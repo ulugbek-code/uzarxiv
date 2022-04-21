@@ -1,14 +1,17 @@
 <template>
-  <div class="container c-sign-in">
-    <div class="logo-img text-center mb-2">
+  <div class="c-sign-in pt-5">
+    <div class="logo-img text-center">
       <img class="logo" src="../assets/logo.png" alt="" />
     </div>
     <div class="d-flex justify-content-center">
       <form @submit.prevent="loginUser" class="border rounded p-4">
+        <div v-if="error" class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
         <div class="mb-3 text-center">
           <p>Welcome</p>
         </div>
-        <div class="input-group mb-3">
+        <div @click="error = false" class="input-group mb-3">
           <input
             v-model="login"
             type="text"
@@ -21,7 +24,7 @@
             <fa :icon="['fas', 'user']" />
           </span>
         </div>
-        <div class="input-group mb-3">
+        <div @click="error = false" class="input-group mb-3">
           <input
             v-model="password"
             type="text"
@@ -49,6 +52,7 @@ export default {
     return {
       login: "",
       password: "",
+      error: "",
     };
   },
   methods: {
@@ -66,11 +70,13 @@ export default {
             },
           }
         );
-        console.log(response);
+        // console.log(response);
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        this.$router.push("/dashboard");
+        this.$router.replace("/dashboard");
+        this.$store.commit("setAuth");
       } catch (e) {
-        console.log(e.message);
+        if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
+        this.error = e.message ? e.message : "hello";
       }
     },
   },
@@ -78,11 +84,20 @@ export default {
 </script>
 
 <style scoped>
+* {
+  margin: 0;
+}
 .c-sign-in {
-  height: 100vh;
-  display: flex;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -40%);
+  min-width: 90%;
+  /* height: 100%; */
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center; */
 }
 .logo {
   display: relative;

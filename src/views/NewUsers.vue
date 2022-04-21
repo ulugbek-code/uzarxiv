@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid">
-    <h1>dashboard</h1>
+  <div :class="[!isNavOpened ? 'nav' : '']" id="page-container">
+    <h1>add new user</h1>
   </div>
 </template>
 
