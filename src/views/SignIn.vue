@@ -72,11 +72,12 @@ export default {
         );
         // console.log(response);
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        this.$router.replace("/dashboard");
+        this.$router.replace("/");
         this.$store.commit("setAuth");
       } catch (e) {
-        if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
-        this.error = e.message ? e.message : "hello";
+        // console.log(e.response.data);
+        // if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
+        this.error = e.response.data;
       }
     },
   },
@@ -93,11 +94,6 @@ export default {
   top: 40%;
   transform: translate(-50%, -40%);
   min-width: 90%;
-  /* height: 100%; */
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
 }
 .logo {
   display: relative;

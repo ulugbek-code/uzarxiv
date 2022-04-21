@@ -1,17 +1,11 @@
 <template>
-  <div :class="[!isNavOpened ? 'nav' : '']" id="page-container">
+  <div class="container-fluid">
     <h1>categories</h1>
   </div>
 </template>
 
 <script>
-export default {
-  computed: {
-    isNavOpened() {
-      return this.$store.getters.isNavOpened;
-    },
-  },
-};
+export default {};
 </script>
 
 <style scoped></style>

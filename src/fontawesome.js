@@ -13,6 +13,9 @@ import {
   faCircleCheck,
   faUserPlus,
   faA,
+  faClock,
+  faPlusCircle,
+  faCircleMinus,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -27,7 +30,10 @@ library.add(
   faCircleQuestion,
   faCircleCheck,
   faUserPlus,
-  faA
+  faA,
+  faClock,
+  faPlusCircle,
+  faCircleMinus
 );
 
 export default FontAwesomeIcon;

@@ -11,6 +11,6 @@ export default {
   logout(state) {
     state.isAuth = false;
     state.token = null;
-    router.replace("/");
+    router.replace("/login");
   },
 };

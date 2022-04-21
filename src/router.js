@@ -8,19 +8,35 @@ import Exams from "./views/Exams.vue";
 import Categories from "./views/Categories.vue";
 import Results from "./views/Results.vue";
 import NewUsers from "./views/NewUsers.vue";
+import NotFound from "./views/NotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/", component: SignIn },
-    { path: "/dashboard", component: Dashboard },
-    { path: "/users", component: Users },
-    { path: "/questions", component: Questions },
-    { path: "/exams", component: Exams },
-    { path: "/categories", component: Categories },
-    { path: "/results", component: Results },
-    { path: "/newuser", component: NewUsers },
+    { path: "/", component: Dashboard, meta: { requiresAuth: true } },
+    { path: "/users", component: Users, meta: { requiresAuth: true } },
+    { path: "/questions", component: Questions, meta: { requiresAuth: true } },
+    { path: "/exams", component: Exams, meta: { requiresAuth: true } },
+    {
+      path: "/categories",
+      component: Categories,
+      meta: { requiresAuth: true },
+    },
+    { path: "/results", component: Results, meta: { requiresAuth: true } },
+    { path: "/newuser", component: NewUsers, meta: { requiresAuth: true } },
+    { path: "/login", component: SignIn, meta: { requiresUnauth: true } },
+    { path: "/:notFound(.*)", component: NotFound },
   ],
+});
+
+router.beforeEach(function (to, _, next) {
+  if (to.meta.requiresAuth && !localStorage.getItem("token")) {
+    next("/login");
+  } else if (to.meta.requiresUnauth && localStorage.getItem("token")) {
+    next("/");
+  } else {
+    next();
+  }
 });
 
 export default router;

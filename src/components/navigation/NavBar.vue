@@ -12,78 +12,78 @@
     <!-- show class above -->
     <nav class="nav">
       <div>
-        <a href="#" class="nav_logo">
+        <router-link to="/" class="nav_logo">
           <fa class="bx bx-layer nav_logo-icon" :icon="['fas', 'a']" />
           <span class="nav_logo-name">Quiz App</span>
-        </a>
+        </router-link>
         <div class="nav_list">
           <hr />
-          <a href="#" class="nav_link active">
+          <router-link to="/" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'circle-user']"
             />
             <span class="nav_name">Admin</span>
-          </a>
+          </router-link>
           <hr />
-          <a href="#" class="nav_link">
+          <router-link to="/" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'gauge-high']"
             />
             <span class="nav_name">Dashboard</span>
-          </a>
+          </router-link>
           <Transition mode="in-out">
             <p v-if="isNavOpened" class="px-4 text-light">Quizapp</p>
           </Transition>
-          <a href="#" class="nav_link">
+          <router-link to="/users" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'user-group']"
             />
             <span class="nav_name">Foydalanuvchilar</span>
-          </a>
-          <a href="#" class="nav_link">
+          </router-link>
+          <router-link to="/exams" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'square-poll-horizontal']"
             />
             <span class="nav_name">Imtihonlar</span>
-          </a>
-          <a href="#" class="nav_link">
+          </router-link>
+          <router-link to="/categories" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'layer-group']"
             />
             <span class="nav_name">Kategoriyalar</span>
-          </a>
-          <a href="#" class="nav_link">
+          </router-link>
+          <router-link to="/questions" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'circle-question']"
             />
             <span class="nav_name">Savollar</span>
-          </a>
-          <a href="#" class="nav_link">
+          </router-link>
+          <router-link to="results" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'circle-check']"
             />
             <span class="nav_name">Imtihon Natijalari</span>
-          </a>
-          <a href="#" class="nav_link">
+          </router-link>
+          <router-link to="/newuser" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'user-plus']"
             />
             <span class="nav_name">Foydalanuvchi qo'shish</span>
-          </a>
+          </router-link>
         </div>
       </div>
-      <a @click="logout" href="#" class="nav_link">
+      <p @click="logout" class="nav_link mb-3 log-out">
         <fa class="bx bx-layer nav_logo-icon" :icon="['fas', 'circle-user']" />
-        <span class="nav_name">&nbsp;SignOut</span>
-      </a>
+        <span class="nav_name">&nbsp;Chiqish</span>
+      </p>
     </nav>
   </div>
 </template>
@@ -188,6 +188,7 @@ export default {
 .nav_link:last-child {
   column-gap: 0.7rem;
 }
+
 .nav_logo {
   position: relative;
   left: -2.5%;
@@ -233,6 +234,9 @@ export default {
   height: 0.9px;
   margin: 1rem auto;
   background: #fff;
+}
+.log-out {
+  cursor: pointer;
 }
 .v-enter-active,
 .v-leave-active {
