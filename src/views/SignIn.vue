@@ -70,7 +70,7 @@ export default {
             },
           }
         );
-        // console.log(response);
+        console.log(response);
         localStorage.setItem("token", JSON.stringify(response.data.token));
         this.$router.replace("/");
         this.$store.commit("setAuth");
