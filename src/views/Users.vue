@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid pt-3">
     <div class="content-header">
-      <div class="row mb-2">
+      <div class="row mb-3">
         <div class="col-auto">
           <h2 class="m-0 fw-normal">Foydalanuvchilar</h2>
         </div>
@@ -23,11 +23,14 @@
                         <div class="col-12 col-sm-8">
                           <div class="actions">
                             <div class="for-label">
-                              <select class="form-control">
-                                <option value="" selected>-------------</option>
-                                <option value="">
-                                  Foydalanuvchilar tanlanganlarni o'chirish
-                                </option>
+                              <select
+                                class="form-select"
+                                aria-label="Default select example"
+                              >
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
                               </select>
                             </div>
                             <button
