@@ -10,6 +10,10 @@ const store = createStore({
       token: JSON.parse(localStorage.getItem("token")) || null,
       isAuth: false,
       isNavOpened: true, //for hamburger menu
+      users: [],
+      exams: [],
+      questions: [],
+      answers: [],
     };
   },
   mutations: rootMutations,

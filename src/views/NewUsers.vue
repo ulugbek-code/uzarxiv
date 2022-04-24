@@ -2,7 +2,7 @@
   <section>
     <div>
       <div class="container">
-        <div class="user signinBx">
+        <!-- <div class="user signinBx">
           <div class="imgBx">
             <h2
               style="
@@ -16,7 +16,7 @@
               <span style="color: green">App</span> ga
             </h2>
           </div>
-        </div>
+        </div> -->
         <div class="user signupBx">
           <div class="formBx">
             <form action="/registration/" method="post">
@@ -67,8 +67,8 @@
                 maxlength="30"
                 id="id_position"
               />
-              <input type="submit" value="Yuborish" />
-              <a href="/admin" class="btn btn-secondary">Bekor qilish</a>
+              <button class="btn btn-outline-secondary">Bekor qilish</button>
+              <button class="btn btn-primary mx-2">Yuboorish</button>
             </form>
           </div>
         </div>
@@ -84,9 +84,9 @@ export default {};
 <style scoped>
 section {
   position: relative;
-  min-height: 100vh;
+  height: 100%;
   width: 100%;
-  background-color: #f8dd30;
+  /* background-color: #f8dd30; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,7 +100,7 @@ section {
 
 section .container {
   position: relative;
-  width: 800px;
+  width: 400px;
   height: 500px;
   background: #fff;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
@@ -116,7 +116,7 @@ section .container .user {
   display: flex;
 }
 
-section .container .user .imgBx {
+/* section .container .user .imgBx {
   position: relative;
   width: 50%;
   height: 100%;
@@ -131,11 +131,11 @@ section .container .user .imgBx img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
+} */
 
 section .container .user .formBx {
   position: relative;
-  width: 50%;
+  width: 100%;
   height: 100%;
   background: #fff;
   display: flex;
@@ -203,20 +203,20 @@ section .container.active .signupBx {
 }
 
 section .container .signupBx .formBx {
-  left: 50%;
+  left: 0%;
 }
 
 section .container.active .signupBx .formBx {
   left: 0;
 }
 
-section .container .signupBx .imgBx {
+/* section .container .signupBx .imgBx {
   left: -100%;
-}
+} */
 
-section .container.active .signupBx .imgBx {
+/* section .container.active .signupBx .imgBx {
   left: 0%;
-}
+} */
 
 section .container .signinBx .formBx {
   left: 0%;
@@ -226,11 +226,11 @@ section .container.active .signinBx .formBx {
   left: 100%;
 }
 
-section .container .signinBx .imgBx {
+/* section .container .signinBx .imgBx {
   left: 0%;
-}
+} */
 
-section .container.active .signinBx .imgBx {
+/* section .container.active .signinBx .imgBx {
   left: -100%;
-}
+} */
 </style>

@@ -83,7 +83,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr role="row" class="even">
+                              <tr role="row">
                                 <td class="action-checkbox">
                                   <input
                                     type="checkbox"
@@ -99,7 +99,7 @@
                                 </th>
                               </tr>
 
-                              <tr role="row" class="odd">
+                              <tr role="row">
                                 <td class="action-checkbox">
                                   <input
                                     type="checkbox"
@@ -498,7 +498,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  created() {
+    this.$store.dispatch("getUsers");
+  },
+};
 </script>
 
 <style scoped>

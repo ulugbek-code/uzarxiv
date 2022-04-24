@@ -18,13 +18,13 @@
         </router-link>
         <div class="nav_list">
           <hr />
-          <router-link to="/" class="nav_link">
+          <h4 class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'circle-user']"
             />
             <span class="nav_name">Admin</span>
-          </router-link>
+          </h4>
           <hr />
           <router-link to="/" class="nav_link">
             <fa
@@ -218,6 +218,9 @@ export default {
 }
 .nav_link:hover {
   color: var(--white-color);
+}
+.nav_list h4:hover {
+  color: var(--first-color-light);
 }
 .nav_icon {
   font-size: 1.25rem;

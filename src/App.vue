@@ -56,18 +56,25 @@ a {
   margin-top: calc(var(--header-height) + 1rem);
   padding-left: calc(var(--nav-width) + 1.2rem);
 }
+.app-wrapper {
+  padding: 0 1rem 0 0;
+}
 .body-pd {
   padding-left: calc(var(--nav-width) + 1rem);
 }
 .app-container.body-pd {
   padding-left: calc(var(--nav-width) + 11rem);
 }
+/* @media screen and (max-width: 768px) {
+  
+} */
 @media screen and (max-width: 768px) {
+  .app-wrapper {
+    padding: 0;
+  }
   .body-pd {
     padding-left: calc(var(--nav-width) + 188px);
   }
-}
-@media screen and (max-width: 768px) {
   .app-container {
     margin-top: 48px;
     padding-left: 0;

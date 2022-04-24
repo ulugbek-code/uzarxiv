@@ -13,4 +13,16 @@ export default {
     state.token = null;
     router.replace("/login");
   },
+  getUsers(state, payload) {
+    state.users = payload.data;
+  },
+  getExams(state, payload) {
+    state.exams = payload.data;
+  },
+  getQuestions(state, payload) {
+    state.questions = payload.data;
+  },
+  getAnswers(state, payload) {
+    state.answers = payload.data;
+  },
 };
