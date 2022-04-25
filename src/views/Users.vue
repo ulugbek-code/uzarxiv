@@ -12,7 +12,9 @@
         <div class="col-12 p-0">
           <div class="card card-primary card-outline">
             <div class="card-header">
-              <h4 class="card-title">Select user to change</h4>
+              <h4 class="card-title">
+                O'zgartirish uchun foydalanuvchini tanlang
+              </h4>
             </div>
             <div class="card-body">
               <form>
@@ -49,10 +51,7 @@
                       <hr />
                       <div class="card">
                         <div class="card-body table-responsive p-0">
-                          <table
-                            id="result_list"
-                            class="table table-striped mb-0"
-                          >
+                          <table id="result_list" class="table table-striped">
                             <thead>
                               <tr>
                                 <th
@@ -77,393 +76,24 @@
                                   colspan="1"
                                 >
                                   <div class="text">
-                                    <span>User</span>
+                                    <span>Foydalanuvchilar</span>
                                   </div>
                                 </th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr role="row">
+                              <tr v-for="user in users" :key="user.is">
                                 <td class="action-checkbox">
                                   <input
                                     type="checkbox"
-                                    name="_selected_action"
-                                    value="24"
+                                    :value="user.id"
                                     class="action-select"
                                   />
                                 </td>
                                 <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/24/change/"
-                                    >Umidjon Muhamadaliyev</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="23"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/23/change/"
-                                    >Diyora Obidjonova</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="22"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/22/change/"
-                                    >Maruf Ro&#x27;zimuratov</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="21"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/21/change/"
-                                    >Nozima Mirsalimova</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="20"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/20/change/"
-                                    >Nargiza Umirzoqova</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="19"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/19/change/"
-                                    >Dd</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="18"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/18/change/"
-                                    >Djarilkaganov Ikram Amangeldie</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="17"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/17/change/"
-                                    >Yuldashyeva Zulxumor Mahmutjon</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="16"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/16/change/"
-                                    >Атакулов Бекзод Шовкатович</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="15"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/15/change/"
-                                    >Муминова Ирода Ғайратовна</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="14"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/14/change/"
-                                    >Дусбаева Гавхар</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="13"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/13/change/"
-                                    >Davlatova Sabohon Komol Qizi</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="12"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/12/change/"
-                                    >Халикова Дилноза Закирджановн</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="11"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/11/change/"
-                                    >Сарибаев Жалғасбай Алламберган</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="10"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/10/change/"
-                                    >Кушакова Гулнора Бурхановна</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="9"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/9/change/"
-                                    >Муродуллоев Шавкат Икрориддино</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="8"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/8/change/"
-                                    >Раимова Ҳилола Қобил қизи</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="7"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/7/change/"
-                                    >Ҳасанова Дилором Салимовна</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="6"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/6/change/"
-                                    >Вохидова Малика Ойбек қизи</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="5"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/5/change/"
-                                    >Sarvarxo&#x27;ja</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="4"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/4/change/"
-                                    >My Account</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="3"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/3/change/"
-                                    >Diyorbek</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="even">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="2"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/2/change/"
-                                    >Diyorbek Yuldashev</a
-                                  >
-                                </th>
-                              </tr>
-
-                              <tr role="row" class="odd">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    name="_selected_action"
-                                    value="1"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/1/change/"
-                                    >Admin</a
-                                  >
+                                  <a href="/admin/quizapp/user/24/change/">{{
+                                    user.username
+                                  }}</a>
                                 </th>
                               </tr>
                             </tbody>
@@ -479,7 +109,7 @@
                         role="status"
                         aria-live="polite"
                       >
-                        24 Foydalanuvchilar
+                        {{ users.length }} Foydalanuvchilar
                       </div>
                     </div>
 
@@ -499,6 +129,11 @@
 
 <script>
 export default {
+  computed: {
+    users() {
+      return this.$store.getters.users;
+    },
+  },
   created() {
     this.$store.dispatch("getUsers");
   },

@@ -19,7 +19,7 @@
         </div> -->
         <div class="user signupBx">
           <div class="formBx">
-            <form action="/registration/" method="post">
+            <form @submit.prevent="addNewUser">
               <h2>Foydalanuvchi yaratish</h2>
               <input
                 type="text"
@@ -68,7 +68,9 @@
                 id="id_position"
               />
               <button class="btn btn-outline-secondary">Bekor qilish</button>
-              <button class="btn btn-primary mx-2">Yuboorish</button>
+              <button @click="addNewUser" class="btn btn-primary mx-2">
+                Yuboorish
+              </button>
             </form>
           </div>
         </div>
@@ -78,19 +80,63 @@
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      login: "",
+      fullName: "",
+      password: "",
+      confirmPassword: false,
+      company: "",
+      position: "",
+    };
+  },
+  methods: {
+    async addNewUser() {
+      try {
+        const response = await axios.post(
+          "https://quiz.multisim.uz/main/user/",
+          {
+            password: "test",
+            username: "Makhach",
+            first_name: "Islam",
+            last_name: "Makhachev",
+            organization: "Udevs",
+            position: "developer",
+          },
+          {
+            headers: {
+              Authorization: `Token ${JSON.parse(
+                localStorage.getItem("token")
+              )}`,
+            },
+          }
+        );
+        console.log(response);
+        this.$router.replace("/");
+      } catch (e) {
+        // console.log(e.response.data);
+        // if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
+        this.error = e.response.data;
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
 section {
   position: relative;
-  height: 100%;
+  height: 90vh;
   width: 100%;
   /* background-color: #f8dd30; */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
+  padding-right: 3rem;
   /* position: absolute;
   left: 50%;
   top: 40%;

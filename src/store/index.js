@@ -14,6 +14,7 @@ const store = createStore({
       exams: [],
       questions: [],
       answers: [],
+      modules: [],
     };
   },
   mutations: rootMutations,

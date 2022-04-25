@@ -31,7 +31,9 @@
               <div class="col-12">
                 <div class="card card-primary card-outline">
                   <div class="card-header mt-2">
-                    <h4 class="card-title fw-normal">Select exam to change</h4>
+                    <h4 class="card-title">
+                      O'zgartirish uchun imtihonni tanlang
+                    </h4>
                     <div class="card-tools form-inline">
                       <form
                         id="changelist-search"
@@ -123,16 +125,11 @@
                               <div class="card-body table-responsive p-0">
                                 <table
                                   id="result_list"
-                                  class="table table-striped mb-0"
+                                  class="table table-striped"
                                 >
                                   <thead>
                                     <tr>
-                                      <th
-                                        class="djn-checkbox-select-all"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
+                                      <th class="djn-checkbox-select-all">
                                         <div class="text">
                                           <span
                                             ><input
@@ -142,134 +139,54 @@
                                         </div>
                                       </th>
 
-                                      <th
-                                        class="sorting"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
+                                      <th class="sorting">
                                         <div class="text">
-                                          <a href="?o=1">ID</a>
+                                          <a href="#">ID</a>
                                         </div>
                                       </th>
 
-                                      <th
-                                        class="sorting"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
+                                      <th class="sorting">
                                         <div class="text">
-                                          <a href="?o=2">Kategoriya</a>
+                                          <a href="#">Kategoriya</a>
                                         </div>
                                       </th>
 
-                                      <th
-                                        class="sorting"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
+                                      <th class="sorting">
                                         <div class="text">
-                                          <a href="?o=3">Ochilish sanasi</a>
+                                          <a href="#">Ochilish sanasi</a>
                                         </div>
                                       </th>
 
-                                      <th
-                                        class="sorting"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
+                                      <th class="sorting">
                                         <div class="text">
-                                          <a href="?o=4">Davomiyligi</a>
+                                          <a href="#">Davomiyligi</a>
                                         </div>
                                       </th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr role="row" class="even">
+                                    <tr v-for="exam in exams" :key="exam.id">
                                       <td class="action-checkbox">
                                         <input
                                           type="checkbox"
-                                          name="_selected_action"
-                                          value="18"
+                                          :value="exam.id"
                                           class="action-select"
                                         />
                                       </td>
-                                      <td class="field-id">18</td>
+                                      <td class="field-id">{{ exam.id }}</td>
                                       <th class="field-subject nowrap">
-                                        <a href="/admin/quizapp/exam/18/change/"
-                                          >TK 1 Variant</a
+                                        <a
+                                          href="/admin/quizapp/exam/18/change/"
+                                          >{{ exam.group.name }}</a
                                         >
                                       </th>
                                       <td class="field-start_date nowrap">
-                                        19-Mart, 2022-yil 0:39
+                                        <!-- 19-Mart, 2022-yil 0:39 -->
+                                        {{ getStartDate(exam.start_date) }}
                                       </td>
-                                      <td class="field-duration">30</td>
-                                    </tr>
-
-                                    <tr role="row" class="odd">
-                                      <td class="action-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          name="_selected_action"
-                                          value="17"
-                                          class="action-select"
-                                        />
+                                      <td class="field-duration">
+                                        {{ exam.duration }}
                                       </td>
-                                      <td class="field-id">17</td>
-                                      <th class="field-subject nowrap">
-                                        <a href="/admin/quizapp/exam/17/change/"
-                                          >Ijro Test 1 Rus</a
-                                        >
-                                      </th>
-                                      <td class="field-start_date nowrap">
-                                        5-Mart, 2022-yil 0:21
-                                      </td>
-                                      <td class="field-duration">5</td>
-                                    </tr>
-
-                                    <tr role="row" class="even">
-                                      <td class="action-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          name="_selected_action"
-                                          value="16"
-                                          class="action-select"
-                                        />
-                                      </td>
-                                      <td class="field-id">16</td>
-                                      <th class="field-subject nowrap">
-                                        <a href="/admin/quizapp/exam/16/change/"
-                                          >Arxiv 2 Variant</a
-                                        >
-                                      </th>
-                                      <td class="field-start_date nowrap">
-                                        4-Mart, 2022-yil 16:30
-                                      </td>
-                                      <td class="field-duration">30</td>
-                                    </tr>
-
-                                    <tr role="row" class="odd">
-                                      <td class="action-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          name="_selected_action"
-                                          value="13"
-                                          class="action-select"
-                                        />
-                                      </td>
-                                      <td class="field-id">13</td>
-                                      <th class="field-subject nowrap">
-                                        <a href="/admin/quizapp/exam/13/change/"
-                                          >TK 3- Variant</a
-                                        >
-                                      </th>
-                                      <td class="field-start_date nowrap">
-                                        4-Mart, 2022-yil 15:25
-                                      </td>
-                                      <td class="field-duration">30</td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -284,7 +201,7 @@
                               role="status"
                               aria-live="polite"
                             >
-                              4 Imtihonlar
+                              {{ exams.length }} Imtihonlar
                             </div>
                           </div>
 
@@ -311,6 +228,25 @@
 
 <script>
 export default {
+  computed: {
+    exams() {
+      return this.$store.getters.exams;
+    },
+  },
+  methods: {
+    getStartDate(date) {
+      let day = new Date(date).toUTCString().slice(5, 22);
+      day =
+        day.substring(0, 2) +
+        "-" +
+        day.substring(3, 6) +
+        ", " +
+        day.substring(7, 11) +
+        "-yil" +
+        day.substring(11);
+      return day;
+    },
+  },
   created() {
     this.$store.dispatch("getExams");
   },

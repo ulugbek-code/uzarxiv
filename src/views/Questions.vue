@@ -31,7 +31,9 @@
               <div class="col-12">
                 <div class="card card-primary card-outline">
                   <div class="card-header mt-2">
-                    <h4 class="card-title fw-normal">Select exam to change</h4>
+                    <h4 class="card-title fw-normal">
+                      O'zgartirish uchun savolni tanlang
+                    </h4>
                     <div class="card-tools form-inline">
                       <form
                         id="changelist-search"
@@ -123,7 +125,7 @@
                               <div class="card-body table-responsive p-0">
                                 <table
                                   id="result_list"
-                                  class="table table-striped mb-0"
+                                  class="table table-striped"
                                 >
                                   <thead>
                                     <tr>
@@ -149,42 +151,25 @@
                                         colspan="1"
                                       >
                                         <div class="text">
-                                          <a href="?o=2">Kategoriya</a>
+                                          <a href="#">Savollar</a>
                                         </div>
                                       </th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr role="row" class="even">
+                                    <tr v-for="q in questions" :key="q.id">
                                       <td class="action-checkbox">
                                         <input
                                           type="checkbox"
-                                          name="_selected_action"
-                                          value="18"
+                                          :value="q.id"
                                           class="action-select"
                                         />
                                       </td>
 
                                       <th class="field-subject nowrap">
-                                        <a href="/admin/quizapp/exam/18/change/"
-                                          >TK 1 Variant</a
-                                        >
-                                      </th>
-                                    </tr>
-
-                                    <tr role="row" class="odd">
-                                      <td class="action-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          name="_selected_action"
-                                          value="13"
-                                          class="action-select"
-                                        />
-                                      </td>
-
-                                      <th class="field-subject nowrap">
-                                        <a href="/admin/quizapp/exam/13/change/"
-                                          >TK 3- Variant</a
+                                        <a
+                                          href="/admin/quizapp/exam/18/change/"
+                                          >{{ q.name }}</a
                                         >
                                       </th>
                                     </tr>
@@ -201,7 +186,7 @@
                               role="status"
                               aria-live="polite"
                             >
-                              4 Imtihonlar
+                              {{ questions.length }} Savollar
                             </div>
                           </div>
 
@@ -227,7 +212,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    questions() {
+      return this.$store.getters.questions;
+    },
+  },
+  created() {
+    this.$store.dispatch("getQuestions");
+  },
+};
 </script>
 
 <style scoped>

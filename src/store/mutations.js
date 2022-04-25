@@ -25,4 +25,7 @@ export default {
   getAnswers(state, payload) {
     state.answers = payload.data;
   },
+  getModules(state, payload) {
+    state.modules = payload.data;
+  },
 };

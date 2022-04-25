@@ -65,9 +65,15 @@ a {
 .app-container.body-pd {
   padding-left: calc(var(--nav-width) + 11rem);
 }
-/* @media screen and (max-width: 768px) {
-  
-} */
+.text a {
+  color: #444;
+}
+.card-title {
+  font-weight: 400;
+}
+.table {
+  margin-bottom: 0px !important;
+}
 @media screen and (max-width: 768px) {
   .app-wrapper {
     padding: 0;

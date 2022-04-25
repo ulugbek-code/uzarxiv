@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import SignIn from "./views/SignIn.vue";
 import Dashboard from "./views/Dashboard.vue";
 import Users from "./views/Users.vue";
+// import EachUser from "./components/users/EachUser.vue";
 import Questions from "./views/Questions.vue";
 import Exams from "./views/Exams.vue";
 import Categories from "./views/Categories.vue";

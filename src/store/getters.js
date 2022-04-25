@@ -20,4 +20,7 @@ export default {
   answers(state) {
     return state.answers;
   },
+  modules(state) {
+    return state.modules;
+  },
 };
