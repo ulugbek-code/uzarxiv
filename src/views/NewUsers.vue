@@ -1,73 +1,73 @@
 <template>
   <section>
     <div>
+      <!--  -->
+      <div
+        v-if="passwordValidity"
+        autohide="true"
+        delay="1000"
+        class="alert alert-danger"
+      >
+        Parolni tasdiqlash mos kelmadi
+      </div>
+      <!--  -->
+      <!-- <p class="m-0">Parolni tasdiqlash mos kelmadi.</p> -->
       <div class="container">
-        <!-- <div class="user signinBx">
-          <div class="imgBx">
-            <h2
-              style="
-                font-size: 38px;
-                margin-top: 50%;
-                margin-bottom: 50%;
-                text-align: center;
-              "
-            >
-              Xush kelibsiz <br /><span style="color: red">Quiz</span>
-              <span style="color: green">App</span> ga
-            </h2>
-          </div>
-        </div> -->
-        <div class="user signupBx">
+        <div @click="changeValidity" class="user signupBx">
           <div class="formBx">
             <form @submit.prevent="addNewUser">
               <h2>Foydalanuvchi yaratish</h2>
               <input
+                v-model="login"
                 type="text"
-                name="username"
                 placeholder="Login"
                 required
                 maxlength="25"
-                id="id_username"
               />
               <input
+                v-model="firstname"
                 type="text"
-                name="fullname"
-                placeholder="To&#x27;liq ismingiz"
+                placeholder="Ismingiz"
                 required
                 maxlength="30"
-                id="id_fullname"
               />
               <input
+                v-model="surname"
+                type="text"
+                placeholder="Familiyangiz"
+                required
+                maxlength="30"
+              />
+              <input
+                v-model="password"
                 type="password"
-                name="password1"
                 placeholder="Parol yaratish"
                 required
-                id="id_password1"
               />
               <input
+                v-model="confirmPassword"
                 type="password"
-                name="password2"
                 placeholder="Parolni takrorlash"
                 required
-                id="id_password2"
               />
               <input
+                v-model="company"
                 type="text"
-                name="organization"
                 placeholder="Organizatsiya"
                 required
                 maxlength="50"
-                id="id_organization"
               />
               <input
+                v-model="position"
                 type="text"
-                name="position"
                 placeholder="Pozitsiya"
                 required
                 maxlength="30"
-                id="id_position"
               />
-              <button class="btn btn-outline-secondary">Bekor qilish</button>
+
+              <button @click="removeInputs" class="btn btn-outline-secondary">
+                Bekor qilish
+              </button>
               <button @click="addNewUser" class="btn btn-primary mx-2">
                 Yuboorish
               </button>
@@ -86,41 +86,59 @@ export default {
   data() {
     return {
       login: "",
-      fullName: "",
+      firstname: "",
+      surname: "",
       password: "",
-      confirmPassword: false,
+      confirmPassword: "",
+      passwordValidity: false,
       company: "",
       position: "",
     };
   },
   methods: {
+    changeValidity() {
+      if (this.passwordValidity) this.passwordValidity = !this.passwordValidity;
+    },
     async addNewUser() {
       try {
-        const response = await axios.post(
-          "https://quiz.multisim.uz/main/user/",
-          {
-            password: "test",
-            username: "Makhach",
-            first_name: "Islam",
-            last_name: "Makhachev",
-            organization: "Udevs",
-            position: "developer",
-          },
-          {
-            headers: {
-              Authorization: `Token ${JSON.parse(
-                localStorage.getItem("token")
-              )}`,
+        if (this.password === this.confirmPassword) {
+          const response = await axios.post(
+            "https://quiz.multisim.uz/main/user/",
+            {
+              password: this.password,
+              username: this.login,
+              first_name: this.firstname,
+              last_name: this.surname,
+              organization: this.company,
+              position: this.position,
             },
-          }
-        );
-        console.log(response);
-        this.$router.replace("/");
+            {
+              headers: {
+                Authorization: `Token ${JSON.parse(
+                  localStorage.getItem("token")
+                )}`,
+              },
+            }
+          );
+          console.log(response);
+          this.$router.replace("/");
+        } else {
+          this.passwordValidity = true;
+        }
       } catch (e) {
         // console.log(e.response.data);
         // if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
-        this.error = e.response.data;
+        console.log(e.response);
       }
+    },
+    removeInputs() {
+      (this.login = ""),
+        (this.firstname = ""),
+        (this.surname = ""),
+        (this.password = ""),
+        (this.confirmPassword = ""),
+        (this.company = ""),
+        (this.position = "");
     },
   },
 };
@@ -131,17 +149,11 @@ section {
   position: relative;
   height: 90vh;
   width: 100%;
-  /* background-color: #f8dd30; */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
   padding-right: 3rem;
-  /* position: absolute;
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -40%);
-  min-width: 90%; */
 }
 
 section .container {
@@ -161,23 +173,6 @@ section .container .user {
   height: 100%;
   display: flex;
 }
-
-/* section .container .user .imgBx {
-  position: relative;
-  width: 50%;
-  height: 100%;
-  background: #ff0;
-  transition: 0.5s;
-}
-
-section .container .user .imgBx img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-} */
 
 section .container .user .formBx {
   position: relative;
@@ -216,6 +211,9 @@ section .container .user .formBx form input {
   letter-spacing: 1px;
   font-weight: 300;
 }
+input::placeholder {
+  color: rgba(68, 68, 68, 0.6);
+}
 
 section .container .user .formBx form input[type="submit"] {
   max-width: 100px;
@@ -252,31 +250,7 @@ section .container .signupBx .formBx {
   left: 0%;
 }
 
-section .container.active .signupBx .formBx {
-  left: 0;
-}
-
-/* section .container .signupBx .imgBx {
-  left: -100%;
-} */
-
-/* section .container.active .signupBx .imgBx {
-  left: 0%;
-} */
-
 section .container .signinBx .formBx {
   left: 0%;
 }
-
-section .container.active .signinBx .formBx {
-  left: 100%;
-}
-
-/* section .container .signinBx .imgBx {
-  left: 0%;
-} */
-
-/* section .container.active .signinBx .imgBx {
-  left: -100%;
-} */
 </style>
