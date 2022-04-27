@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import SignIn from "./views/SignIn.vue";
 import Dashboard from "./views/Dashboard.vue";
 import Users from "./views/Users.vue";
-// import EachUser from "./components/users/EachUser.vue";
+import EachUser from "./components/users/EachUser.vue";
 import Questions from "./views/Questions.vue";
 import Exams from "./views/Exams.vue";
 import Categories from "./views/Categories.vue";
@@ -16,6 +16,13 @@ const router = createRouter({
   routes: [
     { path: "/", component: Dashboard, meta: { requiresAuth: true } },
     { path: "/users", component: Users, meta: { requiresAuth: true } },
+    {
+      path: "/users/:id",
+      name: "user",
+      component: EachUser,
+      props: true,
+      meta: { requiresAuth: true },
+    },
     { path: "/questions", component: Questions, meta: { requiresAuth: true } },
     { path: "/exams", component: Exams, meta: { requiresAuth: true } },
     {

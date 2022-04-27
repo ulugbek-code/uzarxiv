@@ -11,6 +11,9 @@ export default {
   users(state) {
     return state.users;
   },
+  user: (state) => (id) => {
+    return state.users.find((user) => user.id === id);
+  },
   exams(state) {
     return state.exams;
   },

@@ -91,9 +91,14 @@
                                   />
                                 </td>
                                 <th class="field-__str__">
-                                  <a href="/admin/quizapp/user/24/change/">{{
-                                    user.username
-                                  }}</a>
+                                  <!-- <router-link :to="`/users/${user.id}`">{{user.username}}</router-link> -->
+                                  <router-link
+                                    :to="{
+                                      name: 'user',
+                                      params: { id: user.id },
+                                    }"
+                                    >{{ user.username }}</router-link
+                                  >
                                 </th>
                               </tr>
                             </tbody>

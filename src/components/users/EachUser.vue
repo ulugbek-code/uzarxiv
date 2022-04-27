@@ -41,6 +41,7 @@
                     <div class="card card-primary card-outline">
                       <div class="card-header">
                         <div class="card-title">userni o&#x27;zgartirish</div>
+                        {{ getUser }}
                       </div>
                       <div class="card-body">
                         <div class="form-group field-password">
@@ -722,7 +723,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["id"],
+  computed: {
+    getUser() {
+      return this.$store.getters.user(parseInt(this.id));
+    },
+  },
+  created() {
+    this.$store.dispatch("getUsers");
+  },
+};
 </script>
 
 <style scoped>
