@@ -157,13 +157,6 @@ export default {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
-/* .card-body {
-  -webkit-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  min-height: 1px;
-  padding: 1.25rem;
-} */
 .table-responsive {
   display: block;
   width: 100%;
@@ -220,5 +213,93 @@ export default {
 }
 .djn-checkbox-select-all {
   padding-left: 1.5rem !important;
+}
+.card-primary.card-outline {
+  border-top: 3px solid #007bff;
+}
+.card {
+  box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+  margin-bottom: 1rem;
+}
+.card-header {
+  background-color: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 0.75rem 1.25rem;
+  position: relative;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+.card-title {
+  float: left;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0;
+}
+.card-body {
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 1.25rem;
+}
+.form-group {
+  margin-bottom: 1rem;
+}
+label:not(.form-check-label):not(.custom-file-label) {
+  font-weight: 700;
+}
+.text-red {
+  color: #dc3545 !important;
+}
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+select {
+  word-wrap: normal;
+}
+button {
+  text-transform: none;
+}
+
+.form-group div .vTextField {
+  display: block;
+  width: 100%;
+}
+.vTextField {
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: inset 0 0 0 transparent;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.vDateField,
+.vTimeField {
+  min-width: 200px;
+  height: calc(2.25rem + 2px);
+  margin-top: 5px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: inset 0 0 0 transparent;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.help-block,
+.timezonewarning {
+  font-size: 0.8em;
+  color: #859099;
+  font-style: italic;
 }
 </style>
