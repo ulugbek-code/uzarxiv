@@ -14,8 +14,12 @@
               <li class="breadcrumb-item">
                 <router-link to="/users">Foydalanuvchilar</router-link>
               </li>
-              <li class="breadcrumb-item active">
-                {{ `${getUser.first_name} ${getUser.last_name}` }}
+              <li v-if="getUser" class="breadcrumb-item active">
+                {{
+                  getUser.first_name
+                    ? `${getUser.first_name} ${getUser.last_name}`
+                    : getUser.username
+                }}
               </li>
             </ol>
           </div>
@@ -452,12 +456,13 @@ export default {
       password: "",
       superStatus: false,
       username: "",
+      email: "",
       firstname: "",
       lastname: "",
       isStaff: false,
       isActive: false,
       dateJoined: "",
-      timejoined: "",
+      timeJoined: "",
       organization: "",
       position: "",
     };

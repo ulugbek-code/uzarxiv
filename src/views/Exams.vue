@@ -175,9 +175,16 @@
                                       </td>
                                       <td class="field-id">{{ exam.id }}</td>
                                       <th class="field-subject nowrap">
-                                        <a
+                                        <!-- <a
                                           href="/admin/quizapp/exam/18/change/"
                                           >{{ exam.group.name }}</a
+                                        > -->
+                                        <router-link
+                                          :to="{
+                                            name: 'exam',
+                                            params: { id: exam.id },
+                                          }"
+                                          >{{ exam.group.name }}</router-link
                                         >
                                       </th>
                                       <td class="field-start_date nowrap">

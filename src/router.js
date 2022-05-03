@@ -6,6 +6,7 @@ import Users from "./views/Users.vue";
 import EachUser from "./components/users/EachUser.vue";
 import Questions from "./views/Questions.vue";
 import Exams from "./views/Exams.vue";
+import EachExam from "./views/EachExam.vue";
 import Categories from "./views/Categories.vue";
 import Results from "./views/Results.vue";
 import NewUsers from "./views/NewUsers.vue";
@@ -25,6 +26,13 @@ const router = createRouter({
     },
     { path: "/questions", component: Questions, meta: { requiresAuth: true } },
     { path: "/exams", component: Exams, meta: { requiresAuth: true } },
+    {
+      path: "/exams/:id",
+      name: "exam",
+      component: EachExam,
+      props: true,
+      meta: { requiresAuth: true },
+    },
     {
       path: "/categories",
       component: Categories,
