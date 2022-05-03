@@ -17,6 +17,12 @@ export default {
   exam: (state) => (id) => {
     return state.exams.find((exam) => exam.id === id);
   },
+  category: (state) => (id) => {
+    return state.modules.find((module) => module.id === id);
+  },
+  question: (state) => (id) => {
+    return state.questions.find((question) => question.id === id);
+  },
   exams(state) {
     return state.exams;
   },
@@ -28,5 +34,8 @@ export default {
   },
   modules(state) {
     return state.modules;
+  },
+  groups(state) {
+    return state.groups;
   },
 };

@@ -36,28 +36,44 @@
           <Transition mode="in-out">
             <p v-if="isNavOpened" class="px-4 text-light">Quizapp</p>
           </Transition>
-          <router-link to="/users" class="nav_link">
+          <router-link
+            to="/users"
+            :class="[isUserActive ? 'activate' : '']"
+            class="nav_link"
+          >
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'user-group']"
             />
             <span class="nav_name">Foydalanuvchilar</span>
           </router-link>
-          <router-link to="/exams" class="nav_link">
+          <router-link
+            to="/exams"
+            :class="[isExamActive ? 'activate' : '']"
+            class="nav_link"
+          >
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'square-poll-horizontal']"
             />
             <span class="nav_name">Imtihonlar</span>
           </router-link>
-          <router-link to="/categories" class="nav_link">
+          <router-link
+            to="/categories"
+            :class="[isCategoryActive ? 'activate' : '']"
+            class="nav_link"
+          >
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'layer-group']"
             />
             <span class="nav_name">Kategoriyalar</span>
           </router-link>
-          <router-link to="/questions" class="nav_link">
+          <router-link
+            to="/questions"
+            :class="[isQuestionActive ? 'activate' : '']"
+            class="nav_link"
+          >
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'circle-question']"
@@ -93,6 +109,18 @@ export default {
   computed: {
     isNavOpened() {
       return this.$store.getters.isNavOpened;
+    },
+    isUserActive() {
+      return this.$store.state.isUserActive;
+    },
+    isExamActive() {
+      return this.$store.state.isExamActive;
+    },
+    isCategoryActive() {
+      return this.$store.state.isCategoryActive;
+    },
+    isQuestionActive() {
+      return this.$store.state.isQuestionActive;
     },
   },
   methods: {
@@ -214,7 +242,11 @@ export default {
   position: relative;
   color: var(--first-color-light);
   margin-bottom: 8px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+}
+.router-link-active.nav_link,
+.nav_link.activate {
+  color: #fff;
 }
 .nav_link:hover {
   color: var(--white-color);
@@ -238,7 +270,7 @@ export default {
   margin: 1rem auto;
   background: #fff;
 }
-.log-out {
+.l-navbar.show .log-out {
   cursor: pointer;
 }
 .v-enter-active,
@@ -250,6 +282,7 @@ export default {
 .v-leave-to {
   opacity: 0;
 }
+
 @media screen and (min-width: 768px) {
   body {
     margin: calc(var(--header-height) + 1rem) 0 0 0;
@@ -277,6 +310,9 @@ export default {
   .l-navbar.show {
     padding: 1rem 1rem 0 0;
   }
+  .l-navbar:not(.show) .router-link-active .nav_logo-icon {
+    color: #0d6efd;
+  }
 
   .show {
     width: calc(var(--nav-width) + 156px);
@@ -295,6 +331,10 @@ export default {
   }
   hr {
     display: none;
+  }
+  .router-link-active .nav_logo-icon,
+  .nav_link.activate .nav_logo-icon {
+    color: #0d6efd;
   }
 }
 </style>

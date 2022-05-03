@@ -1,6 +1,18 @@
 import router from "../router.js";
 
 export default {
+  activateExam(state) {
+    state.isExamActive = !state.isExamActive;
+  },
+  activateUser(state) {
+    state.isUserActive = !state.isUserActive;
+  },
+  activateQuestion(state) {
+    state.isQuestionActive = !state.isQuestionActive;
+  },
+  activateCategory(state) {
+    state.isCategoryActive = !state.isCategoryActive;
+  },
   toggleNavbar(state) {
     state.isNavOpened = !state.isNavOpened;
   },
@@ -27,5 +39,8 @@ export default {
   },
   getModules(state, payload) {
     state.modules = payload.data;
+  },
+  getGroups(state, payload) {
+    state.groups = payload.data;
   },
 };

@@ -2,23 +2,21 @@
   <div class="content-wrapper">
     <div class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-auto col-sm-3">
+        <div class="row mb-1">
+          <div class="col-auto col-sm-3 mt-2">
             <h1 class="m-0">Imtihonlar</h1>
           </div>
-          <div class="col-auto col-sm-9">
-            {{ getModules }}
-            <ol class="breadcrumb float-sm-right">
+          <div class="col-auto col-sm-9 mt-4">
+            <ol class="breadcrumb float-end">
               <li class="breadcrumb-item">
-                <a href="/admin/"><i class="fa fa-tachometer-alt"></i> Home</a>
+                <router-link to="/">Bosh sahifa</router-link>
               </li>
               <li class="breadcrumb-item">
-                <a href="/admin/quizapp/">Quizapp</a>
+                <router-link to="/exams">Imtihonlar</router-link>
               </li>
-              <li class="breadcrumb-item">
-                <a href="/admin/quizapp/exam/">Imtihonlar</a>
+              <li v-if="getExam" class="breadcrumb-item active">
+                {{ getExam.group.name }}
               </li>
-              <li class="breadcrumb-item active">Ijro Test 1 Rus</li>
             </ol>
           </div>
         </div>
@@ -30,19 +28,15 @@
         <section id="content" class="content">
           <div class="row">
             <div id="content-main" class="col-12">
-              <form action="" method="post" id="exam_form" novalidate>
-                <input
-                  type="hidden"
-                  name="csrfmiddlewaretoken"
-                  value="l89lL5GvyvZufhswwai4ORbYKHnEk1RRAw6EP6lQET04TM9Xx2XdblaewRxwzCwv"
-                />
-
+              <form>
                 <div class="row">
                   <div class="col-12 col-lg-9">
                     <div class="card card-primary card-outline">
                       <div class="card-header">
-                        <div class="card-title">examni o&#x27;zgartirish</div>
-                        {{ getExam }}
+                        <div class="card-title">Imtihonni o'zgartirish</div>
+                        <!-- {{ getExam }} -->
+                        <!-- {{ getGroups }} -->
+                        <!-- {{ getUsers }} -->
                       </div>
                       <div class="card-body">
                         <div class="form-group field-subject">
@@ -53,33 +47,31 @@
                               <span class="text-red">* </span>
                             </label>
                             <div class="col-sm-10 field-subject">
-                              <div class="related-widget-wrapper">
-                                <select name="subject" required>
-                                  <option value="">---------</option>
-                                </select>
+                              <div
+                                v-if="getExam"
+                                class="related-widget-wrapper"
+                              >
+                                <div class="d-inline-block w-50">
+                                  <base-dropdown
+                                    :options="getGroups"
+                                    :withObj="true"
+                                    :default="getExam.group.name"
+                                    @input="getExamCategory"
+                                  ></base-dropdown>
+                                </div>
 
                                 <a
                                   class="related-widget-wrapper-link change-related"
-                                  id="change_id_subject"
-                                  data-href-template="/admin/quizapp/subjects/__fk__/change/?_to_field=id&amp;_popup=1"
-                                  title="Change selected subjects"
-                                  ><img
-                                    src="/static/admin/img/icon-changelink.svg"
-                                    alt="O'zgartirish" /></a
+                                  ><fa
+                                    class="icon pencil mx-3"
+                                    :icon="['fas', 'pencil']" /></a
                                 ><a
                                   class="related-widget-wrapper-link add-related"
-                                  id="add_id_subject"
-                                  href="/admin/quizapp/subjects/add/?_to_field=id&amp;_popup=1"
-                                  title="Add another subjects"
-                                  ><img
-                                    src="/static/admin/img/icon-addlink.svg"
-                                    alt="Qo'shish"
+                                  ><fa
+                                    class="icon plus"
+                                    :icon="['fas', 'plus']"
                                 /></a>
                               </div>
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block text-red"></div>
                             </div>
                           </div>
                         </div>
@@ -93,48 +85,26 @@
                             </label>
                             <div class="col-sm-10 field-user">
                               <div class="related-widget-wrapper">
-                                <select
-                                  name="user"
-                                  required
-                                  id="id_user"
-                                  multiple
-                                >
-                                  <option value="1">Admin</option>
-
-                                  <option value="2" selected>
-                                    Diyorbek Yuldashev
-                                  </option>
-
-                                  <option value="3">Diyorbek</option>
-
-                                  <option value="4">My Account</option>
-
-                                  <option value="5">Sarvarxo&#x27;ja</option>
-
-                                  <option value="6">
-                                    Вохидова Малика Ойбек қизи
-                                  </option>
-                                </select>
-
+                                <div class="multi d-inline-block w-75">
+                                  <Multiselect
+                                    v-model="value"
+                                    mode="tags"
+                                    :close-on-select="false"
+                                    :searchable="true"
+                                    :options="getUsers"
+                                    label="name"
+                                  />
+                                </div>
                                 <a
                                   class="related-widget-wrapper-link add-related"
                                   id="add_id_user"
                                   href="/admin/quizapp/user/add/?_to_field=id&amp;_popup=1"
                                   title="Add another user"
-                                  ><img
-                                    src="/static/admin/img/icon-addlink.svg"
-                                    alt="Qo'shish"
+                                  ><fa
+                                    class="icon plus mx-2"
+                                    :icon="['fas', 'plus']"
                                 /></a>
                               </div>
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block">
-                                Hold down “Control”, or “Command” on a Mac, to
-                                select more than one.
-                              </div>
-
-                              <div class="help-block text-red"></div>
                             </div>
                           </div>
                         </div>
@@ -153,31 +123,23 @@
                               <p class="datetime">
                                 Sana:
                                 <input
+                                  v-model="startDate"
                                   type="text"
-                                  name="start_date_0"
-                                  value="05.03.2022"
                                   class="vDateField"
                                   size="10"
                                   required
-                                  id="id_start_date_0"
                                 />
 
                                 <br />
                                 Vaqt:
                                 <input
+                                  v-model="startTime"
                                   type="text"
-                                  name="start_date_1"
-                                  value="00:21:56"
                                   class="vTimeField"
                                   size="8"
                                   required
-                                  id="id_start_date_1"
                                 />
                               </p>
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block text-red"></div>
                             </div>
                           </div>
                         </div>
@@ -196,31 +158,23 @@
                               <p class="datetime">
                                 Sana:
                                 <input
+                                  v-model="finishDate"
                                   type="text"
-                                  name="finish_date_0"
-                                  value="05.03.2022"
                                   class="vDateField"
                                   size="10"
                                   required
-                                  id="id_finish_date_0"
                                 />
 
                                 <br />
                                 Vaqt:
                                 <input
+                                  v-model="finishTime"
                                   type="text"
-                                  name="finish_date_1"
-                                  value="05:21:58"
                                   class="vTimeField"
                                   size="8"
                                   required
-                                  id="id_finish_date_1"
                                 />
                               </p>
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block text-red"></div>
                             </div>
                           </div>
                         </div>
@@ -234,21 +188,15 @@
                             </label>
                             <div class="col-sm-10 field-duration">
                               <input
+                                v-model="duration"
                                 type="number"
-                                name="duration"
-                                value="5"
                                 class="vIntegerField"
                                 required
-                                id="id_duration"
                               />
-
-                              <div class="help-block red"></div>
 
                               <div class="help-block">
                                 Imtihon davomiyligi minutda kiritilsin!
                               </div>
-
-                              <div class="help-block text-red"></div>
                             </div>
                           </div>
                         </div>
@@ -318,21 +266,70 @@
 </template>
 
 <script>
+import Multiselect from "@vueform/multiselect";
+
 export default {
   props: ["id"],
+  components: {
+    Multiselect,
+  },
+  data() {
+    return {
+      value: [],
+      startDate: "",
+      startTime: "",
+      finishDate: "",
+      finishTime: "",
+      duration: "",
+    };
+  },
   computed: {
     getExam() {
       return this.$store.getters.exam(parseInt(this.id));
     },
-    getModules() {
-      return this.$store.getters.modules;
+    getUsers() {
+      return this.$store.getters.users.map((user) => {
+        return {
+          value: user.id,
+          name: `${user.first_name}  ${user.last_name}`,
+        };
+      });
+    },
+    getGroups() {
+      return this.$store.getters.groups.map((group) => {
+        return {
+          name: group.name,
+          id: group.id,
+        };
+      });
+    },
+  },
+  methods: {
+    getExamCategory(val) {
+      console.log(val);
     },
   },
   created() {
+    this.$store.commit("activateExam");
     this.$store.dispatch("getExams");
     this.$store.dispatch("getModules");
+    this.$store.dispatch("getGroups");
+    this.$store.dispatch("getUsers");
+  },
+  unmounted() {
+    this.$store.commit("activateExam");
   },
   watch: {
+    getExam(newObj) {
+      this.value = newObj.group.users;
+      this.startDate = newObj.start_date.substring(0, 10).replaceAll("-", ".");
+      this.startTime = newObj.start_date.substring(11, 19);
+      this.finishDate = newObj.finish_date
+        .substring(0, 10)
+        .replaceAll("-", ".");
+      this.finishTime = newObj.finish_date.substring(11, 19);
+      this.duration = newObj.duration;
+    },
     // getUser(newObj) {
     //   this.password = newObj.password;
     //   this.superStatus = newObj.is_superuser;
@@ -484,5 +481,17 @@ export default {
 }
 .text-red {
   color: #dc3545 !important;
+}
+.related-widget-wrapper .form-select {
+  display: initial;
+  width: initial;
+  cursor: pointer;
+}
+.icon {
+  font-size: 14px;
+  cursor: pointer;
+}
+.icon.pencil {
+  color: #ffc107;
 }
 </style>

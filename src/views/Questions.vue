@@ -10,12 +10,7 @@
             <div class="col-sm-9 mt-4">
               <ol class="breadcrumb float-end">
                 <li class="breadcrumb-item">
-                  <a href="/admin/"
-                    ><i class="fa fa-tachometer-alt"></i> Home</a
-                  >
-                </li>
-                <li class="breadcrumb-item">
-                  <a href="/admin/quizapp/">Quizapp</a>
+                  <router-link to="/">Bosh sahifa</router-link>
                 </li>
                 <li class="breadcrumb-item active">Imtihonlar</li>
               </ol>
@@ -167,9 +162,12 @@
                                       </td>
 
                                       <th class="field-subject nowrap">
-                                        <a
-                                          href="/admin/quizapp/exam/18/change/"
-                                          >{{ q.name }}</a
+                                        <router-link
+                                          :to="{
+                                            name: 'question',
+                                            params: { id: q.id },
+                                          }"
+                                          >{{ q.name }}</router-link
                                         >
                                       </th>
                                     </tr>

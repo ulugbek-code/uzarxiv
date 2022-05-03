@@ -9,7 +9,7 @@
           <div class="col-sm-9 mt-4">
             <ol class="breadcrumb float-end">
               <li class="breadcrumb-item">
-                <router-link to="/"> Home</router-link>
+                <router-link to="/">Bosh sahifa</router-link>
               </li>
               <li class="breadcrumb-item">
                 <router-link to="/users">Foydalanuvchilar</router-link>
@@ -61,81 +61,20 @@
                               <div class="help-block text-red"></div>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group field-is_superuser">
-                          <div class="row">
-                            <label class="col-sm-2 text-left">
-                              Superuser status
+                          <div class="row mt-3">
+                            <label class="col-sm-2 text-left" for="id_password">
+                              Passport Number
+
+                              <span class="text-red">* </span>
                             </label>
-                            <div class="col-sm-10 field-is_superuser">
-                              <input v-model="superStatus" type="checkbox" />
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block">
-                                Ushbu foydalanuvchi barcha ruxsatlarga ularni
-                                aniq tayinlamasdan ega ekanligini tasdiqlaydi.
-                              </div>
-
-                              <div class="help-block text-red"></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group field-groups">
-                          <div class="row">
-                            <label class="col-sm-2 text-left" for="id_groups">
-                              Groups
-                            </label>
-                            <div class="col-sm-10 field-groups">
-                              <div class="related-widget-wrapper">
-                                <div>
-                                  <Multiselect
-                                    v-model="value"
-                                    mode="tags"
-                                    :close-on-select="false"
-                                    :searchable="true"
-                                    :options="options"
-                                    label="age"
-                                  />
-                                </div>
-                              </div>
-                              <div class="help-block">
-                                Ushbu foydalanuvchi tegishli bo'lgan guruhlar.
-                                Foydalanuvchi har bir guruhga berilgan barcha
-                                ruxsatlarni oladi.
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group field-user_permissions">
-                          <div class="row">
-                            <label
-                              class="col-sm-2 text-left"
-                              for="id_user_permissions"
-                            >
-                              User permissions
-                            </label>
-                            <div class="col-sm-10 field-user_permissions">
-                              <div class="related-widget-wrapper">
-                                <Multiselect
-                                  v-model="value"
-                                  mode="tags"
-                                  :close-on-select="false"
-                                  :searchable="true"
-                                  :options="options"
-                                  label="age"
-                                />
-                              </div>
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block">
-                                Ushbu foydalanuvchi uchun maxsus ruxsatlar.
-                              </div>
-
-                              <div class="help-block text-red"></div>
+                            <div class="col-sm-10 field-password">
+                              <input
+                                v-model="passportNumber"
+                                type="text"
+                                class="vTextField"
+                                maxlength="128"
+                                required
+                              />
                             </div>
                           </div>
                         </div>
@@ -175,6 +114,7 @@
                               for="id_first_name"
                             >
                               First name
+                              <span class="text-red">* </span>
                             </label>
                             <div class="col-sm-10 field-first_name">
                               <input
@@ -198,6 +138,7 @@
                               for="id_last_name"
                             >
                               Last name
+                              <span class="text-red">* </span>
                             </label>
                             <div class="col-sm-10 field-last_name">
                               <input
@@ -207,117 +148,6 @@
                                 maxlength="150"
                                 id="id_last_name"
                               />
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block text-red"></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group field-email">
-                          <div class="row">
-                            <label class="col-sm-2 text-left" for="id_email">
-                              Email address
-                            </label>
-                            <div class="col-sm-10 field-email">
-                              <input
-                                v-model="email"
-                                type="email"
-                                class="vTextField"
-                                maxlength="254"
-                              />
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block text-red"></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group field-is_staff">
-                          <div class="row">
-                            <label class="col-sm-2 text-left" for="id_is_staff">
-                              Staff status
-                            </label>
-                            <div class="col-sm-10 field-is_staff">
-                              <input v-model="isStaff" type="checkbox" />
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block">
-                                Foydalanuvchining ushbu administrator saytiga
-                                kirishi mumkinligini belgilaydi.
-                              </div>
-
-                              <div class="help-block text-red"></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group field-is_active">
-                          <div class="row">
-                            <label
-                              class="col-sm-2 text-left"
-                              for="id_is_active"
-                            >
-                              Active
-                            </label>
-                            <div class="col-sm-10 field-is_active">
-                              <input
-                                v-model="isActive"
-                                type="checkbox"
-                                name="is_active"
-                                id="id_is_active"
-                                checked
-                              />
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block">
-                                Bu foydalanuvchini faol deb hisoblash
-                                kerakligini belgilaydi. Hisoblarni o'chirish
-                                o'rniga bu belgini olib tashlang.
-                              </div>
-
-                              <div class="help-block text-red"></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group field-date_joined">
-                          <div class="row">
-                            <label
-                              class="col-sm-2 text-left"
-                              for="id_date_joined"
-                            >
-                              Date joined
-
-                              <span class="text-red">* </span>
-                            </label>
-                            <div class="col-sm-10 field-date_joined">
-                              <p class="datetime">
-                                Sana:
-                                <input
-                                  v-model="dateJoined"
-                                  type="text"
-                                  class="vDateField"
-                                  size="10"
-                                  required
-                                  id="id_date_joined_0"
-                                />
-
-                                <br />
-                                Vaqt:
-                                <input
-                                  v-model="timeJoined"
-                                  type="text"
-                                  class="vTimeField"
-                                  size="8"
-                                  required
-                                  id="id_date_joined_1"
-                                />
-                              </p>
 
                               <div class="help-block red"></div>
 
@@ -379,7 +209,7 @@
                   </div>
 
                   <div class="col-12 col-lg-3">
-                    <div id="jazzy-actions" class="">
+                    <div>
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
@@ -440,29 +270,15 @@
 </template>
 
 <script>
-import Multiselect from "@vueform/multiselect";
-
 export default {
   props: ["id"],
-  components: {
-    Multiselect,
-  },
   data() {
     return {
-      value: null,
-      options: [
-        // { value: "batman", age: "Batman" },
-      ],
       password: "",
-      superStatus: false,
+      passportNumber: "",
       username: "",
-      email: "",
       firstname: "",
       lastname: "",
-      isStaff: false,
-      isActive: false,
-      dateJoined: "",
-      timeJoined: "",
       organization: "",
       position: "",
     };
@@ -474,21 +290,18 @@ export default {
   },
   created() {
     this.$store.dispatch("getUsers");
+    this.$store.commit("activateUser");
+  },
+  unmounted() {
+    this.$store.commit("activateUser");
   },
   watch: {
     getUser(newObj) {
       this.password = newObj.password;
-      this.superStatus = newObj.is_superuser;
+      this.passportNumber = newObj.pass_number;
       this.username = newObj.username;
       this.firstname = newObj.first_name;
       this.lastname = newObj.last_name;
-      this.email = newObj.email;
-      this.isStaff = newObj.is_staff;
-      this.isActive = newObj.is_active;
-      this.dateJoined = newObj.date_joined
-        .substring(0, 10)
-        .replaceAll("-", ".");
-      this.timeJoined = newObj.date_joined.substring(11, 19);
       this.organization = newObj.organization;
       this.position = newObj.position;
     },

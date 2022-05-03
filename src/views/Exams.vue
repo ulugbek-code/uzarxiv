@@ -10,12 +10,7 @@
             <div class="col-sm-9 mt-4">
               <ol class="breadcrumb float-end">
                 <li class="breadcrumb-item">
-                  <a href="/admin/"
-                    ><i class="fa fa-tachometer-alt"></i> Home</a
-                  >
-                </li>
-                <li class="breadcrumb-item">
-                  <a href="/admin/quizapp/">Quizapp</a>
+                  <a href="/admin/">Bosh sahifa</a>
                 </li>
                 <li class="breadcrumb-item active">Imtihonlar</li>
               </ol>

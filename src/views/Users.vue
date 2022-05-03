@@ -1,9 +1,19 @@
 <template>
   <div class="container-fluid pt-3">
     <div class="content-header">
-      <div class="row mb-3">
-        <div class="col-auto">
-          <h2 class="m-0 fw-normal">Foydalanuvchilar</h2>
+      <div class="container-fluid">
+        <div class="row mb-1">
+          <div class="col-sm-3 mt-2">
+            <h1 class="m-0 fw-normal">Foydalanuvchilar</h1>
+          </div>
+          <div class="col-sm-9 mt-4">
+            <ol class="breadcrumb float-end">
+              <li class="breadcrumb-item">
+                <a href="/admin/">Bosh sahifa</a>
+              </li>
+              <li class="breadcrumb-item active">Foydalanuvchilar</li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>

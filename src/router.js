@@ -5,9 +5,11 @@ import Dashboard from "./views/Dashboard.vue";
 import Users from "./views/Users.vue";
 import EachUser from "./components/users/EachUser.vue";
 import Questions from "./views/Questions.vue";
+import EachQuestion from "./components/questions/EachQuestion.vue";
 import Exams from "./views/Exams.vue";
 import EachExam from "./views/EachExam.vue";
 import Categories from "./views/Categories.vue";
+import EachCategory from "./components/categories/EachCategory.vue";
 import Results from "./views/Results.vue";
 import NewUsers from "./views/NewUsers.vue";
 import NotFound from "./views/NotFound.vue";
@@ -25,6 +27,13 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     { path: "/questions", component: Questions, meta: { requiresAuth: true } },
+    {
+      path: "/questions/:id",
+      name: "question",
+      component: EachQuestion,
+      props: true,
+      meta: { requiresAuth: true },
+    },
     { path: "/exams", component: Exams, meta: { requiresAuth: true } },
     {
       path: "/exams/:id",
@@ -36,6 +45,13 @@ const router = createRouter({
     {
       path: "/categories",
       component: Categories,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/categories/:id",
+      name: "category",
+      component: EachCategory,
+      props: true,
       meta: { requiresAuth: true },
     },
     { path: "/results", component: Results, meta: { requiresAuth: true } },

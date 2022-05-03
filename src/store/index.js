@@ -7,6 +7,10 @@ import rootGetters from "./getters.js";
 const store = createStore({
   state() {
     return {
+      isExamActive: false,
+      isUserActive: false,
+      isCategoryActive: false,
+      isQuestionActive: false, //for navigation active class
       token: JSON.parse(localStorage.getItem("token")) || null,
       isAuth: false,
       isNavOpened: true, //for hamburger menu
@@ -15,6 +19,7 @@ const store = createStore({
       questions: [],
       answers: [],
       modules: [],
+      groups: [],
     };
   },
   mutations: rootMutations,

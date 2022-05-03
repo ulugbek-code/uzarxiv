@@ -17,6 +17,8 @@ import {
   faPlusCircle,
   faCircleMinus,
   faEdit,
+  faPencil,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -35,7 +37,9 @@ library.add(
   faClock,
   faPlusCircle,
   faCircleMinus,
-  faEdit
+  faEdit,
+  faPencil,
+  faPlus
 );
 
 export default FontAwesomeIcon;

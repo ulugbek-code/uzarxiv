@@ -73,4 +73,18 @@ export default {
       console.log(e.response);
     }
   },
+  //get Groups
+  async getGroups(context) {
+    try {
+      const res = await axios.get("https://quiz.multisim.uz/main/group/", {
+        headers: {
+          Authorization: `Token ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      console.log(res);
+      context.commit("getGroups", res);
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
 };
