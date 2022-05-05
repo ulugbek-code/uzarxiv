@@ -74,7 +74,6 @@ export default {
 
 <style scoped>
 .card {
-  /* box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%); */
   margin-bottom: 1rem;
 }
 p span {

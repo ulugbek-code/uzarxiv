@@ -34,7 +34,7 @@
                     <div class="card card-primary card-outline">
                       <div class="card-header">
                         <div class="card-title">Savolni o'zgartirish</div>
-                        {{ getQuestion }}
+                        <!-- {{ getQuestion.variants }} -->
                         <!-- {{ getAnswers }} -->
                       </div>
                       <div class="card-body">
@@ -152,8 +152,6 @@
                                   >
                                     <thead>
                                       <tr>
-                                        <th class="original"></th>
-
                                         <th class="column-answer required">
                                           Variant
                                         </th>
@@ -166,67 +164,38 @@
                                           Ball
                                         </th>
 
-                                        <th>O'chirasizmi?</th>
+                                        <th></th>
                                       </tr>
                                     </thead>
 
-                                    <tbody>
-                                      <tr class="form-row has_original">
-                                        <td class="original"></td>
-
-                                        <td class="field-answer">
-                                          <textarea
-                                            cols="40"
-                                            rows="10"
-                                            class="vLargeTextField"
-                                          >
-Бўлимларда номенклатурага асосан шаклланган ҳужжатлар реестрларга жойланиб топширилади</textarea
-                                          >
-                                          <div
-                                            class="help-block text-red"
-                                          ></div>
-                                        </td>
-
-                                        <td class="field-status">
-                                          <select
-                                            name="answers_set-0-status"
-                                            id="id_answers_set-0-status"
-                                          >
-                                            <option value="Correct">
-                                              Correct
-                                            </option>
-
-                                            <option value="Mistake" selected>
-                                              Mistake
-                                            </option>
-                                          </select>
-                                          <div
-                                            class="help-block text-red"
-                                          ></div>
-                                        </td>
-
-                                        <td class="field-ball">
-                                          <input
-                                            type="text"
-                                            name="answers_set-0-ball"
-                                            value="0"
-                                            class="vTextField"
-                                            maxlength="150"
-                                            id="id_answers_set-0-ball"
-                                          />
-                                          <div
-                                            class="help-block text-red"
-                                          ></div>
-                                        </td>
-
-                                        <td class="delete">
-                                          <input
-                                            type="checkbox"
-                                            name="answers_set-0-DELETE"
-                                            id="id_answers_set-0-DELETE"
-                                          />
-                                        </td>
+                                    <tbody v-if="getQuestion">
+                                      <tr
+                                        v-for="variant in getQuestion.variants"
+                                        class="form-row has_original"
+                                        :key="variant.id"
+                                      >
+                                        <each-variant
+                                          :variant="variant"
+                                          @deleteTr="removeTr"
+                                        ></each-variant>
                                       </tr>
+                                      <div
+                                        class="no-variants"
+                                        v-if="getQuestion.variants.length === 0"
+                                      >
+                                        <p class="text-center">
+                                          There are not any variants yet!
+                                        </p>
+                                      </div>
+                                      <div class="add-tr">
+                                        <button
+                                          @click="addTr"
+                                          type="button"
+                                          class="btn btn-primary text-primary"
+                                        >
+                                          Variant qo'shish
+                                        </button>
+                                      </div>
                                     </tbody>
                                   </table>
                                 </div>
@@ -300,11 +269,18 @@
 </template>
 
 <script>
+import EachVariant from "./EachVariant.vue";
+
 export default {
   props: ["id"],
+  components: {
+    EachVariant,
+  },
   data() {
     return {
+      copyQuestions: this.getQuestion,
       questionName: "",
+      status: "",
     };
   },
   computed: {
@@ -327,8 +303,20 @@ export default {
     getQuestionCategory(val) {
       console.log(val);
     },
+    removeTr(id) {
+      console.log(id);
+    },
+    async addTr() {
+      this.getQuestion.variants.push({
+        id: Date.now(),
+        name: "",
+        ball: 0,
+        status: "Mistake",
+      });
+    },
   },
   created() {
+    console.log("sada");
     this.$store.commit("activateQuestion");
     this.$store.dispatch("getQuestions");
     this.$store.dispatch("getModules");
@@ -340,6 +328,7 @@ export default {
   watch: {
     getQuestion(newObj) {
       this.questionName = newObj.name;
+      // this.status =
     },
   },
 };
@@ -488,5 +477,31 @@ export default {
 }
 textarea {
   min-height: 100px;
+}
+.no-variants {
+  margin: 4rem;
+}
+.add-tr {
+  margin: 4rem;
+}
+.add-tr button {
+  position: absolute;
+  top: 95%;
+  left: 94%;
+  transform: translate(-90%, -95%);
+}
+.add-tr button:hover,
+.add-tr button:focus {
+  color: #fff !important;
+}
+
+.no-variants p {
+  background: gold;
+  padding: 8px;
+  border-radius: 5px;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -90%);
 }
 </style>

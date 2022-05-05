@@ -75,6 +75,42 @@
                             </div>
                           </div>
                         </div>
+                        <div class="form-group field-subject">
+                          <div class="row">
+                            <label class="col-sm-2 text-left" for="id_subject">
+                              Test variantlari
+
+                              <span class="text-red">* </span>
+                            </label>
+                            <div class="col-sm-10 field-subject">
+                              <div
+                                v-if="getExam"
+                                class="related-widget-wrapper"
+                              >
+                                <div class="d-inline-block w-50">
+                                  <base-dropdown
+                                    :options="getGroups"
+                                    :withObj="true"
+                                    :default="getExam.group.name"
+                                    @input="getExamCategory"
+                                  ></base-dropdown>
+                                </div>
+
+                                <a
+                                  class="related-widget-wrapper-link change-related"
+                                  ><fa
+                                    class="icon pencil mx-3"
+                                    :icon="['fas', 'pencil']" /></a
+                                ><a
+                                  class="related-widget-wrapper-link add-related"
+                                  ><fa
+                                    class="icon plus"
+                                    :icon="['fas', 'plus']"
+                                /></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                         <div class="form-group field-user">
                           <div class="row">

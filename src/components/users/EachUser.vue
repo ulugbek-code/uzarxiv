@@ -32,7 +32,7 @@
         <section id="content" class="content">
           <div class="row">
             <div id="content-main" class="col-12">
-              <form action="" method="post" id="user_form" novalidate>
+              <form>
                 <div class="row">
                   <div class="col-12 col-lg-9">
                     <div class="card card-primary card-outline">
@@ -43,6 +43,22 @@
                       </div>
                       <div class="card-body">
                         <div class="form-group field-password">
+                          <div class="row mb-3">
+                            <label class="col-sm-2 text-left" for="id_password">
+                              Passport raqami
+
+                              <span class="text-red">* </span>
+                            </label>
+                            <div class="col-sm-10 field-password">
+                              <input
+                                v-model="passportNumber"
+                                type="text"
+                                class="vTextField"
+                                maxlength="128"
+                                required
+                              />
+                            </div>
+                          </div>
                           <div class="row">
                             <label class="col-sm-2 text-left" for="id_password">
                               Parol
@@ -59,22 +75,6 @@
                               />
                               <div class="help-block red"></div>
                               <div class="help-block text-red"></div>
-                            </div>
-                          </div>
-                          <div class="row mt-3">
-                            <label class="col-sm-2 text-left" for="id_password">
-                              Passport Number
-
-                              <span class="text-red">* </span>
-                            </label>
-                            <div class="col-sm-10 field-password">
-                              <input
-                                v-model="passportNumber"
-                                type="text"
-                                class="vTextField"
-                                maxlength="128"
-                                required
-                              />
                             </div>
                           </div>
                         </div>

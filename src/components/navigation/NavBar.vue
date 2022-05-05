@@ -47,16 +47,12 @@
             />
             <span class="nav_name">Foydalanuvchilar</span>
           </router-link>
-          <router-link
-            to="/exams"
-            :class="[isExamActive ? 'activate' : '']"
-            class="nav_link"
-          >
+          <router-link to="/groups" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'square-poll-horizontal']"
             />
-            <span class="nav_name">Imtihonlar</span>
+            <span class="nav_name">Guruhlar</span>
           </router-link>
           <router-link
             to="/categories"
@@ -78,9 +74,9 @@
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'circle-question']"
             />
-            <span class="nav_name">Savollar</span>
+            <span class="nav_name">Test Variantlari</span>
           </router-link>
-          <router-link to="results" class="nav_link">
+          <router-link to="/results" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'circle-check']"

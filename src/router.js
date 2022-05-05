@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import SignIn from "./views/SignIn.vue";
 import Dashboard from "./views/Dashboard.vue";
 import Users from "./views/Users.vue";
+import Groups from "./views/Groups.vue";
+import GroupDetail from "./components/groups/GroupDetail.vue";
 import EachUser from "./components/users/EachUser.vue";
 import Questions from "./views/Questions.vue";
 import EachQuestion from "./components/questions/EachQuestion.vue";
@@ -23,6 +25,14 @@ const router = createRouter({
       path: "/users/:id",
       name: "user",
       component: EachUser,
+      props: true,
+      meta: { requiresAuth: true },
+    },
+    { path: "/groups", component: Groups, meta: { requiresAuth: true } },
+    {
+      path: "/groups/:id",
+      name: "group",
+      component: GroupDetail,
       props: true,
       meta: { requiresAuth: true },
     },
