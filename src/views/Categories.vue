@@ -109,8 +109,8 @@
                                   href="/admin/quizapp/exam/add/"
                                   class="btn btn-outline-success float-end"
                                 >
-                                  <fa :icon="['fas', 'plus-circle']" /> &nbsp;
-                                  Imtihon qo'shish
+                                  <fa :icon="['fas', 'plus-circle']" />
+                                  Kategoriya qo'shish
                                 </a>
                               </div>
                             </div>
@@ -125,42 +125,19 @@
                                   <thead>
                                     <tr>
                                       <th
-                                        class="djn-checkbox-select-all"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
-                                        <div class="text">
-                                          <span
-                                            ><input
-                                              type="checkbox"
-                                              id="action-toggle"
-                                          /></span>
-                                        </div>
-                                      </th>
-
-                                      <th
                                         class="sorting"
                                         tabindex="0"
                                         rowspan="1"
                                         colspan="1"
                                       >
                                         <div class="text">
-                                          <a href="#">Kategoriyalar</a>
+                                          <a>Kategoriyalar</a>
                                         </div>
                                       </th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr v-for="cat in categories" :key="cat.id">
-                                      <td class="action-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          :value="cat.id"
-                                          class="action-select"
-                                        />
-                                      </td>
-
                                       <th class="field-subject nowrap">
                                         <router-link
                                           :to="{
@@ -199,7 +176,6 @@
                     <!-- </form> -->
                   </div>
                 </div>
-                <br class="clear" />
               </div>
             </div>
           </section>

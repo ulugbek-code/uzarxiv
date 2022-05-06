@@ -30,11 +30,7 @@
                       O'zgartirish uchun imtihonni tanlang
                     </h4>
                     <div class="card-tools form-inline">
-                      <form
-                        id="changelist-search"
-                        class="form-inline"
-                        method="GET"
-                      >
+                      <form class="form-inline">
                         <div class="form-group">
                           <select
                             class="form-select"
@@ -124,50 +120,33 @@
                                 >
                                   <thead>
                                     <tr>
-                                      <th class="djn-checkbox-select-all">
+                                      <th class="sorting">
                                         <div class="text">
-                                          <span
-                                            ><input
-                                              type="checkbox"
-                                              id="action-toggle"
-                                          /></span>
+                                          <a>ID</a>
                                         </div>
                                       </th>
 
                                       <th class="sorting">
                                         <div class="text">
-                                          <a href="#">ID</a>
+                                          <a>Kategoriya</a>
                                         </div>
                                       </th>
 
                                       <th class="sorting">
                                         <div class="text">
-                                          <a href="#">Kategoriya</a>
+                                          <a>Ochilish sanasi</a>
                                         </div>
                                       </th>
 
                                       <th class="sorting">
                                         <div class="text">
-                                          <a href="#">Ochilish sanasi</a>
-                                        </div>
-                                      </th>
-
-                                      <th class="sorting">
-                                        <div class="text">
-                                          <a href="#">Davomiyligi</a>
+                                          <a>Davomiyligi</a>
                                         </div>
                                       </th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr v-for="exam in exams" :key="exam.id">
-                                      <td class="action-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          :value="exam.id"
-                                          class="action-select"
-                                        />
-                                      </td>
                                       <td class="field-id">{{ exam.id }}</td>
                                       <th class="field-subject nowrap">
                                         <!-- <a
@@ -218,7 +197,6 @@
                     <!-- </form> -->
                   </div>
                 </div>
-                <br class="clear" />
               </div>
             </div>
           </section>

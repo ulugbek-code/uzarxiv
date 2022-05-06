@@ -109,8 +109,8 @@
                                   href="/admin/quizapp/exam/add/"
                                   class="btn btn-outline-success float-end"
                                 >
-                                  <fa :icon="['fas', 'plus-circle']" /> &nbsp;
-                                  Imtihon qo'shish
+                                  <fa :icon="['fas', 'plus-circle']" />
+                                  Savol qo'shish
                                 </a>
                               </div>
                             </div>
@@ -125,28 +125,13 @@
                                   <thead>
                                     <tr>
                                       <th
-                                        class="djn-checkbox-select-all"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
-                                        <div class="text">
-                                          <span
-                                            ><input
-                                              type="checkbox"
-                                              id="action-toggle"
-                                          /></span>
-                                        </div>
-                                      </th>
-
-                                      <th
                                         class="sorting"
                                         tabindex="0"
                                         rowspan="1"
                                         colspan="1"
                                       >
                                         <div class="text">
-                                          <a href="#">Savollar</a>
+                                          <a>Savollar</a>
                                         </div>
                                       </th>
                                     </tr>
@@ -179,11 +164,7 @@
                         </div>
                         <div class="row mt-2">
                           <div class="col-5">
-                            <div
-                              class="dataTables_info"
-                              role="status"
-                              aria-live="polite"
-                            >
+                            <div class="dataTables_info">
                               {{ questions.length }} Savollar
                             </div>
                           </div>
@@ -199,7 +180,6 @@
                     <!-- </form> -->
                   </div>
                 </div>
-                <br class="clear" />
               </div>
             </div>
           </section>

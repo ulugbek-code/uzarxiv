@@ -1,75 +1,93 @@
 <template>
   <section>
     <div>
-      <!--  -->
-      <div
-        v-if="passwordValidity"
-        autohide="true"
-        delay="1000"
-        class="alert alert-danger"
-      >
-        Parolni tasdiqlash mos kelmadi
-      </div>
-      <!--  -->
-      <!-- <p class="m-0">Parolni tasdiqlash mos kelmadi.</p> -->
       <div class="container">
-        <div @click="changeValidity" class="user signupBx">
+        <div class="user signinBx">
+          <div class="imgBx">
+            <h2>
+              Xush kelibsiz <br /><span class="text-danger">Uz</span>
+              <span class="text-success">Arxiv</span> ga
+            </h2>
+          </div>
+          <div v-if="isEmpty" class="custom-toast bg-danger text-light">
+            <div class="d-flex">
+              <div class="toast-body">Please, fill in all required fields!</div>
+            </div>
+          </div>
+        </div>
+        <div class="user signupBx">
           <div class="formBx">
-            <form @submit.prevent="addNewUser">
+            <form @submit.prevent="">
               <h2>Foydalanuvchi yaratish</h2>
               <input
-                v-model="login"
+                v-model.trim="passportNumber"
+                type="text"
+                placeholder="Passport raqami"
+                required
+              />
+              <input
+                v-model.trim="login"
                 type="text"
                 placeholder="Login"
                 required
                 maxlength="25"
               />
               <input
-                v-model="firstname"
+                v-model.trim="firstname"
                 type="text"
-                placeholder="Ismingiz"
+                placeholder="Ismi"
                 required
                 maxlength="30"
               />
               <input
-                v-model="surname"
+                v-model.trim="lastname"
                 type="text"
-                placeholder="Familiyangiz"
+                placeholder="Familiyasi"
                 required
-                maxlength="30"
               />
               <input
                 v-model="password"
                 type="password"
-                placeholder="Parol yaratish"
+                placeholder="Parol"
                 required
               />
               <input
-                v-model="confirmPassword"
+                v-model.trim="confirmPassword"
                 type="password"
                 placeholder="Parolni takrorlash"
                 required
-              />
-              <input
-                v-model="company"
-                type="text"
-                placeholder="Organizatsiya"
-                required
                 maxlength="50"
               />
+              <p v-if="passwordValidity" class="text-danger mb-0">
+                Parol takrorlanmadi
+              </p>
               <input
-                v-model="position"
+                v-model.trim="company"
+                type="text"
+                placeholder="Tashkilot nomi"
+                required
+                maxlength="30"
+              />
+              <input
+                v-model.trim="position"
                 type="text"
                 placeholder="Pozitsiya"
                 required
                 maxlength="30"
               />
-
-              <button @click="removeInputs" class="btn btn-outline-secondary">
-                Bekor qilish
+              <button
+                @click="addNewUser"
+                type="button"
+                class="btn btn-success mt-2"
+              >
+                Yuborish
               </button>
-              <button @click="addNewUser" class="btn btn-primary mx-2">
-                Yuboorish
+              <button
+                @click="removeInputs"
+                type="button"
+                class="btn btn-outline-danger mt-2 mx-2"
+              >
+                Bekor qilish
               </button>
             </form>
           </div>
@@ -81,18 +99,19 @@
 
 <script>
 import axios from "axios";
-
 export default {
   data() {
     return {
+      passportNumber: "",
       login: "",
       firstname: "",
-      surname: "",
+      lastname: "",
       password: "",
       confirmPassword: "",
-      passwordValidity: false,
       company: "",
       position: "",
+      passwordValidity: false,
+      isEmpty: false,
     };
   },
   methods: {
@@ -101,6 +120,18 @@ export default {
     },
     async addNewUser() {
       try {
+        if (
+          !this.passportNumber ||
+          !this.login ||
+          !this.login ||
+          !this.firstname ||
+          !this.lastname ||
+          !this.password ||
+          !this.confirmPassword ||
+          !this.company ||
+          !this.position
+        )
+          return (this.isEmpty = true);
         if (this.password === this.confirmPassword) {
           const response = await axios.post(
             "https://quiz.multisim.uz/main/user/",
@@ -108,9 +139,10 @@ export default {
               password: this.password,
               username: this.login,
               first_name: this.firstname,
-              last_name: this.surname,
+              last_name: this.lastname,
               organization: this.company,
               position: this.position,
+              pass_number: this.passportNumber,
             },
             {
               headers: {
@@ -133,36 +165,67 @@ export default {
     },
     removeInputs() {
       (this.login = ""),
+        (this.passportNumber = ""),
         (this.firstname = ""),
-        (this.surname = ""),
+        (this.lastname = ""),
         (this.password = ""),
         (this.confirmPassword = ""),
         (this.company = ""),
         (this.position = "");
     },
   },
+  watch: {
+    passportNumber(newVal) {
+      console.log(newVal);
+    },
+    isEmpty(newVal) {
+      if (newVal === true) {
+        setTimeout(() => (this.isEmpty = false), 2000);
+      }
+    },
+    passwordValidity(newVal) {
+      if (newVal === true) {
+        setTimeout(() => (this.passwordValidity = false), 2000);
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
+.custom-toast {
+  position: absolute;
+  right: 60%;
+  top: 10%;
+}
+.imgBx h2 {
+  font-size: 38px;
+  margin-top: 50%;
+  margin-bottom: 50%;
+  text-align: center;
+}
 section {
-  position: relative;
-  height: 90vh;
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
+  min-height: 100%;
+  background-color: #f8dd30;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  padding-right: 3rem;
+  z-index: 100;
 }
 
 section .container {
   position: relative;
-  width: 400px;
-  height: 500px;
+  width: 800px;
+  height: 570px;
   background: #fff;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  border-radius: 4px;
 }
 
 section .container .user {
@@ -174,9 +237,26 @@ section .container .user {
   display: flex;
 }
 
+section .container .user .imgBx {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background: #ff0;
+  transition: 0.5s;
+}
+
+section .container .user .imgBx img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 section .container .user .formBx {
   position: relative;
-  width: 100%;
+  width: 50%;
   height: 100%;
   background: #fff;
   display: flex;
@@ -211,9 +291,6 @@ section .container .user .formBx form input {
   letter-spacing: 1px;
   font-weight: 300;
 }
-input::placeholder {
-  color: rgba(68, 68, 68, 0.6);
-}
 
 section .container .user .formBx form input[type="submit"] {
   max-width: 100px;
@@ -247,10 +324,50 @@ section .container.active .signupBx {
 }
 
 section .container .signupBx .formBx {
+  left: 50%;
+}
+
+section .container.active .signupBx .formBx {
+  left: 0;
+}
+
+section .container .signupBx .imgBx {
+  left: -100%;
+}
+
+section .container.active .signupBx .imgBx {
   left: 0%;
 }
 
 section .container .signinBx .formBx {
   left: 0%;
+}
+
+section .container.active .signinBx .formBx {
+  left: 100%;
+}
+
+section .container .signinBx .imgBx {
+  left: 0%;
+}
+
+section .container.active .signinBx .imgBx {
+  left: -100%;
+}
+
+@media (max-width: 991px) {
+  section .container {
+    max-width: 400px;
+  }
+  section .container .signupBx .formBx {
+    left: 0%;
+  }
+  .imgBx {
+    display: none;
+  }
+
+  section .container .user .formBx {
+    width: 100%;
+  }
 }
 </style>

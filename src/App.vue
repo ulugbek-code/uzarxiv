@@ -1,6 +1,6 @@
 <template>
   <!-- <navigation-bar></navigation-bar> -->
-  <nav-bar v-if="isAuth || token"></nav-bar>
+  <nav-bar></nav-bar>
   <div :class="[isNavOpened ? 'body-pd' : '']" class="app-container">
     <!-- body-pd class above -->
     <router-view> </router-view>

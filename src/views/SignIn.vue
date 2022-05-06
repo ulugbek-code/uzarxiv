@@ -13,7 +13,7 @@
         </div>
         <div @click="error = false" class="input-group mb-3">
           <input
-            v-model="login"
+            v-model.trim="login"
             type="text"
             class="form-control"
             placeholder="Username"
@@ -26,7 +26,7 @@
         </div>
         <div @click="error = false" class="input-group mb-3">
           <input
-            v-model="password"
+            v-model.trim="password"
             type="text"
             class="form-control"
             placeholder="Password"

@@ -65,22 +65,7 @@
                             <thead>
                               <tr>
                                 <th
-                                  class="djn-checkbox-select-all"
-                                  tabindex="0"
-                                  rowspan="1"
-                                  colspan="1"
-                                >
-                                  <div class="text">
-                                    <span
-                                      ><input
-                                        type="checkbox"
-                                        id="action-toggle"
-                                    /></span>
-                                  </div>
-                                </th>
-
-                                <th
-                                  class=""
+                                  class="sorting"
                                   tabindex="0"
                                   rowspan="1"
                                   colspan="1"

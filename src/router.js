@@ -71,14 +71,14 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach(function (to, _, next) {
-  if (to.meta.requiresAuth && !localStorage.getItem("token")) {
-    next("/login");
-  } else if (to.meta.requiresUnauth && localStorage.getItem("token")) {
-    next("/");
-  } else {
-    next();
-  }
-});
+// router.beforeEach(function (to, _, next) {
+//   if (to.meta.requiresAuth && !localStorage.getItem("token")) {
+//     next("/login");
+//   } else if (to.meta.requiresUnauth && localStorage.getItem("token")) {
+//     next("/");
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;
