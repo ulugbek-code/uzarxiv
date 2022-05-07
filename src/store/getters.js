@@ -29,6 +29,9 @@ export default {
   questions(state) {
     return state.questions;
   },
+  variants(state) {
+    return state.variants;
+  },
   answers(state) {
     return state.answers;
   },

@@ -80,6 +80,9 @@ export default {
       this.$emit("input", option);
     },
   },
+  created() {
+    this.$emit("input", this.default);
+  },
   watch: {
     submitted() {
       if (this.submitted === true) {

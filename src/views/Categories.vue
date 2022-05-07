@@ -118,10 +118,7 @@
 
                             <div class="card">
                               <div class="card-body table-responsive p-0">
-                                <table
-                                  id="result_list"
-                                  class="table table-striped"
-                                >
+                                <table id="result_list" class="table">
                                   <thead>
                                     <tr>
                                       <th
@@ -138,15 +135,9 @@
                                   </thead>
                                   <tbody>
                                     <tr v-for="cat in categories" :key="cat.id">
-                                      <th class="field-subject nowrap">
-                                        <router-link
-                                          :to="{
-                                            name: 'category',
-                                            params: { id: cat.id },
-                                          }"
-                                          >{{ cat.name }}</router-link
-                                        >
-                                      </th>
+                                      <each-category-row
+                                        :cat="cat"
+                                      ></each-category-row>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -186,7 +177,11 @@
 </template>
 
 <script>
+import EachCategoryRow from "../components/categories/EachCategoryRow.vue";
 export default {
+  components: {
+    EachCategoryRow,
+  },
   computed: {
     categories() {
       return this.$store.getters.modules;

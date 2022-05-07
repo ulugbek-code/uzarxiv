@@ -19,6 +19,8 @@ import {
   faEdit,
   faPencil,
   faPlus,
+  faSearch,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -39,7 +41,9 @@ library.add(
   faCircleMinus,
   faEdit,
   faPencil,
-  faPlus
+  faPlus,
+  faSearch,
+  faTrashAlt
 );
 
 export default FontAwesomeIcon;

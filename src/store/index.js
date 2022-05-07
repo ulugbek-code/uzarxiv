@@ -17,6 +17,7 @@ const store = createStore({
       users: [],
       exams: [],
       questions: [],
+      variants: [],
       answers: [],
       modules: [],
       groups: [],

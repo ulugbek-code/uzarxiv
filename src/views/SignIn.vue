@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import customAxios from "../api";
 export default {
   data() {
     return {
@@ -58,8 +58,8 @@ export default {
   methods: {
     async loginUser() {
       try {
-        const response = await axios.post(
-          "https://quiz.multisim.uz/api/login/",
+        const response = await customAxios.post(
+          "api/login/",
           {
             username: this.login,
             password: this.password,

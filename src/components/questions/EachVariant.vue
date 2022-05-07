@@ -3,12 +3,15 @@
   <td class="field-answer">
     <!-- {{ questions }} -->
     <!-- {{ variant }} -->
-    <textarea v-model="variantName" class="form-control"></textarea>
-    <div class="help-block text-red"></div>
+    <textarea
+      v-model.lazy="variantName"
+      class="form-control"
+      placeholder="Variantning savoli bo'lishi shart!"
+    ></textarea>
   </td>
 
   <td class="field-status">
-    <select v-model="status" class="form-select">
+    <select v-model.lazy="status" class="form-select">
       <option value="Correct">Correct</option>
 
       <option value="Mistake">Mistake</option>
@@ -18,20 +21,17 @@
 
   <td class="field-ball">
     <input
-      v-model="variantBall"
-      type="text"
+      v-model.lazy="variantBall"
+      type="number"
       class="form-control"
       maxlength="150"
+      :disabled="status === 'Mistake'"
     />
-    <div class="help-block text-red"></div>
+    <div class="help-block text-danger"></div>
   </td>
 
   <td class="delete">
-    <button
-      type="button"
-      @click="$emit('deleteTr', variant.id)"
-      class="btn btn-danger"
-    >
+    <button type="button" @click="deleting(variant.id)" class="btn btn-danger">
       O'chirish
     </button>
   </td>
@@ -40,33 +40,81 @@
 <script>
 export default {
   props: ["variant"],
-  emits: ["deleteTr"],
+  emits: ["deleteTr", "updateVariants"],
   data() {
     return {
-      variantName: "",
-      variantBall: "",
-      status: "",
+      isEmpty: false,
+      variantName: this.variant.name,
+      variantBall: this.variant.ball,
+      status: this.variant.status,
     };
   },
-  //   computed: {
-  //     questions() {
-  //       return this.$store.getters.questions.map((question) => question.variants);
-  //     },
-  //   },
-  created() {
-    // this.$store.dispatch("getQuestions");
-    this.variantName = this.variant.name;
-    this.variantBall = this.variant.ball;
-    this.status = this.variant.status;
+  methods: {
+    deleting(id) {
+      this.$emit("deleteTr", id);
+    },
   },
+  mounted() {},
+  // created() {
+  //   this.variantName = this.variant.name;
+  //   this.variantBall = this.variant.ball;
+  //   this.status = this.variant.status;
+  // },
   watch: {
     variant(newObj) {
       this.variantName = newObj.name;
       this.variantBall = newObj.ball;
       this.status = newObj.status;
     },
+    variantName(newVal) {
+      if (newVal.length === 0) {
+        this.isEmpty = true;
+        return;
+      }
+      this.isEmpty = false;
+      this.$emit("updateVariants", {
+        id: this.variant.id,
+        name: newVal,
+        ball: this.variantBall,
+        status: this.status,
+      });
+    },
+    variantBall(newVal) {
+      if (this.variantName.length === 0) {
+        this.isEmpty = true;
+        return;
+      }
+      this.isEmpty = false;
+      this.$emit("updateVariants", {
+        id: this.variant.id,
+        name: this.variantName,
+        ball: newVal,
+        status: this.status,
+      });
+    },
+    status(newVal) {
+      if (this.variantName.length === 0) {
+        this.isEmpty = true;
+        return;
+      }
+      this.isEmpty = false;
+      this.$emit("updateVariants", {
+        id: this.variant.id,
+        name: this.variantName,
+        status: newVal,
+        ball: this.variantBall,
+      });
+    },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.field-answer textarea {
+  min-height: 100px;
+}
+.custom-toast {
+  left: 12%;
+  position: absolute;
+}
+</style>

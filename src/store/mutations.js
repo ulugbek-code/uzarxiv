@@ -19,6 +19,7 @@ export default {
   setAuth(state) {
     state.isAuth = true;
     state.token = JSON.parse(localStorage.getItem("token"));
+    console.log(state.token);
   },
   logout(state) {
     state.isAuth = false;
@@ -31,8 +32,12 @@ export default {
   getExams(state, payload) {
     state.exams = payload.data;
   },
+  // questions
   getQuestions(state, payload) {
     state.questions = payload.data;
+  },
+  getVariants(state, payload) {
+    state.variants = payload.data;
   },
   getAnswers(state, payload) {
     state.answers = payload.data;

@@ -68,7 +68,7 @@
       </div>
       <div class="content-table my-4">
         <div class="container-fluid">
-          <table class="table table-striped table-hover text-center">
+          <table class="table table-hover text-center">
             <thead>
               <tr>
                 <th>FIO</th>
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import customAxios from "../../api";
 export default {
   props: ["id"],
   data() {
@@ -184,17 +184,9 @@ export default {
     },
     async getGroupDetails(id) {
       try {
-        const res = await axios.get(
-          "https://quiz.multisim.uz/main/group/get_details/?group_id=" + id,
-          {
-            headers: {
-              Authorization: `Token ${JSON.parse(
-                localStorage.getItem("token")
-              )}`,
-            },
-          }
+        const res = await customAxios.get(
+          "main/group/get_details/?group_id=" + id
         );
-        console.log(res);
         this.groupDetails = res.data;
       } catch (e) {
         console.log(e.response);
@@ -203,9 +195,6 @@ export default {
   },
   created() {
     this.getGroupDetails(this.id);
-  },
-  mounted() {
-    console.table(this.getFilteredDetails);
   },
 };
 </script>

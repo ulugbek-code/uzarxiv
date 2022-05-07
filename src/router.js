@@ -9,7 +9,7 @@ import EachUser from "./components/users/EachUser.vue";
 import Questions from "./views/Questions.vue";
 import EachQuestion from "./components/questions/EachQuestion.vue";
 import Exams from "./views/Exams.vue";
-import EachExam from "./views/EachExam.vue";
+import EachExam from "./components/exams/EachExam.vue";
 import Categories from "./views/Categories.vue";
 import EachCategory from "./components/categories/EachCategory.vue";
 import Results from "./views/Results.vue";
@@ -71,14 +71,14 @@ const router = createRouter({
   ],
 });
 
-// router.beforeEach(function (to, _, next) {
-//   if (to.meta.requiresAuth && !localStorage.getItem("token")) {
-//     next("/login");
-//   } else if (to.meta.requiresUnauth && localStorage.getItem("token")) {
-//     next("/");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach(function (to, _, next) {
+  if (to.meta.requiresAuth && !localStorage.getItem("token")) {
+    next("/login");
+  } else if (to.meta.requiresUnauth && localStorage.getItem("token")) {
+    next("/");
+  } else {
+    next();
+  }
+});
 
 export default router;

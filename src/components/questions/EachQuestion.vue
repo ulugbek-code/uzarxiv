@@ -22,13 +22,12 @@
         </div>
       </div>
     </div>
-
     <div class="content">
       <div class="container-fluid">
         <section id="content" class="content">
           <div class="row">
             <div id="content-main" class="col-12">
-              <form>
+              <form @submit.prevent="">
                 <div class="row">
                   <div class="col-12 col-lg-9">
                     <div class="card card-primary card-outline">
@@ -122,7 +121,36 @@
                                         class="col-sm-3 text-left"
                                         for="id_subject"
                                       >
-                                        Kategoriya nomi
+                                        Variant nomi
+
+                                        <span class="text-red">* </span>
+                                      </label>
+                                      <div class="col-sm-9 field-subject">
+                                        <div class="related-widget-wrapper">
+                                          <div
+                                            v-if="getQuestion"
+                                            class="d-inline-block w-50"
+                                          >
+                                            <base-dropdown
+                                              :options="getVariants"
+                                              :withObj="true"
+                                              :default="
+                                                getQuestion.variant_name
+                                              "
+                                              @input="getVariantChanges"
+                                            ></base-dropdown>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="field-subject mt-4 mx-4">
+                                    <div class="row">
+                                      <label
+                                        class="col-sm-3 text-left"
+                                        for="id_subject"
+                                      >
+                                        Savol nomi
 
                                         <span class="text-red">* </span>
                                       </label>
@@ -133,7 +161,7 @@
                                         >
                                           <div class="d-inline-block w-100">
                                             <textarea
-                                              v-model="questionName"
+                                              v-model.lazy="questionName"
                                               class="form-control"
                                             ></textarea>
                                           </div>
@@ -172,13 +200,15 @@
                                       <tr
                                         v-for="variant in getQuestion.variants"
                                         class="form-row has_original"
-                                        :key="variant.id"
+                                        :key="variant"
                                       >
                                         <each-variant
                                           :variant="variant"
                                           @deleteTr="removeTr"
+                                          @updateVariants="updateVar"
                                         ></each-variant>
                                       </tr>
+
                                       <div
                                         class="no-variants"
                                         v-if="getQuestion.variants.length === 0"
@@ -187,6 +217,9 @@
                                           There are not any variants yet!
                                         </p>
                                       </div>
+                                      <!-- {{
+                                        copyQuestions
+                                      }} -->
                                       <div class="add-tr">
                                         <button
                                           @click="addTr"
@@ -218,11 +251,13 @@
                         </div>
                         <div class="card-body">
                           <div class="d-grid my-2">
-                            <input
-                              type="submit"
-                              value="Saqlash"
+                            <button
+                              @click.prevent="saveQuestion"
                               class="btn btn-outline-success"
-                            />
+                              type="submit"
+                            >
+                              Saqlash
+                            </button>
                           </div>
 
                           <div class="d-grid my-2">
@@ -232,29 +267,17 @@
                           </div>
 
                           <div class="d-grid my-2">
-                            <input
-                              type="submit"
-                              class="btn btn-outline-info"
-                              value="Save and add another"
-                            />
+                            <button class="btn btn-outline-info">
+                              Saqlash va boshqasini qo'shish
+                            </button>
                           </div>
 
                           <div class="d-grid my-2">
-                            <input
-                              type="submit"
-                              class="btn btn-outline-info"
-                              value="Save and continue editing"
-                            />
+                            <button class="btn btn-outline-info">
+                              Saqlash va davom ettirish
+                            </button>
                           </div>
                         </div>
-                      </div>
-
-                      <div class="object-tools mb-md-2">
-                        <button
-                          class="btn btn-block btn-outline-secondary btn-sm"
-                        >
-                          History
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -269,6 +292,7 @@
 </template>
 
 <script>
+import costumAxios from "../../api";
 import EachVariant from "./EachVariant.vue";
 
 export default {
@@ -278,7 +302,7 @@ export default {
   },
   data() {
     return {
-      copyQuestions: this.getQuestion,
+      copyQuestion: {},
       questionName: "",
       status: "",
     };
@@ -286,9 +310,6 @@ export default {
   computed: {
     getQuestion() {
       return this.$store.getters.question(parseInt(this.id));
-    },
-    getAnswers() {
-      return this.$store.getters.answers;
     },
     getCategories() {
       return this.$store.getters.modules.map((module) => {
@@ -298,29 +319,63 @@ export default {
         };
       });
     },
+    getVariants() {
+      return this.$store.getters.variants;
+    },
   },
   methods: {
+    getVariantChanges(val) {
+      if (typeof val === "string") return;
+      else {
+        this.getQuestion.variant_id = val.id;
+        // console.log(this.getQuestion);
+        // console.log(val);
+      }
+    },
+    updateVar(val) {
+      // this.copyQuestion
+      this.getQuestion.variants = this.getQuestion.variants.map((va) => {
+        if (va.id == val.id) {
+          return val;
+        } else {
+          return va;
+        }
+      });
+      // console.log(val);
+      // console.log(this.getQuestion);
+    },
+    async saveQuestion() {
+      const arr = [];
+      arr.push(this.getQuestion);
+      const res = await costumAxios.post("main/question/post/", arr);
+      console.log(res);
+    },
     getQuestionCategory(val) {
       console.log(val);
     },
-    removeTr(id) {
-      console.log(id);
+    async removeTr(id) {
+      if (id === undefined) {
+        this.getQuestion.variants.pop();
+        return;
+      }
+      if (confirm("Haqiqatan ham o'chirishni xohlaysizmi")) {
+        await costumAxios.get(`main/question/delete/?id=${id}`);
+        await this.$store.dispatch("getQuestions");
+      }
     },
     async addTr() {
       this.getQuestion.variants.push({
-        id: Date.now(),
         name: "",
-        ball: 0,
+        ball: "0",
         status: "Mistake",
       });
     },
   },
   created() {
-    console.log("sada");
     this.$store.commit("activateQuestion");
     this.$store.dispatch("getQuestions");
     this.$store.dispatch("getModules");
-    this.$store.dispatch("getAnswers");
+    this.$store.dispatch("getVariants");
   },
   unmounted() {
     this.$store.commit("activateQuestion");
@@ -328,7 +383,9 @@ export default {
   watch: {
     getQuestion(newObj) {
       this.questionName = newObj.name;
-      // this.status =
+    },
+    questionName(val) {
+      this.getQuestion.name = val;
     },
   },
 };

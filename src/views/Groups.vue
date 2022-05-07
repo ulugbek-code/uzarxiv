@@ -21,7 +21,7 @@
       <div class="content">
         <div class="container-fluid">
           <section class="content">
-            <table class="table table-striped table-hover">
+            <table class="table table-hover">
               <thead>
                 <tr>
                   <th>Nomi</th>

@@ -1,6 +1,6 @@
 <template>
   <!-- <navigation-bar></navigation-bar> -->
-  <nav-bar></nav-bar>
+  <nav-bar v-if="isAuth || token"></nav-bar>
   <div :class="[isNavOpened ? 'body-pd' : '']" class="app-container">
     <!-- body-pd class above -->
     <router-view> </router-view>
@@ -22,7 +22,7 @@ export default {
       return this.$store.getters.isAuth;
     },
     token() {
-      return this.$store.getters.token;
+      return this.$store.state.token;
     },
   },
   methods: {

@@ -29,34 +29,7 @@
                     <h4 class="card-title fw-normal">
                       O'zgartirish uchun savolni tanlang
                     </h4>
-                    <div class="card-tools form-inline">
-                      <form
-                        id="changelist-search"
-                        class="form-inline"
-                        method="GET"
-                      >
-                        <div class="form-group">
-                          <select
-                            class="form-select"
-                            aria-label="Default select example"
-                          >
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                        </div>
-
-                        <button
-                          type="submit"
-                          class="btn btn-outline-primary mx-1"
-                        >
-                          Izlash
-                        </button>
-                      </form>
-                    </div>
                   </div>
-
                   <div class="card-body">
                     <!-- <form> -->
                     <div id="content-main">
@@ -64,47 +37,24 @@
                         <div class="row">
                           <div class="col-lg-12">
                             <div class="row">
-                              <div class="col-12 col-sm-8">
+                              <div class="col-md-4">
                                 <div class="actions">
-                                  <label>
-                                    <select
-                                      class="form-select"
-                                      aria-label="Default select example"
-                                    >
-                                      <option selected>
-                                        Open this select menu
-                                      </option>
-                                      <option value="1">One</option>
-                                      <option value="2">Two</option>
-                                      <option value="3">Three</option>
-                                    </select> </label
-                                  ><label
-                                    ><input
-                                      type="hidden"
-                                      name="select_across"
-                                      value="0"
-                                      class="select-across"
-                                  /></label>
-
-                                  <button
-                                    type="submit"
-                                    class="btn btn-outline-primary"
-                                    style="margin-right: 5px; margin-left: 15px"
-                                    title="Tanlangan faoliyatni ishga tushirish"
-                                    name="index"
-                                    value="0"
-                                  >
-                                    Go
-                                  </button>
-
-                                  <span
-                                    class="action-counter"
-                                    data-actions-icnt="4"
-                                    >0 of 4 selected</span
-                                  >
+                                  <div class="input-group mb-3">
+                                    <input
+                                      v-model.trim="search"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="Qidiruv..."
+                                    />
+                                    <span class="input-group-text">
+                                      <fa
+                                        class="text-secondary"
+                                        :icon="['fas', 'search']"
+                                    /></span>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-12 col-sm-4">
+                              <div class="col-md-8">
                                 <a
                                   href="/admin/quizapp/exam/add/"
                                   class="btn btn-outline-success float-end"
@@ -118,35 +68,25 @@
 
                             <div class="card">
                               <div class="card-body table-responsive p-0">
-                                <table
-                                  id="result_list"
-                                  class="table table-striped"
-                                >
+                                <table id="result_list" class="table">
                                   <thead>
                                     <tr>
-                                      <th
-                                        class="sorting"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
+                                      <th class="sorting" tabindex="0">
                                         <div class="text">
                                           <a>Savollar</a>
                                         </div>
                                       </th>
+                                      <th class="sorting">Kategoriya nomi</th>
+                                      <th class="sorting">Variant nomi</th>
+                                      <th></th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr v-for="q in questions" :key="q.id">
-                                      <td class="action-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          :value="q.id"
-                                          class="action-select"
-                                        />
-                                      </td>
-
-                                      <th class="field-subject nowrap">
+                                    <tr
+                                      v-for="q in filteredQuestions"
+                                      :key="q.id"
+                                    >
+                                      <td class="field-subject nowrap">
                                         <router-link
                                           :to="{
                                             name: 'question',
@@ -154,7 +94,14 @@
                                           }"
                                           >{{ q.name }}</router-link
                                         >
-                                      </th>
+                                      </td>
+                                      <td>{{ q.module_name }}</td>
+                                      <td>{{ q.variant_name }}</td>
+                                      <td @click="removeQuestion(q.id)">
+                                        <button class="btn btn-danger">
+                                          O'chirish
+                                        </button>
+                                      </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -165,7 +112,7 @@
                         <div class="row mt-2">
                           <div class="col-5">
                             <div class="dataTables_info">
-                              {{ questions.length }} Savollar
+                              {{ filteredQuestions.length }} Savollar
                             </div>
                           </div>
 
@@ -190,10 +137,29 @@
 </template>
 
 <script>
+import costumAxios from "../api";
 export default {
+  data() {
+    return {
+      search: "",
+    };
+  },
   computed: {
     questions() {
       return this.$store.getters.questions;
+    },
+    filteredQuestions() {
+      return this.questions.filter((question) => {
+        return question.name.toLowerCase().includes(this.search.toLowerCase());
+      });
+    },
+  },
+  methods: {
+    async removeQuestion(id) {
+      if (confirm("Haqiqatan ham o'chirishni xohlaysizmi")) {
+        await costumAxios.get(`main/question/delete_question/?id=${id}`);
+        await this.$store.dispatch("getQuestions");
+      }
     },
   },
   created() {

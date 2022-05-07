@@ -39,7 +39,7 @@
                         <!-- {{ getUsers }} -->
                       </div>
                       <div class="card-body">
-                        <div class="form-group field-subject">
+                        <!-- <div class="form-group field-subject">
                           <div class="row">
                             <label class="col-sm-2 text-left" for="id_subject">
                               Kategoriya
@@ -74,7 +74,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                         <div class="form-group field-subject">
                           <div class="row">
                             <label class="col-sm-2 text-left" for="id_subject">
@@ -366,22 +366,6 @@ export default {
       this.finishTime = newObj.finish_date.substring(11, 19);
       this.duration = newObj.duration;
     },
-    // getUser(newObj) {
-    //   this.password = newObj.password;
-    //   this.superStatus = newObj.is_superuser;
-    //   this.username = newObj.username;
-    //   this.firstname = newObj.first_name;
-    //   this.lastname = newObj.last_name;
-    //   this.email = newObj.email;
-    //   this.isStaff = newObj.is_staff;
-    //   this.isActive = newObj.is_active;
-    //   this.dateJoined = newObj.date_joined
-    //     .substring(0, 10)
-    //     .replaceAll("-", ".");
-    //   this.timeJoined = newObj.date_joined.substring(11, 19);
-    //   this.organization = newObj.organization;
-    //   this.position = newObj.position;
-    // },
   },
 };
 </script>

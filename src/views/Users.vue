@@ -32,28 +32,21 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="row">
-                        <div class="col-12 col-sm-8">
+                        <div class="col-md-4">
                           <div class="actions">
-                            <div class="for-label">
-                              <select
-                                class="form-select"
-                                aria-label="Default select example"
-                              >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                              </select>
+                            <div class="input-group mb-3">
+                              <input
+                                v-model.trim="search"
+                                type="text"
+                                class="form-control"
+                                placeholder="Qidiruv..."
+                              />
+                              <span class="input-group-text">
+                                <fa
+                                  class="text-secondary"
+                                  :icon="['fas', 'search']"
+                              /></span>
                             </div>
-                            <button
-                              type="submit"
-                              class="btn btn-outline-primary mx-2 mb-1"
-                            >
-                              Go
-                            </button>
-                            <span class="action-counter"
-                              >24 dan 0 tanlandi</span
-                            >
                           </div>
                         </div>
                         <div class="col-12 col-sm-4"></div>
@@ -61,7 +54,7 @@
                       <hr />
                       <div class="card">
                         <div class="card-body table-responsive p-0">
-                          <table id="result_list" class="table table-striped">
+                          <table class="table table-hover">
                             <thead>
                               <tr>
                                 <th
@@ -74,18 +67,31 @@
                                     <span>Foydalanuvchilar</span>
                                   </div>
                                 </th>
+                                <th class="sorting">
+                                  <div class="text">
+                                    <span>Passport raqami</span>
+                                  </div>
+                                </th>
+                                <th class="sorting">
+                                  <div class="text">
+                                    <span>Tashkilot</span>
+                                  </div>
+                                </th>
+                                <th class="sorting">
+                                  <div class="text">
+                                    <span>Pozitsiya</span>
+                                  </div>
+                                </th>
+                                <th class="sorting">
+                                  <div class="text">
+                                    <span></span>
+                                  </div>
+                                </th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="user in users" :key="user.is">
-                                <td class="action-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    :value="user.id"
-                                    class="action-select"
-                                  />
-                                </td>
-                                <th class="field-__str__">
+                              <tr v-for="user in filteredUsers" :key="user.id">
+                                <td>
                                   <!-- <router-link :to="`/users/${user.id}`">{{user.username}}</router-link> -->
                                   <router-link
                                     :to="{
@@ -94,7 +100,30 @@
                                     }"
                                     >{{ user.username }}</router-link
                                   >
-                                </th>
+                                </td>
+                                <td>{{ user.pass_number }}</td>
+                                <td>{{ user.organization }}</td>
+                                <td>{{ user.position }}</td>
+                                <td>
+                                  <button
+                                    @click="goUserDetails(user.id)"
+                                    class="btn btn-warning mx-2"
+                                  >
+                                    <fa
+                                      class="text-light"
+                                      :icon="['fas', 'pencil']"
+                                    />
+                                  </button>
+                                  <button
+                                    @click="deleteUser(user.id)"
+                                    class="btn btn-danger"
+                                  >
+                                    <fa
+                                      class="text-light"
+                                      :icon="['fas', 'trash-alt']"
+                                    />
+                                  </button>
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -109,7 +138,7 @@
                         role="status"
                         aria-live="polite"
                       >
-                        {{ users.length }} Foydalanuvchilar
+                        {{ filteredUsers.length }} Foydalanuvchilar
                       </div>
                     </div>
 
@@ -128,10 +157,35 @@
 </template>
 
 <script>
+import costumAxios from "../api";
 export default {
+  data() {
+    return {
+      search: "",
+    };
+  },
   computed: {
+    filteredUsers() {
+      return this.users.filter((user) => {
+        return (
+          user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
+          user.username.toLowerCase().includes(this.search.toLowerCase())
+        );
+      });
+    },
     users() {
       return this.$store.getters.users;
+    },
+  },
+  methods: {
+    goUserDetails(userId) {
+      this.$router.push({ name: "user", params: { id: userId } });
+    },
+    async deleteUser(id) {
+      if (confirm("Siz haqiqatan ham o'chirmoqchimisiz")) {
+        await costumAxios.delete(`main/user/${id}/`);
+        await this.$store.dispatch("getUsers");
+      }
     },
   },
   created() {
@@ -168,7 +222,7 @@ export default {
 .table td,
 .table th {
   padding: 0.75rem;
-  vertical-align: top;
+  vertical-align: baseline;
   border-top: 1px solid #dee2e6;
 }
 .card-body::after,
@@ -296,5 +350,8 @@ button {
   font-size: 0.8em;
   color: #859099;
   font-style: italic;
+}
+.input-group {
+  flex-wrap: nowrap;
 }
 </style>

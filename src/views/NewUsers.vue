@@ -4,6 +4,8 @@
       <div class="container">
         <div class="user signinBx">
           <div class="imgBx">
+            {{ getUsers }}
+            {{ isInvalidPassportNumber.length }}
             <h2>
               Xush kelibsiz <br /><span class="text-danger">Uz</span>
               <span class="text-success">Arxiv</span> ga
@@ -20,11 +22,22 @@
             <form @submit.prevent="">
               <h2>Foydalanuvchi yaratish</h2>
               <input
+                :class="[
+                  isInvalidPassportNumber.length === 0
+                    ? 'border-success'
+                    : 'border-danger',
+                ]"
+                class="border border-2"
                 v-model.trim="passportNumber"
                 type="text"
                 placeholder="Passport raqami"
+                minlength="9"
+                maxlength="9"
                 required
               />
+              <span class="text-danger mb-0">
+                {{ notValidPassport }}
+              </span>
               <input
                 v-model.trim="login"
                 type="text"
@@ -58,9 +71,9 @@
                 required
                 maxlength="50"
               />
-              <p v-if="passwordValidity" class="text-danger mb-0">
+              <span v-if="passwordValidity" class="text-danger mb-0">
                 Parol takrorlanmadi
-              </p>
+              </span>
               <input
                 v-model.trim="company"
                 type="text"
@@ -98,10 +111,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import customAxios from "../api";
 export default {
   data() {
     return {
+      notValidPassport: "",
+      isInvalidPassportNumber: [],
       passportNumber: "",
       login: "",
       firstname: "",
@@ -113,6 +128,11 @@ export default {
       passwordValidity: false,
       isEmpty: false,
     };
+  },
+  computed: {
+    getUsers() {
+      return this.$store.getters.users;
+    },
   },
   methods: {
     changeValidity() {
@@ -132,29 +152,27 @@ export default {
           !this.position
         )
           return (this.isEmpty = true);
-        if (this.password === this.confirmPassword) {
-          const response = await axios.post(
-            "https://quiz.multisim.uz/main/user/",
-            {
-              password: this.password,
-              username: this.login,
-              first_name: this.firstname,
-              last_name: this.lastname,
-              organization: this.company,
-              position: this.position,
-              pass_number: this.passportNumber,
-            },
-            {
-              headers: {
-                Authorization: `Token ${JSON.parse(
-                  localStorage.getItem("token")
-                )}`,
-              },
-            }
-          );
+        if (
+          this.password === this.confirmPassword &&
+          this.isInvalidPassportNumber.length === 0
+        ) {
+          const response = await customAxios.post("main/user/", {
+            password: this.password,
+            username: this.login,
+            first_name: this.firstname,
+            last_name: this.lastname,
+            organization: this.company,
+            position: this.position,
+            pass_number: this.passportNumber,
+          });
           console.log(response);
-          this.$router.replace("/");
+          this.$router.replace("/users");
         } else {
+          if (this.isInvalidPassportNumber.length !== 0) {
+            this.notValidPassport = "Bunday passport raqami allaqachon mavjud!";
+            setTimeout(() => (this.notValidPassport = ""), 2000);
+            return;
+          }
           this.passwordValidity = true;
         }
       } catch (e) {
@@ -174,9 +192,16 @@ export default {
         (this.position = "");
     },
   },
+  created() {
+    this.$store.dispatch("getUsers");
+  },
   watch: {
     passportNumber(newVal) {
-      console.log(newVal);
+      this.isInvalidPassportNumber = this.getUsers.filter((user) => {
+        return user.pass_number.toLowerCase().includes(newVal.toLowerCase());
+        // ? true
+        // : false;
+      });
     },
     isEmpty(newVal) {
       if (newVal === true) {
@@ -205,16 +230,12 @@ export default {
   text-align: center;
 }
 section {
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
   min-height: 100%;
-  background-color: #f8dd30;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 30px;
   z-index: 100;
 }
 
