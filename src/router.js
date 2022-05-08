@@ -12,7 +12,7 @@ import EachQuestion from "./components/questions/EachQuestion.vue";
 import Exams from "./views/Exams.vue";
 import EachExam from "./components/exams/EachExam.vue";
 import Categories from "./views/Categories.vue";
-import EachCategory from "./components/categories/EachCategory.vue";
+// import EachCategory from "./components/categories/EachCategory.vue";
 import Results from "./views/Results.vue";
 import NewUsers from "./views/NewUsers.vue";
 import NotFound from "./views/NotFound.vue";
@@ -65,13 +65,13 @@ const router = createRouter({
       component: Categories,
       meta: { requiresAuth: true },
     },
-    {
-      path: "/categories/:id",
-      name: "category",
-      component: EachCategory,
-      props: true,
-      meta: { requiresAuth: true },
-    },
+    // {
+    //   path: "/categories/:id",
+    //   name: "category",
+    //   component: EachCategory,
+    //   props: true,
+    //   meta: { requiresAuth: true },
+    // },
     { path: "/results", component: Results, meta: { requiresAuth: true } },
     { path: "/newuser", component: NewUsers, meta: { requiresAuth: true } },
     { path: "/login", component: SignIn, meta: { requiresUnauth: true } },

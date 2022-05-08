@@ -33,7 +33,7 @@ export default {
   async getVariants(context) {
     try {
       const res = await customAxios.get("main/variant/");
-      // console.log(res);
+      console.log(res);
       context.commit("getVariants", res);
     } catch (e) {
       console.log(e.response);

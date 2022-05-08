@@ -30,7 +30,7 @@
                       O'zgartirish uchun kategoriyani tanlang
                     </h4>
                   </div>
-
+                  <!-- {{ filteredCategories }} -->
                   <div class="card-body">
                     <!-- <form> -->
                     <div id="content-main">
@@ -65,36 +65,24 @@
                                 </a>
                               </div>
                             </div>
-                            <hr />
-
-                            <div class="card">
-                              <div class="card-body table-responsive p-0">
-                                <table id="result_list" class="table">
-                                  <thead>
-                                    <tr>
-                                      <th
-                                        class="sorting"
-                                        tabindex="0"
-                                        rowspan="1"
-                                        colspan="1"
-                                      >
-                                        <div class="text">
-                                          <a>Kategoriyalar</a>
-                                        </div>
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr
-                                      v-for="cat in filteredCategories"
-                                      :key="cat.id"
-                                    >
-                                      <each-category-row
-                                        :cat="cat"
-                                      ></each-category-row>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                            <div class="card my-3 table-responsive">
+                              <div class="custom-table">
+                                <div class="first-row">
+                                  <p>Kategoriyalar</p>
+                                  <p>Qisqartma</p>
+                                  <p>No 1</p>
+                                  <p>No 2</p>
+                                  <p></p>
+                                </div>
+                                <template
+                                  v-for="cat in filteredCategories"
+                                  :key="cat.id"
+                                >
+                                  <each-category-row
+                                    :cat="cat"
+                                    @deleteCat="removeCategory"
+                                  ></each-category-row>
+                                </template>
                               </div>
                             </div>
                           </div>
@@ -131,6 +119,7 @@
 </template>
 
 <script>
+import customAxios from "../api";
 import EachCategoryRow from "../components/categories/EachCategoryRow.vue";
 export default {
   components: {
@@ -151,6 +140,14 @@ export default {
       });
     },
   },
+  methods: {
+    async removeCategory(id) {
+      if (confirm("Siz haqiqatan ham o'chirmoqchimisiz?")) {
+        await customAxios.delete(`main/module/${id}`);
+        await this.$store.dispatch("getModules");
+      }
+    },
+  },
   created() {
     this.$store.dispatch("getModules");
   },
@@ -158,6 +155,22 @@ export default {
 </script>
 
 <style scoped>
+.custom-table {
+  transition: all 0.4s ease;
+}
+.first-row {
+  width: 100%;
+  display: flex;
+  margin-bottom: 4px;
+  border-bottom: 2px solid #444;
+}
+.first-row p {
+  font-weight: 600;
+  flex: 1;
+  margin: 0;
+  padding: 12px;
+  text-align: center;
+}
 .card-header {
   display: flex;
   justify-content: space-between;
