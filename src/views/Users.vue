@@ -138,7 +138,7 @@
                         role="status"
                         aria-live="polite"
                       >
-                        {{ filteredUsers.length }} Foydalanuvchilar
+                        {{ filteredUsers.length }} ta foydalanuvchilar
                       </div>
                     </div>
 

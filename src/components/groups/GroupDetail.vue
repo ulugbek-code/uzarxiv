@@ -1,5 +1,5 @@
 <template>
-  <div v-if="groupDetails" class="container-fluid app-wrapper">
+  <div v-if="groupDetails.length" class="container-fluid app-wrapper">
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
@@ -55,13 +55,20 @@
               </ul>
             </div>
             <div class="col-sm-3">
-              <button
-                @click="goGroupDetail(groupDetails[0].group.module)"
-                type="button"
-                class="btn btn-primary float-end"
+              <router-link
+                :to="{
+                  name: 'exam',
+                  params: { id: id },
+                }"
               >
-                Imtihon olish
-              </button>
+                <button type="button" class="btn btn-primary float-end">
+                  {{
+                    groupDetails[0].group.exams.length > 0
+                      ? "Imtihon qayta topshirish"
+                      : "Imtihon olish"
+                  }}
+                </button>
+              </router-link>
             </div>
           </div>
         </div>
@@ -76,7 +83,6 @@
                 <th>Pozitsiya</th>
                 <th>To'lov holati</th>
                 <th>Imtihon holati</th>
-
                 <th>Imtihon sertifikati</th>
               </tr>
             </thead>
@@ -134,7 +140,14 @@
 
                 <p></p>
                 <div class="d-flex" style="justify-content: space-between">
-                  <a href="#" class="btn btn-primary">Ko'rish</a>
+                  <router-link
+                    :to="{
+                      name: 'operation',
+                      params: { id: exam.id },
+                    }"
+                  >
+                    <button class="btn btn-primary">Ko'rish</button>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -166,11 +179,6 @@ export default {
     },
   },
   methods: {
-    goGroupDetail(name) {
-      {
-        console.log(name);
-      }
-    },
     formatDate(date) {
       let day = new Date(date).toUTCString().slice(5, 22);
       day =
@@ -203,6 +211,10 @@ export default {
 .card {
   margin-bottom: 1rem;
 }
+p {
+  margin-bottom: 8px;
+}
+
 p span {
   line-height: 2;
 }

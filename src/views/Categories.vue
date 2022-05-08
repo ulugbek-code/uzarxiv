@@ -29,82 +29,33 @@
                     <h4 class="card-title fw-normal">
                       O'zgartirish uchun kategoriyani tanlang
                     </h4>
-                    <div class="card-tools form-inline">
-                      <form
-                        id="changelist-search"
-                        class="form-inline"
-                        method="GET"
-                      >
-                        <div class="form-group">
-                          <select
-                            class="form-select"
-                            aria-label="Default select example"
-                          >
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                          </select>
-                        </div>
-
-                        <button
-                          type="submit"
-                          class="btn btn-outline-primary mx-1"
-                        >
-                          Izlash
-                        </button>
-                      </form>
-                    </div>
                   </div>
 
                   <div class="card-body">
                     <!-- <form> -->
                     <div id="content-main">
-                      <div class="module filtered" id="changelist">
+                      <div class="module filtered">
                         <div class="row">
                           <div class="col-lg-12">
                             <div class="row">
-                              <div class="col-12 col-sm-8">
+                              <div class="col-md-4">
                                 <div class="actions">
-                                  <label>
-                                    <select
-                                      class="form-select"
-                                      aria-label="Default select example"
-                                    >
-                                      <option selected>
-                                        Open this select menu
-                                      </option>
-                                      <option value="1">One</option>
-                                      <option value="2">Two</option>
-                                      <option value="3">Three</option>
-                                    </select> </label
-                                  ><label
-                                    ><input
-                                      type="hidden"
-                                      name="select_across"
-                                      value="0"
-                                      class="select-across"
-                                  /></label>
-
-                                  <button
-                                    type="submit"
-                                    class="btn btn-outline-primary"
-                                    style="margin-right: 5px; margin-left: 15px"
-                                    title="Tanlangan faoliyatni ishga tushirish"
-                                    name="index"
-                                    value="0"
-                                  >
-                                    Go
-                                  </button>
-
-                                  <span
-                                    class="action-counter"
-                                    data-actions-icnt="4"
-                                    >0 of 4 selected</span
-                                  >
+                                  <div class="input-group mb-3">
+                                    <input
+                                      v-model.trim="search"
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="Qidiruv..."
+                                    />
+                                    <span class="input-group-text">
+                                      <fa
+                                        class="text-secondary"
+                                        :icon="['fas', 'search']"
+                                    /></span>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-12 col-sm-4">
+                              <div class="col-md-8">
                                 <a
                                   href="/admin/quizapp/exam/add/"
                                   class="btn btn-outline-success float-end"
@@ -134,7 +85,10 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr v-for="cat in categories" :key="cat.id">
+                                    <tr
+                                      v-for="cat in filteredCategories"
+                                      :key="cat.id"
+                                    >
                                       <each-category-row
                                         :cat="cat"
                                       ></each-category-row>
@@ -152,7 +106,7 @@
                               role="status"
                               aria-live="polite"
                             >
-                              {{ categories.length }} Kategoriyalar
+                              {{ filteredCategories.length }} ta kategoriyalar
                             </div>
                           </div>
 
@@ -182,9 +136,19 @@ export default {
   components: {
     EachCategoryRow,
   },
+  data() {
+    return {
+      search: "",
+    };
+  },
   computed: {
     categories() {
       return this.$store.getters.modules;
+    },
+    filteredCategories() {
+      return this.categories.filter((category) => {
+        return category.name.toLowerCase().includes(this.search.toLowerCase());
+      });
     },
   },
   created() {

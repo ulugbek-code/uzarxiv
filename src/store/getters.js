@@ -38,7 +38,11 @@ export default {
   modules(state) {
     return state.modules;
   },
+  // groups
   groups(state) {
     return state.groups;
+  },
+  operationDetails(state) {
+    return state.operationDetails;
   },
 };

@@ -34,7 +34,14 @@
 
                 <p></p>
                 <div class="d-flex" style="justify-content: space-between">
-                  <a href="/user-details/17" class="btn btn-primary">Ko'rish</a>
+                  <router-link
+                    :to="{
+                      name: 'operation',
+                      params: { id: exam.id },
+                    }"
+                  >
+                    <button class="btn btn-primary">Ko'rish</button>
+                  </router-link>
                 </div>
               </div>
             </div>

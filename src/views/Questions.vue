@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-
+      <!-- {{ filterByVariant }} -->
       <div class="content">
         <div class="container-fluid">
           <section id="content" class="content">
@@ -29,6 +29,14 @@
                     <h4 class="card-title fw-normal">
                       O'zgartirish uchun savolni tanlang
                     </h4>
+                    <div v-if="variants.length" class="col-md-3 col-sm-6 col-6">
+                      <base-dropdown
+                        :options="variants"
+                        :withObj="true"
+                        :default="variants[0].name"
+                        @input="getVariantChanges"
+                      ></base-dropdown>
+                    </div>
                   </div>
                   <div class="card-body">
                     <!-- <form> -->
@@ -64,8 +72,6 @@
                                 </a>
                               </div>
                             </div>
-                            <hr />
-
                             <div class="card">
                               <div class="card-body table-responsive p-0">
                                 <table id="result_list" class="table">
@@ -112,7 +118,7 @@
                         <div class="row mt-2">
                           <div class="col-5">
                             <div class="dataTables_info">
-                              {{ filteredQuestions.length }} Savollar
+                              {{ filteredQuestions.length }} ta savollar
                             </div>
                           </div>
 
@@ -142,19 +148,35 @@ export default {
   data() {
     return {
       search: "",
+      filterByVariant: null,
     };
   },
   computed: {
     questions() {
       return this.$store.getters.questions;
     },
+    variants() {
+      return this.$store.getters.variants;
+    },
+    chosenQuestionsByVariant() {
+      return this.questions.filter(
+        (question) => question.variant_id === this.filterByVariant
+      );
+    },
     filteredQuestions() {
-      return this.questions.filter((question) => {
+      return this.chosenQuestionsByVariant.filter((question) => {
         return question.name.toLowerCase().includes(this.search.toLowerCase());
       });
     },
   },
   methods: {
+    getVariantChanges(val) {
+      if (typeof val === "string") {
+        this.filterByVariant = this.variants[0].id;
+      } else {
+        this.filterByVariant = val.id;
+      }
+    },
     async removeQuestion(id) {
       if (confirm("Haqiqatan ham o'chirishni xohlaysizmi")) {
         await costumAxios.get(`main/question/delete_question/?id=${id}`);
@@ -164,6 +186,7 @@ export default {
   },
   created() {
     this.$store.dispatch("getQuestions");
+    this.$store.dispatch("getVariants");
   },
 };
 </script>

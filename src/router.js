@@ -5,6 +5,7 @@ import Dashboard from "./views/Dashboard.vue";
 import Users from "./views/Users.vue";
 import Groups from "./views/Groups.vue";
 import GroupDetail from "./components/groups/GroupDetail.vue";
+import OperationDetails from "./components/operation/OperationDetails";
 import EachUser from "./components/users/EachUser.vue";
 import Questions from "./views/Questions.vue";
 import EachQuestion from "./components/questions/EachQuestion.vue";
@@ -36,6 +37,13 @@ const router = createRouter({
       props: true,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/operation-detail/:id",
+      name: "operation",
+      component: OperationDetails,
+      props: true,
+      meta: { requiresAuth: true },
+    },
     { path: "/questions", component: Questions, meta: { requiresAuth: true } },
     {
       path: "/questions/:id",
@@ -46,7 +54,7 @@ const router = createRouter({
     },
     { path: "/exams", component: Exams, meta: { requiresAuth: true } },
     {
-      path: "/exams/:id",
+      path: "/exams/add-exam/:id",
       name: "exam",
       component: EachExam,
       props: true,

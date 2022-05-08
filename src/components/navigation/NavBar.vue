@@ -14,7 +14,7 @@
       <div>
         <router-link to="/" class="nav_logo">
           <fa class="bx bx-layer nav_logo-icon" :icon="['fas', 'a']" />
-          <span class="nav_logo-name">Quiz App</span>
+          <span class="nav_logo-name">Uz Arxiv</span>
         </router-link>
         <div class="nav_list">
           <hr />

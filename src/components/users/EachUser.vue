@@ -249,14 +249,6 @@
                           </div>
                         </div>
                       </div>
-
-                      <div class="object-tools mb-md-2">
-                        <button
-                          class="btn btn-block btn-outline-secondary btn-sm"
-                        >
-                          History
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>

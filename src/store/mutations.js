@@ -45,7 +45,11 @@ export default {
   getModules(state, payload) {
     state.modules = payload.data;
   },
+  // groups
   getGroups(state, payload) {
     state.groups = payload.data;
+  },
+  getOperationDetails(state, payload) {
+    state.operationDetails = payload.data;
   },
 };

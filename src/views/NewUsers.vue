@@ -4,8 +4,8 @@
       <div class="container">
         <div class="user signinBx">
           <div class="imgBx">
-            {{ getUsers }}
-            {{ isInvalidPassportNumber.length }}
+            <!-- {{ getUsers }}
+            {{ isInvalidPassportNumber.length }} -->
             <h2>
               Xush kelibsiz <br /><span class="text-danger">Uz</span>
               <span class="text-success">Arxiv</span> ga
@@ -23,11 +23,11 @@
               <h2>Foydalanuvchi yaratish</h2>
               <input
                 :class="[
-                  isInvalidPassportNumber.length === 0
+                  isInvalidPassportNumber.length === 0 && passportNumber.length
                     ? 'border-success'
                     : 'border-danger',
                 ]"
-                class="border border-2"
+                class="form-control mb-2 border border-2"
                 v-model.trim="passportNumber"
                 type="text"
                 placeholder="Passport raqami"
@@ -40,6 +40,7 @@
               </span>
               <input
                 v-model.trim="login"
+                class="form-control mb-2"
                 type="text"
                 placeholder="Login"
                 required
@@ -47,6 +48,7 @@
               />
               <input
                 v-model.trim="firstname"
+                class="form-control mb-2"
                 type="text"
                 placeholder="Ismi"
                 required
@@ -54,18 +56,21 @@
               />
               <input
                 v-model.trim="lastname"
+                class="form-control mb-2"
                 type="text"
                 placeholder="Familiyasi"
                 required
               />
               <input
                 v-model="password"
+                class="form-control mb-2"
                 type="password"
                 placeholder="Parol"
                 required
               />
               <input
                 v-model.trim="confirmPassword"
+                class="form-control mb-2"
                 type="password"
                 placeholder="Parolni takrorlash"
                 required
@@ -76,6 +81,7 @@
               </span>
               <input
                 v-model.trim="company"
+                class="form-control mb-2"
                 type="text"
                 placeholder="Tashkilot nomi"
                 required
@@ -83,6 +89,7 @@
               />
               <input
                 v-model.trim="position"
+                class="form-control"
                 type="text"
                 placeholder="Pozitsiya"
                 required
@@ -297,33 +304,9 @@ section .container .user .formBx form h2 {
   margin-bottom: 10px;
   color: #555;
 }
-
-section .container .user .formBx form input {
-  position: relative;
-  width: 100%;
-  padding: 10px;
-  background: #f5f5f5;
-  color: #333;
-  border: none;
-  outline: none;
-  box-shadow: none;
-  margin: 8px 0;
-  font-size: 14px;
-  letter-spacing: 1px;
-  font-weight: 300;
+input::placeholder {
+  opacity: 0.7;
 }
-
-section .container .user .formBx form input[type="submit"] {
-  max-width: 100px;
-  background: #677eff;
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  transition: 0.5s;
-}
-
 section .container .user .formBx form .signup {
   position: relative;
   margin-top: 20px;

@@ -33,7 +33,7 @@ export default {
   async getVariants(context) {
     try {
       const res = await customAxios.get("main/variant/");
-      console.log(res);
+      // console.log(res);
       context.commit("getVariants", res);
     } catch (e) {
       console.log(e.response);
@@ -65,6 +65,17 @@ export default {
       const res = await customAxios.get("main/group/");
       // console.log(res);
       context.commit("getGroups", res);
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
+  async getOperationDetails(context, payload) {
+    try {
+      const res = await customAxios.get(
+        "operation/result/filter/?exam_id=" + payload
+      );
+      console.log(res);
+      context.commit("getOperationDetails", res);
     } catch (e) {
       console.log(e.response);
     }

@@ -21,6 +21,7 @@ const store = createStore({
       answers: [],
       modules: [],
       groups: [],
+      operationDetails: [],
     };
   },
   mutations: rootMutations,
