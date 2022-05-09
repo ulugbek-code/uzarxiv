@@ -150,6 +150,7 @@ export default {
   },
   created() {
     this.$store.dispatch("getModules");
+    this.$store.dispatch("getVariants");
   },
 };
 </script>
@@ -169,7 +170,10 @@ export default {
   flex: 1;
   margin: 0;
   padding: 12px;
-  text-align: center;
+}
+.first-row p:first-child,
+.first-row p:nth-child(2) {
+  flex: 2;
 }
 .card-header {
   display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <div @click="isVariantsOpen = !isVariantsOpen" class="first-row">
+  <div @click.stop="isVariantsOpen = !isVariantsOpen" class="first-row">
     <p v-if="isLabel">
       <fa
         :class="{ spin: isVariantsOpen }"
@@ -8,19 +8,39 @@
       />
       {{ cat.name }}
     </p>
-    <div v-else>
-      <input v-model="labelName" class="form-control" type="text" />
-      <button class="btn btn-primary mx-2 mb-1">Jo'natish</button>
+    <div @click.stop="" v-if="!isLabel">
+      <input
+        v-model="labelName"
+        class="form-control"
+        type="text"
+        placeholder="To'ldirish shart!"
+      />
     </div>
-    <p>{{ cat.AT }}</p>
+    <div @click.stop="" v-if="!isLabel">
+      <input
+        v-model="abbName"
+        class="form-control"
+        type="text"
+        placeholder="To'ldirish shart!"
+      />
+    </div>
+    <p v-if="isLabel">{{ cat.AT }}</p>
     <p>{{ cat.no_1 }}</p>
     <p>{{ cat.no_2 }}</p>
-    <div class="float-end">
-      <button @click="changeCategory" class="btn btn-warning mx-2">
+    <div v-if="isLabel" @click.stop="" class="actions mb-1">
+      <button @click="changeCategory" class="btn btn-warning">
         <fa class="text-light" :icon="['fas', 'pencil']" />
       </button>
-      <button @click="$emit('deleteCat', cat.id)" class="btn btn-danger">
+      <button @click="$emit('deleteCat', cat.id)" class="btn btn-danger mx-2">
         <fa class="text-light" :icon="['fas', 'trash-alt']" />
+      </button>
+    </div>
+    <div v-else @click.stop="" class="actions mb-1">
+      <button @click="updateCategory" class="btn btn-success">
+        <fa class="text-light" :icon="['fas', 'circle-check']" />
+      </button>
+      <button @click="isLabel = true" class="btn btn-danger mx-2">
+        <fa class="text-light" :icon="['fas', 'circle-xmark']" />
       </button>
     </div>
   </div>
@@ -31,32 +51,29 @@
         <p class="bolder">Izoh</p>
         <p></p>
       </div>
-      <div v-for="v in getVariants" class="second-row" :key="v.id">
-        <p>{{ v.name }}</p>
-        <p>{{ v.description ? v.description : "No description" }}</p>
-        <div class="float-end">
-          <button @click="changeCategory" class="btn btn-warning mx-2">
-            <fa class="text-light" :icon="['fas', 'pencil']" />
-          </button>
-          <button @click="$emit('deleteCat', cat.id)" class="btn btn-danger">
-            <fa class="text-light" :icon="['fas', 'trash-alt']" />
-          </button>
-        </div>
-      </div>
+      <template v-for="v in getVariants" :key="v.id">
+        <each-variant-of-category :v="v"></each-variant-of-category>
+      </template>
       <button class="btn btn-primary float-end">Variant qo'shish</button>
     </div>
   </template>
 </template>
 
 <script>
+import customAxios from "../../api";
+import EachVariantOfCategory from "./EachVariantOfCategory.vue";
 export default {
   props: ["cat"],
   emits: ["deleteCat"],
+  components: {
+    EachVariantOfCategory,
+  },
   data() {
     return {
       isVariantsOpen: false,
       isLabel: true,
       labelName: this.cat.name,
+      abbName: this.cat.AT,
     };
   },
   computed: {
@@ -70,10 +87,21 @@ export default {
     changeCategory() {
       this.isLabel = !this.isLabel;
     },
+    async updateCategory() {
+      if (!this.labelName || !this.abbName) return;
+      await customAxios.patch(`main/module/${this.cat.id}/`, {
+        name: this.labelName,
+        AT: this.abbName,
+        no_1: this.cat.no_1,
+        no_2: this.cat.no_2,
+      });
+      await this.$store.dispatch("getModules");
+      this.isLabel = true;
+    },
   },
-  created() {
-    this.$store.dispatch("getVariants");
-  },
+  // created() {
+  //   this.$store.dispatch("getVariants");
+  // },
 };
 </script>
 
@@ -108,9 +136,12 @@ p {
 .first-row div {
   flex: 1;
 }
-.first-row p {
-  text-align: center;
+.first-row p:first-child,
+.first-row div:first-child,
+.first-row div:nth-child(2) {
+  flex: 2;
 }
+.first-row p:not(:first-child),
 .second-row p {
   padding-left: 1rem;
 }
@@ -124,8 +155,8 @@ p {
 .bolder {
   font-weight: 500;
 }
-/* p,
-div {
-  display: inline-block;
-} */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>

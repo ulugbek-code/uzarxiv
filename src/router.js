@@ -2,19 +2,31 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import SignIn from "./views/SignIn.vue";
 import Dashboard from "./views/Dashboard.vue";
-import Users from "./views/Users.vue";
-import Groups from "./views/Groups.vue";
-import GroupDetail from "./components/groups/GroupDetail.vue";
-import OperationDetails from "./components/operation/OperationDetails";
-import EachUser from "./components/users/EachUser.vue";
-import Questions from "./views/Questions.vue";
-import EachQuestion from "./components/questions/EachQuestion.vue";
-import Exams from "./views/Exams.vue";
-import EachExam from "./components/exams/EachExam.vue";
-import Categories from "./views/Categories.vue";
+const Users = () => import("./views/Users.vue");
+const Groups = () => import("./views/Groups.vue");
+const GroupDetail = () => import("./components/groups/GroupDetail.vue");
+const OperationDetails = () =>
+  import("./components/operation/OperationDetails");
+const EachUser = () => import("./components/users/EachUser.vue");
+const Questions = () => import("./views/Questions.vue");
+const EachQuestion = () => import("./components/questions/EachQuestion.vue");
+const Exams = () => import("./views/Exams.vue");
+const EachExam = () => import("./components/exams/EachExam.vue");
+const Categories = () => import("./views/Categories.vue");
+const Results = () => import("./views/Results.vue");
+const NewUsers = () => import("./views/NewUsers.vue");
+// import Users from "./views/Users.vue";
+// import Groups from "./views/Groups.vue";
+// import GroupDetail from "./components/groups/GroupDetail.vue";
+// import OperationDetails from "./components/operation/OperationDetails";
+// import EachUser from "./components/users/EachUser.vue";
+// import Questions from "./views/Questions.vue";
+// import EachQuestion from "./components/questions/EachQuestion.vue";
+// import Exams from "./views/Exams.vue";
+// import EachExam from "./components/exams/EachExam.vue";
+// import Categories from "./views/Categories.vue";
 // import EachCategory from "./components/categories/EachCategory.vue";
-import Results from "./views/Results.vue";
-import NewUsers from "./views/NewUsers.vue";
+// import Results from "./views/Results.vue";
 import NotFound from "./views/NotFound.vue";
 
 const router = createRouter({

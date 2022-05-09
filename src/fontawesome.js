@@ -22,6 +22,7 @@ import {
   faSearch,
   faTrashAlt,
   faAngleDown,
+  faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -45,7 +46,8 @@ library.add(
   faPlus,
   faSearch,
   faTrashAlt,
-  faAngleDown
+  faAngleDown,
+  faCircleXmark
 );
 
 export default FontAwesomeIcon;
