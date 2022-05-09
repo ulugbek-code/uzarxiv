@@ -54,7 +54,36 @@
       <template v-for="v in getVariants" :key="v.id">
         <each-variant-of-category :v="v"></each-variant-of-category>
       </template>
-      <button class="btn btn-primary float-end">Variant qo'shish</button>
+      <div v-if="isAddVariantOpened" class="second-row">
+        <input
+          v-model="newVariantName"
+          class="form-control mx-2 mb-1"
+          type="text"
+        />
+        <input
+          v-model="newVariantDesc"
+          class="form-control mx-2 mb-1"
+          type="text"
+        />
+        <div class="actions mb-1">
+          <button @click="createVariant" class="btn btn-success">
+            <fa class="text-light" :icon="['fas', 'circle-check']" />
+          </button>
+          <button @click="resetNewVariant" class="btn btn-danger mx-2">
+            <fa class="text-light" :icon="['fas', 'circle-xmark']" />
+          </button>
+        </div>
+      </div>
+      <button
+        v-if="!isAddVariantOpened"
+        @click="isAddVariantOpened = true"
+        class="btn btn-primary float-end"
+      >
+        Variant qo'shish
+      </button>
+      <button v-else @click="denyCreating" class="btn btn-danger float-end">
+        Bekor qilish
+      </button>
     </div>
   </template>
 </template>
@@ -71,9 +100,12 @@ export default {
   data() {
     return {
       isVariantsOpen: false,
+      isAddVariantOpened: false,
       isLabel: true,
       labelName: this.cat.name,
       abbName: this.cat.AT,
+      newVariantName: "",
+      newVariantDesc: "",
     };
   },
   computed: {
@@ -84,6 +116,25 @@ export default {
     },
   },
   methods: {
+    resetNewVariant() {
+      this.newVariantName = "";
+      this.newVariantDesc = "";
+    },
+    denyCreating() {
+      this.isAddVariantOpened = false;
+      this.resetNewVariant();
+    },
+    async createVariant() {
+      if (!this.newVariantName) return;
+      await customAxios.post("main/variant/", {
+        name: this.newVariantName,
+        module: this.cat.id,
+        description: this.newVariantDesc,
+      });
+      await this.$store.dispatch("getVariants");
+      this.resetNewVariant();
+      this.isAddVariantOpened = false;
+    },
     changeCategory() {
       this.isLabel = !this.isLabel;
     },
@@ -131,15 +182,25 @@ p {
   margin-bottom: 10px;
 }
 .first-row p,
-.second-row p,
-.second-row div,
+/* .second-row p, */
+/* .second-row div, */
 .first-row div {
-  flex: 1;
+  width: 20%;
+  /* flex: 1; */
+}
+.second-row input,
+.second-row div {
+  width: 30%;
+}
+.second-row p {
+  width: 33%;
 }
 .first-row p:first-child,
+.first-row p:nth-child(2),
 .first-row div:first-child,
 .first-row div:nth-child(2) {
-  flex: 2;
+  width: 40%;
+  /* flex: 2; */
 }
 .first-row p:not(:first-child),
 .second-row p {

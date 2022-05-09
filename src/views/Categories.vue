@@ -56,13 +56,22 @@
                                 </div>
                               </div>
                               <div class="col-md-8">
-                                <a
-                                  href="/admin/quizapp/exam/add/"
+                                <button
+                                  v-if="!isFormOpened"
+                                  @click="addCategory"
                                   class="btn btn-outline-success float-end"
                                 >
                                   <fa :icon="['fas', 'plus-circle']" />
                                   Kategoriya qo'shish
-                                </a>
+                                </button>
+                                <button
+                                  v-else
+                                  @click="denyCreatingNewCategory"
+                                  class="btn btn-outline-danger float-end"
+                                >
+                                  <fa :icon="['fas', 'circle-xmark']" />
+                                  Bekor qilish
+                                </button>
                               </div>
                             </div>
                             <div class="card my-3 table-responsive">
@@ -70,8 +79,8 @@
                                 <div class="first-row">
                                   <p>Kategoriyalar</p>
                                   <p>Qisqartma</p>
-                                  <p>No 1</p>
-                                  <p>No 2</p>
+                                  <p class="left-p">No 1</p>
+                                  <p class="left-p">No 2</p>
                                   <p></p>
                                 </div>
                                 <template
@@ -83,6 +92,52 @@
                                     @deleteCat="removeCategory"
                                   ></each-category-row>
                                 </template>
+                                <div v-if="isFormOpened" class="third-row">
+                                  <input
+                                    v-model="categoryName"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Kategoriya nomi*"
+                                  />
+                                  <input
+                                    v-model="categoryAbb"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Kategoriya qisqartmasi*"
+                                  />
+                                  <input
+                                    v-model.number="categoryNo1"
+                                    class="form-control"
+                                    type="number"
+                                    placeholder="Nomer 1*"
+                                  />
+                                  <input
+                                    v-model.number="categoryNo2"
+                                    class="form-control"
+                                    type="number"
+                                    placeholder="Nomer 2*"
+                                  />
+                                  <div class="actions">
+                                    <button
+                                      @click="createCategory"
+                                      class="btn btn-success"
+                                    >
+                                      <fa
+                                        class="text-light"
+                                        :icon="['fas', 'circle-check']"
+                                      />
+                                    </button>
+                                    <button
+                                      @click="resetCategory"
+                                      class="btn btn-danger mx-2"
+                                    >
+                                      <fa
+                                        class="text-light"
+                                        :icon="['fas', 'circle-xmark']"
+                                      />
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -127,7 +182,12 @@ export default {
   },
   data() {
     return {
+      isFormOpened: false,
       search: "",
+      categoryName: "",
+      categoryAbb: "",
+      categoryNo1: null,
+      categoryNo2: null,
     };
   },
   computed: {
@@ -147,6 +207,38 @@ export default {
         await this.$store.dispatch("getModules");
       }
     },
+    denyCreatingNewCategory() {
+      this.isFormOpened = false;
+      this.resetCategory();
+    },
+    resetCategory() {
+      this.categoryName = "";
+      this.categoryAbb = "";
+      this.categoryNo1 = "";
+      this.categoryNo2 = "";
+    },
+    addCategory() {
+      if (!this.isFormOpened) {
+        this.isFormOpened = true;
+      }
+    },
+    async createCategory() {
+      if (
+        !this.categoryName ||
+        !this.categoryAbb ||
+        !this.categoryNo1 ||
+        !this.categoryNo2
+      )
+        return;
+      await customAxios.post("main/module/", {
+        name: this.categoryName,
+        AT: this.categoryAbb,
+        no_1: this.categoryNo1,
+        no_2: this.categoryNo2,
+      });
+      await this.$store.dispatch("getModules");
+      this.isFormOpened = false;
+    },
   },
   created() {
     this.$store.dispatch("getModules");
@@ -165,15 +257,34 @@ export default {
   margin-bottom: 4px;
   border-bottom: 2px solid #444;
 }
+.third-row {
+  width: 100%;
+  display: flex;
+  margin-bottom: 4px;
+}
+.third-row input {
+  margin: 0 4px;
+}
 .first-row p {
   font-weight: 600;
-  flex: 1;
+  /* flex: 1; */
+  width: 20%;
   margin: 0;
   padding: 12px;
 }
+.third-row input,
+.third-row div {
+  width: 20%;
+}
 .first-row p:first-child,
-.first-row p:nth-child(2) {
-  flex: 2;
+.first-row p:nth-child(2),
+.third-row input:first-child,
+.third-row input:nth-child(2) {
+  /* flex: 2; */
+  width: 40%;
+}
+.third-row input {
+  width: 20%;
 }
 .card-header {
   display: flex;
@@ -202,5 +313,12 @@ form {
 .djn-checkbox-select-all {
   width: 45px;
   padding-left: 1.5rem;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.left-p {
+  padding-left: 20px !important;
 }
 </style>
