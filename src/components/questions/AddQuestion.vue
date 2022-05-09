@@ -14,9 +14,7 @@
               <li class="breadcrumb-item">
                 <router-link to="/questions">Savollar</router-link>
               </li>
-              <li v-if="getQuestion" class="breadcrumb-item active">
-                {{ getQuestion.name }}
-              </li>
+              <li class="breadcrumb-item active">Savol qo'shish</li>
             </ol>
           </div>
         </div>
@@ -32,9 +30,7 @@
                   <div class="col-12 col-lg-9">
                     <div class="card card-primary card-outline">
                       <div class="card-header">
-                        <div class="card-title">Savolni o'zgartirish</div>
-                        <!-- {{ getQuestion.variants }} -->
-                        <!-- {{ getAnswers }} -->
+                        <div class="card-title">Savol qo'shish</div>
                       </div>
                       <div class="card-body">
                         <div class="form-group field-start_date">
@@ -87,15 +83,12 @@
                                         <span class="text-red">* </span>
                                       </label>
                                       <div class="col-sm-9 field-subject">
-                                        <div
-                                          v-if="getQuestion"
-                                          class="related-widget-wrapper"
-                                        >
+                                        <div class="related-widget-wrapper">
                                           <div class="d-inline-block w-50">
                                             <base-dropdown
                                               :options="getCategories"
                                               :withObj="true"
-                                              :default="getQuestion.module_name"
+                                              default="Kategoriya tanlang..."
                                               @input="getQuestionCategory"
                                             ></base-dropdown>
                                           </div>
@@ -127,16 +120,12 @@
                                       </label>
                                       <div class="col-sm-9 field-subject">
                                         <div class="related-widget-wrapper">
-                                          <div
-                                            v-if="getQuestion"
-                                            class="d-inline-block w-50"
-                                          >
+                                          <div class="d-inline-block w-50">
                                             <base-dropdown
                                               :options="getVariants"
                                               :withObj="true"
-                                              :default="
-                                                getQuestion.variant_name
-                                              "
+                                              :notAllow="true"
+                                              default="Variant tanlang..."
                                               @input="getVariantChanges"
                                             ></base-dropdown>
                                           </div>
@@ -155,14 +144,12 @@
                                         <span class="text-red">* </span>
                                       </label>
                                       <div class="col-sm-9 field-subject">
-                                        <div
-                                          v-if="getQuestion"
-                                          class="related-widget-wrapper"
-                                        >
+                                        <div class="related-widget-wrapper">
                                           <div class="d-inline-block w-100">
                                             <textarea
-                                              v-model.lazy="questionName"
+                                              v-model="questions.name"
                                               class="form-control"
+                                              placeholder="Savol nomini kiriting..."
                                             ></textarea>
                                           </div>
                                         </div>
@@ -195,31 +182,30 @@
                                         <th></th>
                                       </tr>
                                     </thead>
-
-                                    <tbody v-if="getQuestion">
+                                    <tbody>
                                       <tr
-                                        v-for="variant in getQuestion.variants"
+                                        v-for="(
+                                          variant, idx
+                                        ) in questions.variants"
                                         class="form-row has_original"
                                         :key="variant"
                                       >
-                                        <each-variant
+                                        <add-question-variant
                                           :variant="variant"
+                                          :idx="idx"
                                           @deleteTr="removeTr"
                                           @updateVariants="updateVar"
-                                        ></each-variant>
+                                        ></add-question-variant>
                                       </tr>
 
-                                      <div
+                                      <!-- <div
                                         class="no-variants"
-                                        v-if="getQuestion.variants.length === 0"
+                                        v-if="questions.variants.length === 0"
                                       >
                                         <p class="text-center">
                                           There are not any variants yet!
                                         </p>
-                                      </div>
-                                      <!-- {{
-                                        copyQuestions
-                                      }} -->
+                                      </div> -->
                                       <div class="add-tr">
                                         <button
                                           @click="addTr"
@@ -265,18 +251,6 @@
                               O'chirish
                             </button>
                           </div>
-
-                          <div class="d-grid my-2">
-                            <button class="btn btn-outline-info">
-                              Saqlash va boshqasini qo'shish
-                            </button>
-                          </div>
-
-                          <div class="d-grid my-2">
-                            <button class="btn btn-outline-info">
-                              Saqlash va davom ettirish
-                            </button>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -293,24 +267,30 @@
 
 <script>
 import costumAxios from "../../api";
-import EachVariant from "./EachVariant.vue";
+import AddQuestionVariant from "./AddQuestionVariant.vue";
 
 export default {
   props: ["id"],
   components: {
-    EachVariant,
+    AddQuestionVariant,
   },
   data() {
     return {
-      copyQuestion: {},
-      questionName: "",
-      status: "",
+      moduleId: null,
+      questions: {
+        name: "",
+        variant: null,
+        variants: [
+          {
+            name: "",
+            status: "Mistake",
+            ball: "0",
+          },
+        ],
+      },
     };
   },
   computed: {
-    getQuestion() {
-      return this.$store.getters.question(parseInt(this.id));
-    },
     getCategories() {
       return this.$store.getters.modules.map((module) => {
         return {
@@ -320,73 +300,58 @@ export default {
       });
     },
     getVariants() {
-      return this.$store.getters.variants;
+      return this.$store.getters.variants.filter(
+        (variant) => variant.module == this.moduleId
+      );
     },
   },
   methods: {
     getVariantChanges(val) {
-      if (typeof val === "string") return;
-      else {
-        this.getQuestion.variant_id = val.id;
-        // console.log(this.getQuestion);
-        // console.log(val);
-      }
+      this.questions.variant = val.id;
     },
     updateVar(val) {
-      // this.copyQuestion
-      this.getQuestion.variants = this.getQuestion.variants.map((va) => {
-        if (va.id == val.id) {
-          return val;
-        } else {
-          return va;
+      this.questions.variants = this.questions.variants.map(
+        (variant, index) => {
+          if (index == val.id) {
+            return val;
+          } else {
+            return variant;
+          }
         }
-      });
-      // console.log(val);
+      );
+      this.questions.variants.map((variant) => delete variant.id);
+      // console.log(this.questions);
       // console.log(this.getQuestion);
     },
     async saveQuestion() {
+      // console.log(this.questions);
       const arr = [];
-      arr.push(this.getQuestion);
-      const res = await costumAxios.post("main/question/post/", arr);
-      console.log(res);
+      arr.push(this.questions);
+      await costumAxios.post("main/question/post/", arr);
+      await this.$store.dispatch("getQuestions");
+      this.$router.replace("/questions");
     },
     getQuestionCategory(val) {
-      console.log(val);
+      this.moduleId = val.id;
     },
-    async removeTr(id) {
-      if (id === undefined) {
-        this.getQuestion.variants.pop();
-        return;
-      }
-      if (confirm("Haqiqatan ham o'chirishni xohlaysizmi")) {
-        await costumAxios.get(`main/question/delete/?id=${id}`);
-        await this.$store.dispatch("getQuestions");
-      }
+    removeTr(id) {
+      this.questions.variants.splice(id, 1);
     },
-    async addTr() {
-      this.getQuestion.variants.push({
+    addTr() {
+      this.questions.variants.push({
         name: "",
-        ball: "0",
         status: "Mistake",
+        ball: "0",
       });
     },
   },
   created() {
     this.$store.commit("activateQuestion");
-    this.$store.dispatch("getQuestions");
     this.$store.dispatch("getModules");
     this.$store.dispatch("getVariants");
   },
   unmounted() {
     this.$store.commit("activateQuestion");
-  },
-  watch: {
-    getQuestion(newObj) {
-      this.questionName = newObj.name;
-    },
-    questionName(val) {
-      this.getQuestion.name = val;
-    },
   },
 };
 </script>

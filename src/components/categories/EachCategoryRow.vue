@@ -45,7 +45,7 @@
     </div>
   </div>
   <template v-if="isVariantsOpen">
-    <div class="w-50">
+    <div class="w-75">
       <div class="second-row">
         <p class="bolder">Variant nomi</p>
         <p class="bolder">Izoh</p>
@@ -59,11 +59,13 @@
           v-model="newVariantName"
           class="form-control mx-2 mb-1"
           type="text"
+          placeholder="To'ldirish shart!"
         />
         <input
           v-model="newVariantDesc"
           class="form-control mx-2 mb-1"
           type="text"
+          placeholder="Majburiy emas..."
         />
         <div class="actions mb-1">
           <button @click="createVariant" class="btn btn-success">

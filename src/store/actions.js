@@ -74,7 +74,7 @@ export default {
       const res = await customAxios.get(
         "operation/result/filter/?exam_id=" + payload
       );
-      console.log(res);
+      // console.log(res);
       context.commit("getOperationDetails", res);
     } catch (e) {
       console.log(e.response);

@@ -20,7 +20,13 @@
   </td>
 
   <td class="field-ball">
-    <input v-model.lazy="variantBall" type="number" class="form-control" />
+    <input
+      v-model.lazy="variantBall"
+      type="number"
+      class="form-control"
+      maxlength="150"
+      :disabled="status === 'Mistake'"
+    />
     <div class="help-block text-danger"></div>
   </td>
 

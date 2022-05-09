@@ -1,6 +1,10 @@
 <template>
   <div class="custom-select" :tabindex="tabindex" @blur="open = false">
-    <div class="selected" :class="{ open: open }" @click="open = !open">
+    <div
+      class="selected"
+      :class="{ open: open, disabled: notAllow && !options.length }"
+      @click="toggle"
+    >
       {{ selected }}
     </div>
     <div class="items" :class="{ selectHide: !open }">
@@ -41,6 +45,9 @@ export default {
     defaultVal: {
       required: false,
     },
+    notAllow: {
+      required: false,
+    },
     default: {
       type: String,
       required: false,
@@ -69,6 +76,10 @@ export default {
     };
   },
   methods: {
+    toggle() {
+      if (this.notAllow && !this.options.length) return;
+      this.open = !this.open;
+    },
     sendData(option) {
       if (this.withObj) {
         this.selected = option.name;
@@ -95,6 +106,9 @@ export default {
 </script>
 
 <style scoped>
+.selected.disabled:hover {
+  cursor: not-allowed;
+}
 .custom-select {
   position: relative;
   width: 100%;

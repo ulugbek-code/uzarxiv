@@ -63,13 +63,13 @@
                                 </div>
                               </div>
                               <div class="col-md-8">
-                                <a
-                                  href="/admin/quizapp/exam/add/"
+                                <router-link
+                                  to="/questions/add"
                                   class="btn btn-outline-success float-end"
                                 >
                                   <fa :icon="['fas', 'plus-circle']" />
                                   Savol qo'shish
-                                </a>
+                                </router-link>
                               </div>
                             </div>
                             <div class="card">

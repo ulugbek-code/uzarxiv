@@ -2,12 +2,33 @@
   <div class="container-fluid pt-4">
     <div class="row">
       <h1>Dashboard</h1>
+      {{ statistics }}
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import customAxios from "../api";
+export default {
+  data() {
+    return {
+      statistics: [],
+    };
+  },
+  methods: {
+    async getStatistics() {
+      try {
+        const res = await customAxios.get("statistic/");
+        this.statistics = res.data;
+      } catch (e) {
+        console.log(e.response);
+      }
+    },
+  },
+  created() {
+    this.getStatistics();
+  },
+};
 </script>
 
 <style scoped>

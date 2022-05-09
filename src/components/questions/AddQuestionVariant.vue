@@ -1,8 +1,5 @@
 <template>
-  <!-- {{ variant }} -->
   <td class="field-answer">
-    <!-- {{ questions }} -->
-    <!-- {{ variant }} -->
     <textarea
       v-model.lazy="variantName"
       class="form-control"
@@ -25,7 +22,7 @@
   </td>
 
   <td class="delete">
-    <button type="button" @click="deleting(variant.id)" class="btn btn-danger">
+    <button type="button" @click="deleting(idx)" class="btn btn-danger">
       O'chirish
     </button>
   </td>
@@ -33,7 +30,7 @@
 
 <script>
 export default {
-  props: ["variant"],
+  props: ["variant", "idx"],
   emits: ["deleteTr", "updateVariants"],
   data() {
     return {
@@ -48,12 +45,6 @@ export default {
       this.$emit("deleteTr", id);
     },
   },
-  mounted() {},
-  // created() {
-  //   this.variantName = this.variant.name;
-  //   this.variantBall = this.variant.ball;
-  //   this.status = this.variant.status;
-  // },
   watch: {
     variant(newObj) {
       this.variantName = newObj.name;
@@ -67,33 +58,33 @@ export default {
       }
       this.isEmpty = false;
       this.$emit("updateVariants", {
-        id: this.variant.id,
+        id: this.idx,
         name: newVal,
         ball: this.variantBall,
         status: this.status,
       });
     },
     variantBall(newVal) {
-      if (this.variantName.length === 0) {
+      if (this.variantBall.length === 0) {
         this.isEmpty = true;
         return;
       }
       this.isEmpty = false;
       this.$emit("updateVariants", {
-        id: this.variant.id,
+        id: this.idx,
         name: this.variantName,
         ball: newVal,
         status: this.status,
       });
     },
     status(newVal) {
-      if (this.variantName.length === 0) {
+      if (this.status.length === 0) {
         this.isEmpty = true;
         return;
       }
       this.isEmpty = false;
       this.$emit("updateVariants", {
-        id: this.variant.id,
+        id: this.idx,
         name: this.variantName,
         status: newVal,
         ball: this.variantBall,
