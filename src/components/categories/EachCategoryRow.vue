@@ -45,10 +45,10 @@
     </div>
   </div>
   <template v-if="isVariantsOpen">
-    <div class="w-75">
+    <div class="">
       <div class="second-row">
         <p class="bolder">Variant nomi</p>
-        <p class="bolder">Izoh</p>
+        <p class="bolder p-left">Izoh</p>
         <p></p>
       </div>
       <template v-for="v in getVariants" :key="v.id">
@@ -79,11 +79,15 @@
       <button
         v-if="!isAddVariantOpened"
         @click="isAddVariantOpened = true"
-        class="btn btn-primary float-end"
+        class="btn btn-primary float-end mb-1 mx-2"
       >
         Variant qo'shish
       </button>
-      <button v-else @click="denyCreating" class="btn btn-danger float-end">
+      <button
+        v-else
+        @click="denyCreating"
+        class="btn btn-danger float-end mb-2 mx-2"
+      >
         Bekor qilish
       </button>
     </div>
@@ -172,6 +176,9 @@ export default {
   margin-bottom: 4px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+.second-row:first-child {
+  border-bottom: 1px solid #444;
+}
 .first-row:last-child {
   margin-bottom: 0;
 }
@@ -221,5 +228,8 @@ p {
 .actions {
   display: flex;
   justify-content: flex-end;
+}
+.p-left {
+  padding-left: 24px !important;
 }
 </style>

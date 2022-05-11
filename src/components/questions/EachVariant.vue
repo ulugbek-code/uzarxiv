@@ -5,13 +5,17 @@
     <!-- {{ variant }} -->
     <textarea
       v-model.lazy="variantName"
-      class="form-control"
-      placeholder="Variantning savoli bo'lishi shart!"
+      :class="[
+        'form-control',
+        isEmpty && !variantName ? 'red-border' : '',
+        isBlank && !variantName ? 'red-border' : '',
+      ]"
+      placeholder="Savolning variantlari bo'lishi shart!"
     ></textarea>
   </td>
 
   <td class="field-status">
-    <select v-model.lazy="status" class="form-select">
+    <select v-model="status" class="form-select">
       <option value="Correct">Correct</option>
 
       <option value="Mistake">Mistake</option>
@@ -20,20 +24,35 @@
   </td>
 
   <td class="field-ball">
-    <input v-model.lazy="variantBall" type="number" class="form-control" />
+    <input
+      v-model.lazy="variantBall"
+      type="number"
+      :class="[
+        'form-control',
+        isEmpty && !variantBall ? 'red-border' : '',
+        isBlank && status == 'Correct' && variantBall == 0 ? 'red-border' : '',
+      ]"
+    />
     <div class="help-block text-danger"></div>
   </td>
 
   <td class="delete">
-    <button type="button" @click="deleting(variant.id)" class="btn btn-danger">
+    <button
+      type="button"
+      @click="deleting({ id: variant.id, idx: idx })"
+      class="btn btn-danger"
+    >
       O'chirish
     </button>
   </td>
+  <div v-if="isCorrectEmpty" class="correct">
+    Agar holat to'g'ri bo'lsa, ball 0 dan katta bo'lishi lozim!
+  </div>
 </template>
 
 <script>
 export default {
-  props: ["variant"],
+  props: ["variant", "idx", "isBlank", "isCorrectEmpty"],
   emits: ["deleteTr", "updateVariants"],
   data() {
     return {
@@ -44,11 +63,10 @@ export default {
     };
   },
   methods: {
-    deleting(id) {
-      this.$emit("deleteTr", id);
+    deleting(val) {
+      this.$emit("deleteTr", val);
     },
   },
-  mounted() {},
   // created() {
   //   this.variantName = this.variant.name;
   //   this.variantBall = this.variant.ball;
@@ -78,6 +96,9 @@ export default {
         this.isEmpty = true;
         return;
       }
+      if (newVal == 0 && this.status == "Correct") {
+        return;
+      }
       this.isEmpty = false;
       this.$emit("updateVariants", {
         id: this.variant.id,
@@ -87,10 +108,6 @@ export default {
       });
     },
     status(newVal) {
-      if (this.variantName.length === 0) {
-        this.isEmpty = true;
-        return;
-      }
       this.isEmpty = false;
       this.$emit("updateVariants", {
         id: this.variant.id,
@@ -110,5 +127,31 @@ export default {
 .custom-toast {
   left: 12%;
   position: absolute;
+}
+.red-border {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
+    0 0 8px rgba(239, 104, 104, 1);
+  /* outline: none; */
+}
+.correct {
+  position: absolute;
+  top: 55%;
+  left: 25%;
+  background: #ffc107;
+  border-radius: 0.25rem;
+  padding: 1rem 2rem;
+  animation: fade 2.5s forwards;
+  pointer-events: none;
+}
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>

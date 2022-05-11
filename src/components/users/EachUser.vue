@@ -231,22 +231,6 @@
                               O'chirish
                             </button>
                           </div>
-
-                          <div class="d-grid my-2">
-                            <input
-                              type="submit"
-                              class="btn btn-outline-info"
-                              value="Save and add another"
-                            />
-                          </div>
-
-                          <div class="d-grid my-2">
-                            <input
-                              type="submit"
-                              class="btn btn-outline-info"
-                              value="Save and continue editing"
-                            />
-                          </div>
                         </div>
                       </div>
                     </div>

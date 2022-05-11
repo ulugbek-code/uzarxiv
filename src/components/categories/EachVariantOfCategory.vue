@@ -21,10 +21,10 @@
       />
     </div>
     <div v-if="isVariant" @click.stop="" class="actions mb-1">
-      <button @click="changeVariant" class="btn btn-warning mx-2">
+      <button @click="changeVariant" class="btn btn-warning">
         <fa class="text-light" :icon="['fas', 'pencil']" />
       </button>
-      <button @click="removeVariant(v.id)" class="btn btn-danger">
+      <button @click="removeVariant(v.id)" class="btn btn-danger mx-2">
         <fa class="text-light" :icon="['fas', 'trash-alt']" />
       </button>
     </div>

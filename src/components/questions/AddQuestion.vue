@@ -36,6 +36,12 @@
                         <div class="form-group field-start_date">
                           <div class="row">
                             <div class="col-12">
+                              <div
+                                v-if="isNoCorrectValue == undefined"
+                                class="correct"
+                              >
+                                Variantlar orasida to'g'ri javob bo'lishi kerak?
+                              </div>
                               <ul
                                 class="nav nav-tabs"
                                 id="myTab"
@@ -82,14 +88,19 @@
 
                                         <span class="text-red">* </span>
                                       </label>
-                                      <div class="col-sm-9 field-subject">
+                                      <div
+                                        v-if="getCategories.length"
+                                        class="col-sm-9 field-subject"
+                                      >
                                         <div class="related-widget-wrapper">
                                           <div class="d-inline-block w-50">
                                             <base-dropdown
                                               :options="getCategories"
                                               :withObj="true"
+                                              :submitted="isSubmitted"
                                               default="Kategoriya tanlang..."
                                               @input="getQuestionCategory"
+                                              @changee="isSubmitted = false"
                                             ></base-dropdown>
                                           </div>
 
@@ -98,12 +109,12 @@
                                             ><fa
                                               class="icon pencil mx-3"
                                               :icon="['fas', 'pencil']" /></a
-                                          ><a
-                                            class="related-widget-wrapper-link add-related"
+                                          > -->
+                                          <router-link to="/categories"
                                             ><fa
-                                              class="icon plus"
+                                              class="icon plus mx-3"
                                               :icon="['fas', 'plus']"
-                                          /></a> -->
+                                          /></router-link>
                                         </div>
                                       </div>
                                     </div>
@@ -125,8 +136,11 @@
                                               :options="getVariants"
                                               :withObj="true"
                                               :notAllow="true"
+                                              :isEmpty="isEmpty"
+                                              :submitted="isSubmitted"
                                               default="Variant tanlang..."
                                               @input="getVariantChanges"
+                                              @changee="isSubmitted = false"
                                             ></base-dropdown>
                                           </div>
                                         </div>
@@ -148,13 +162,22 @@
                                           <div class="d-inline-block w-100">
                                             <textarea
                                               v-model="questions.name"
-                                              class="form-control"
+                                              :class="[
+                                                'form-control',
+                                                isEmpty && !questions.name
+                                                  ? 'red-border'
+                                                  : '',
+                                              ]"
                                               placeholder="Savol nomini kiriting..."
                                             ></textarea>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
+                                  </div>
+                                  <div v-if="isCorrectEmpty" class="correct">
+                                    Agar variant holati to'g'ri bo'lsa, ball 0
+                                    dan katta bo'lishi lozim!
                                   </div>
                                 </div>
                                 <div
@@ -192,7 +215,9 @@
                                       >
                                         <add-question-variant
                                           :variant="variant"
+                                          :isBlank="isEmpty"
                                           :idx="idx"
+                                          :isCorrectEmpty="isCorrectEmpty"
                                           @deleteTr="removeTr"
                                           @updateVariants="updateVar"
                                         ></add-question-variant>
@@ -227,7 +252,7 @@
                   </div>
 
                   <div class="col-12 col-lg-3">
-                    <div id="jazzy-actions" class="">
+                    <div class="fixed-actions">
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
@@ -247,8 +272,11 @@
                           </div>
 
                           <div class="d-grid my-2">
-                            <button class="btn btn-outline-danger">
-                              O'chirish
+                            <button
+                              @click="resetQuestions"
+                              class="btn btn-outline-danger"
+                            >
+                              Bekor qilish
                             </button>
                           </div>
                         </div>
@@ -276,6 +304,10 @@ export default {
   },
   data() {
     return {
+      isNoCorrectValue: 1,
+      isCorrectEmpty: false,
+      isEmpty: false,
+      isSubmitted: false,
       moduleId: null,
       questions: {
         name: "",
@@ -306,15 +338,33 @@ export default {
     },
   },
   methods: {
+    resetQuestions() {
+      this.isSubmitted = true;
+      this.moduleId = null;
+      this.questions = {
+        name: "",
+        variant: null,
+        variants: [
+          {
+            name: "",
+            status: "Mistake",
+            ball: "0",
+          },
+        ],
+      };
+    },
     getVariantChanges(val) {
+      if (typeof val === "string") return;
       this.questions.variant = val.id;
     },
     updateVar(val) {
       this.questions.variants = this.questions.variants.map(
         (variant, index) => {
           if (index == val.id) {
+            // console.log(val);
             return val;
           } else {
+            // console.log("noequal", variant);
             return variant;
           }
         }
@@ -324,11 +374,33 @@ export default {
       // console.log(this.getQuestion);
     },
     async saveQuestion() {
+      if (!this.questions.name || !this.questions.variant) {
+        this.isEmpty = true;
+        return;
+      }
+      this.isEmpty = this.questions.variants.find(
+        (variant) => variant.name === ""
+      );
+      if (this.isEmpty) return;
+
+      this.isNoCorrectValue = this.questions.variants.find(
+        (variant) => variant.status == "Correct"
+      );
+      if (this.isNoCorrectValue == undefined) return;
+
+      this.isCorrectEmpty = this.questions.variants.find(
+        (variant) => variant.status === "Correct" && variant.ball == 0
+      );
+      if (this.isCorrectEmpty) {
+        this.isEmpty = true;
+        return;
+      }
       // console.log(this.questions);
       const arr = [];
       arr.push(this.questions);
       await costumAxios.post("main/question/post/", arr);
       await this.$store.dispatch("getQuestions");
+      this.isEmpty = false;
       this.$router.replace("/questions");
     },
     getQuestionCategory(val) {
@@ -349,6 +421,17 @@ export default {
     this.$store.commit("activateQuestion");
     this.$store.dispatch("getModules");
     this.$store.dispatch("getVariants");
+  },
+  watch: {
+    isEmpty() {
+      setTimeout(() => (this.isEmpty = false), 2500);
+    },
+    isCorrectEmpty() {
+      setTimeout(() => (this.isCorrectEmpty = false), 2700);
+    },
+    isNoCorrectValue() {
+      setTimeout(() => (this.isNoCorrectValue = 1), 2500);
+    },
   },
   unmounted() {
     this.$store.commit("activateQuestion");
@@ -525,5 +608,37 @@ textarea {
   top: 90%;
   left: 50%;
   transform: translate(-50%, -90%);
+}
+.red-border {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
+    0 0 8px rgba(239, 104, 104, 1);
+  /* outline: none; */
+}
+.fixed-actions {
+  position: sticky;
+  z-index: 1;
+  top: 10%;
+}
+.correct {
+  position: absolute;
+  top: 55%;
+  left: 25%;
+  background: #ffc107;
+  border-radius: 0.25rem;
+  padding: 1rem 2rem;
+  animation: fade 2.5s forwards;
+  z-index: 100;
+  pointer-events: none;
+}
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>

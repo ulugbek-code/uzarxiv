@@ -74,6 +74,11 @@ a {
 .table {
   margin-bottom: 0px !important;
 }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  /* margin: 0; */
+}
 @media screen and (max-width: 768px) {
   .app-wrapper {
     padding: 0;

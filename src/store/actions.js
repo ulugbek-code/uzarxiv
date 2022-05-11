@@ -3,7 +3,7 @@ export default {
   // users
   async getUsers(context) {
     try {
-      const res = await customAxios.get("main/user/");
+      const res = await customAxios.get("main/user/get/");
       // console.log(res);
       context.commit("getUsers", res);
     } catch (e) {

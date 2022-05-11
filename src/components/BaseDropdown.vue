@@ -2,7 +2,11 @@
   <div class="custom-select" :tabindex="tabindex" @blur="open = false">
     <div
       class="selected"
-      :class="{ open: open, disabled: notAllow && !options.length }"
+      :class="{
+        open: open,
+        disabled: notAllow && !options.length,
+        isempty: isEmpty && !selected,
+      }"
       @click="toggle"
     >
       {{ selected }}
@@ -46,6 +50,9 @@ export default {
       required: false,
     },
     notAllow: {
+      required: false,
+    },
+    isEmpty: {
       required: false,
     },
     default: {
@@ -106,6 +113,10 @@ export default {
 </script>
 
 <style scoped>
+.selected.isempty {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
+    0 0 8px rgba(239, 104, 104, 1);
+}
 .selected.disabled:hover {
   cursor: not-allowed;
 }
@@ -147,7 +158,8 @@ export default {
 }
 
 .custom-select .items {
-  max-height: 14rem;
+  /* was 14rem below */
+  max-height: 11rem;
   overflow-y: scroll;
   color: rgb(68, 68, 68);
   border: 1px solid #ced4da;

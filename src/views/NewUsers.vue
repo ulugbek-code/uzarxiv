@@ -45,6 +45,7 @@
                 placeholder="Login"
                 required
                 maxlength="25"
+                autocomplete="off"
               />
               <input
                 v-model.trim="firstname"
@@ -67,6 +68,7 @@
                 type="password"
                 placeholder="Parol"
                 required
+                autocomplete="off"
               />
               <input
                 v-model.trim="confirmPassword"
@@ -75,6 +77,7 @@
                 placeholder="Parolni takrorlash"
                 required
                 maxlength="50"
+                autocomplete="off"
               />
               <span v-if="passwordValidity" class="text-danger mb-0">
                 Parol takrorlanmadi

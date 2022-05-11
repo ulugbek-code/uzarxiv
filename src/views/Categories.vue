@@ -10,7 +10,7 @@
             <div class="col-sm-9 mt-4">
               <ol class="breadcrumb float-end">
                 <li class="breadcrumb-item">
-                  <a href="/admin/">Bosh sahifa</a>
+                  <router-link to="/">Bosh sahifa</router-link>
                 </li>
                 <li class="breadcrumb-item active">Kategoriyalar</li>
               </ol>
@@ -62,7 +62,9 @@
                                   class="btn btn-outline-success float-end"
                                 >
                                   <fa :icon="['fas', 'plus-circle']" />
-                                  Kategoriya qo'shish
+                                  <a href="#add-category" class="add-cat">
+                                    Kategoriya qo'shish</a
+                                  >
                                 </button>
                                 <button
                                   v-else
@@ -92,7 +94,11 @@
                                     @deleteCat="removeCategory"
                                   ></each-category-row>
                                 </template>
-                                <div v-if="isFormOpened" class="third-row">
+                                <div
+                                  v-if="isFormOpened"
+                                  id="add-category"
+                                  class="third-row"
+                                >
                                   <input
                                     v-model="categoryName"
                                     class="form-control"
@@ -320,5 +326,11 @@ form {
 }
 .left-p {
   padding-left: 20px !important;
+}
+.add-cat {
+  color: #198754;
+}
+button:hover .add-cat {
+  color: #f8f9fa;
 }
 </style>

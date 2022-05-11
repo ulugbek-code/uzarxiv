@@ -35,11 +35,18 @@
                         <div class="card-title">Savolni o'zgartirish</div>
                         <!-- {{ getQuestion.variants }} -->
                         <!-- {{ getAnswers }} -->
+                        <!-- {{ getQuestion }} -->
                       </div>
                       <div class="card-body">
                         <div class="form-group field-start_date">
                           <div class="row">
                             <div class="col-12">
+                              <div
+                                v-if="isNoCorrectValue == undefined"
+                                class="correct"
+                              >
+                                Variantlar orasida to'g'ri javob bo'lishi kerak?
+                              </div>
                               <ul
                                 class="nav nav-tabs"
                                 id="myTab"
@@ -161,13 +168,28 @@
                                         >
                                           <div class="d-inline-block w-100">
                                             <textarea
-                                              v-model.lazy="questionName"
-                                              class="form-control"
+                                              v-model="questionName"
+                                              :class="[
+                                                'form-control',
+                                                isEmpty && !questionName
+                                                  ? 'red-border'
+                                                  : '',
+                                              ]"
                                             ></textarea>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
+                                  </div>
+                                  <div
+                                    v-if="isCorrectEmpty || isVariantsEmpty"
+                                    class="correct"
+                                  >
+                                    {{
+                                      isVariantsEmpty
+                                        ? "Savolning variantlari bo'lishi kerak!"
+                                        : "Agar variant holati to'g'ri bo'lsa, ball 0 dan katta bo'lishi lozim!"
+                                    }}
                                   </div>
                                 </div>
                                 <div
@@ -198,12 +220,17 @@
 
                                     <tbody v-if="getQuestion">
                                       <tr
-                                        v-for="variant in getQuestion.variants"
+                                        v-for="(
+                                          variant, idx
+                                        ) in getQuestion.variants"
                                         class="form-row has_original"
-                                        :key="variant"
+                                        :key="variant.id"
                                       >
                                         <each-variant
                                           :variant="variant"
+                                          :idx="idx"
+                                          :isBlank="isEmpty"
+                                          :isCorrectEmpty="isCorrectEmpty"
                                           @deleteTr="removeTr"
                                           @updateVariants="updateVar"
                                         ></each-variant>
@@ -214,7 +241,7 @@
                                         v-if="getQuestion.variants.length === 0"
                                       >
                                         <p class="text-center">
-                                          There are not any variants yet!
+                                          Hozircha variantlar yo'q!
                                         </p>
                                       </div>
                                       <!-- {{
@@ -241,7 +268,7 @@
                   </div>
 
                   <div class="col-12 col-lg-3">
-                    <div id="jazzy-actions" class="">
+                    <div class="fixed-actions">
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
@@ -260,23 +287,11 @@
                             </button>
                           </div>
 
-                          <div class="d-grid my-2">
+                          <!-- <div class="d-grid my-2">
                             <button class="btn btn-outline-danger">
                               O'chirish
                             </button>
-                          </div>
-
-                          <div class="d-grid my-2">
-                            <button class="btn btn-outline-info">
-                              Saqlash va boshqasini qo'shish
-                            </button>
-                          </div>
-
-                          <div class="d-grid my-2">
-                            <button class="btn btn-outline-info">
-                              Saqlash va davom ettirish
-                            </button>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -302,9 +317,12 @@ export default {
   },
   data() {
     return {
-      copyQuestion: {},
+      isEmpty: false,
+      isVariantsEmpty: false,
+      isCorrectEmpty: false,
+      isNoCorrectValue: 1,
+      // copyQuestion: {},
       questionName: "",
-      status: "",
     };
   },
   computed: {
@@ -320,7 +338,10 @@ export default {
       });
     },
     getVariants() {
-      return this.$store.getters.variants;
+      // return this.$store.getters.variants;
+      return this.$store.getters.variants.filter(
+        (variant) => variant.module == this.getQuestion.module_id
+      );
     },
   },
   methods: {
@@ -328,12 +349,10 @@ export default {
       if (typeof val === "string") return;
       else {
         this.getQuestion.variant_id = val.id;
-        // console.log(this.getQuestion);
-        // console.log(val);
       }
     },
     updateVar(val) {
-      // this.copyQuestion
+      // console.log(val);
       this.getQuestion.variants = this.getQuestion.variants.map((va) => {
         if (va.id == val.id) {
           return val;
@@ -341,33 +360,63 @@ export default {
           return va;
         }
       });
-      // console.log(val);
-      // console.log(this.getQuestion);
     },
     async saveQuestion() {
-      const arr = [];
-      arr.push(this.getQuestion);
-      const res = await costumAxios.post("main/question/post/", arr);
-      console.log(res);
+      if (!this.questionName) {
+        this.isEmpty = true;
+        return;
+      }
+      if (!this.getQuestion.variants.length) {
+        this.isVariantsEmpty = true;
+        return;
+      }
+      this.isEmpty = this.getQuestion.variants.find(
+        (variant) => variant.name === ""
+      );
+      if (this.isEmpty) return;
+
+      this.isNoCorrectValue = this.getQuestion.variants.find(
+        (variant) => variant.status == "Correct"
+      );
+      if (this.isNoCorrectValue == undefined) return;
+
+      this.isCorrectEmpty = this.getQuestion.variants.find(
+        (variant) =>
+          variant.status === "Correct" && (!variant.ball || variant.ball == 0)
+      );
+      if (this.isCorrectEmpty) {
+        this.isEmpty = true;
+        return;
+      }
+      // console.log(this.getQuestion);
+      await costumAxios.post("main/question/update_question/", {
+        id: this.getQuestion.id,
+        name: this.questionName,
+        variant: this.getQuestion.variant_id,
+        variants: this.getQuestion.variants,
+      });
+      this.$router.push("/questions");
     },
     getQuestionCategory(val) {
-      console.log(val);
+      // if (typeof val === "string") return;
+      this.getQuestion.module_id = val.id;
     },
-    async removeTr(id) {
-      if (id === undefined) {
-        this.getQuestion.variants.pop();
+    async removeTr(val) {
+      if (typeof val.id === "string") {
+        this.getQuestion.variants.splice(val.idx, 1);
         return;
       }
       if (confirm("Haqiqatan ham o'chirishni xohlaysizmi")) {
-        await costumAxios.get(`main/question/delete/?id=${id}`);
+        await costumAxios.get(`main/question/delete/?id=${val.id}`);
         await this.$store.dispatch("getQuestions");
       }
     },
     async addTr() {
       this.getQuestion.variants.push({
+        id: "" + Date.now(),
         name: "",
-        ball: "0",
         status: "Mistake",
+        ball: "0",
       });
     },
   },
@@ -381,12 +430,26 @@ export default {
     this.$store.commit("activateQuestion");
   },
   watch: {
+    isEmpty() {
+      setTimeout(() => (this.isEmpty = false), 2500);
+    },
+    isVariantsEmpty() {
+      setTimeout(() => (this.isVariantsEmpty = false), 2500);
+    },
+    isCorrectEmpty() {
+      setTimeout(() => (this.isCorrectEmpty = false), 2700);
+    },
+    isNoCorrectValue() {
+      setTimeout(() => (this.isNoCorrectValue = 1), 2500);
+    },
     getQuestion(newObj) {
       this.questionName = newObj.name;
     },
-    questionName(val) {
-      this.getQuestion.name = val;
-    },
+    // questionName(val) {
+    //   if (!val) {
+    //     this.isEmpty = true;
+    //   }
+    // },
   },
 };
 </script>
@@ -560,5 +623,37 @@ textarea {
   top: 90%;
   left: 50%;
   transform: translate(-50%, -90%);
+}
+.fixed-actions {
+  position: sticky;
+  z-index: 1;
+  top: 10%;
+}
+.red-border {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
+    0 0 8px rgba(239, 104, 104, 1);
+  /* outline: none; */
+}
+.correct {
+  position: absolute;
+  top: 55%;
+  left: 25%;
+  background: #ffc107;
+  border-radius: 0.25rem;
+  padding: 1rem 2rem;
+  animation: fade 2.5s forwards;
+  z-index: 100;
+  pointer-events: none;
+}
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>
