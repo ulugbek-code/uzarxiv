@@ -8,6 +8,9 @@ export default {
   token(state) {
     return state.token;
   },
+  isAmin(state) {
+    return state.isAmin;
+  },
   users(state) {
     return state.users;
   },

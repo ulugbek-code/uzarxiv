@@ -23,6 +23,8 @@ import {
   faTrashAlt,
   faAngleDown,
   faCircleXmark,
+  // faPeopleGroup,
+  // faUserCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -48,6 +50,8 @@ library.add(
   faTrashAlt,
   faAngleDown,
   faCircleXmark
+  // faPeopleGroup,
+  // faUserCheck
 );
 
 export default FontAwesomeIcon;

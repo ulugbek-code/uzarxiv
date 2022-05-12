@@ -19,11 +19,13 @@ export default {
   setAuth(state) {
     state.isAuth = true;
     state.token = JSON.parse(localStorage.getItem("token"));
-    console.log(state.token);
+    state.isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
+    // console.log(state.token);
   },
   logout(state) {
     state.isAuth = false;
     state.token = null;
+    state.isAdmin = false;
     router.replace("/login");
   },
   getUsers(state, payload) {

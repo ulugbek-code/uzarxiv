@@ -12,6 +12,7 @@ const store = createStore({
       isCategoryActive: false,
       isQuestionActive: false, //for navigation active class
       token: JSON.parse(localStorage.getItem("token")) || null,
+      isAdmin: JSON.parse(localStorage.getItem("isAdmin")) || false,
       isAuth: false,
       isNavOpened: true, //for hamburger menu
       users: [],

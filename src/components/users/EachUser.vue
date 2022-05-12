@@ -285,7 +285,6 @@ export default {
 };
 </script>
 
-<style src="@vueform/multiselect/themes/default.css"></style>
 <style scoped>
 .card-primary.card-outline {
   border-top: 3px solid #007bff;

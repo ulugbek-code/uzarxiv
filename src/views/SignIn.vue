@@ -70,14 +70,18 @@ export default {
             },
           }
         );
-        console.log(response);
+        console.log(response.data);
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        this.$router.replace("/");
+        localStorage.setItem(
+          "isAdmin",
+          JSON.stringify(response.data.is_superuser)
+        );
         this.$store.commit("setAuth");
+        this.$router.replace("/");
       } catch (e) {
         // console.log(e.response.data);
         // if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
-        this.error = e.response.data;
+        this.error = e ? e.response.data : "error";
       }
     },
   },

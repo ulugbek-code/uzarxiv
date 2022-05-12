@@ -17,79 +17,83 @@
           <span class="nav_logo-name">Uz Arxiv</span>
         </router-link>
         <div class="nav_list">
-          <hr />
-          <h4 class="nav_link">
-            <fa
-              class="bx bx-layer nav_logo-icon"
-              :icon="['fas', 'circle-user']"
-            />
-            <span class="nav_name">Admin</span>
-          </h4>
-          <hr />
+          <template v-if="isUserAdmin">
+            <hr />
+            <h4 class="nav_link">
+              <fa
+                class="bx bx-layer nav_logo-icon"
+                :icon="['fas', 'circle-user']"
+              />
+              <span class="nav_name">Admin</span>
+            </h4>
+            <hr />
+          </template>
           <router-link to="/" class="nav_link">
             <fa
               class="bx bx-layer nav_logo-icon"
               :icon="['fas', 'gauge-high']"
             />
-            <span class="nav_name">Dashboard</span>
+            <span class="nav_name px-1">Dashboard</span>
           </router-link>
-          <Transition mode="in-out">
-            <p v-if="isNavOpened" class="px-4 text-light">Quizapp</p>
-          </Transition>
-          <router-link
-            to="/users"
-            :class="[isUserActive ? 'activate' : '']"
-            class="nav_link"
-          >
-            <fa
-              class="bx bx-layer nav_logo-icon"
-              :icon="['fas', 'user-group']"
-            />
-            <span class="nav_name">Foydalanuvchilar</span>
-          </router-link>
-          <router-link to="/groups" class="nav_link">
-            <fa
-              class="bx bx-layer nav_logo-icon"
-              :icon="['fas', 'square-poll-horizontal']"
-            />
-            <span class="nav_name">Guruhlar</span>
-          </router-link>
-          <router-link
-            to="/categories"
-            :class="[isCategoryActive ? 'activate' : '']"
-            class="nav_link"
-          >
-            <fa
-              class="bx bx-layer nav_logo-icon"
-              :icon="['fas', 'layer-group']"
-            />
-            <span class="nav_name">Kategoriyalar</span>
-          </router-link>
-          <router-link
-            to="/questions"
-            :class="[isQuestionActive ? 'activate' : '']"
-            class="nav_link"
-          >
-            <fa
-              class="bx bx-layer nav_logo-icon"
-              :icon="['fas', 'circle-question']"
-            />
-            <span class="nav_name">Test Variantlari</span>
-          </router-link>
-          <router-link to="/results" class="nav_link">
-            <fa
-              class="bx bx-layer nav_logo-icon"
-              :icon="['fas', 'circle-check']"
-            />
-            <span class="nav_name">Imtihon Natijalari</span>
-          </router-link>
-          <router-link to="/newuser" class="nav_link">
-            <fa
-              class="bx bx-layer nav_logo-icon"
-              :icon="['fas', 'user-plus']"
-            />
-            <span class="nav_name">Foydalanuvchi qo'shish</span>
-          </router-link>
+          <template v-if="isUserAdmin">
+            <Transition mode="in-out">
+              <p v-if="isNavOpened" class="px-4 text-light">Quizapp</p>
+            </Transition>
+            <router-link
+              to="/users"
+              :class="[isUserActive ? 'activate' : '']"
+              class="nav_link"
+            >
+              <fa
+                class="bx bx-layer nav_logo-icon"
+                :icon="['fas', 'user-group']"
+              />
+              <span class="nav_name">Foydalanuvchilar</span>
+            </router-link>
+            <router-link to="/groups" class="nav_link">
+              <fa
+                class="bx bx-layer nav_logo-icon"
+                :icon="['fas', 'square-poll-horizontal']"
+              />
+              <span class="nav_name">Guruhlar</span>
+            </router-link>
+            <router-link
+              to="/categories"
+              :class="[isCategoryActive ? 'activate' : '']"
+              class="nav_link"
+            >
+              <fa
+                class="bx bx-layer nav_logo-icon"
+                :icon="['fas', 'layer-group']"
+              />
+              <span class="nav_name">Kategoriyalar</span>
+            </router-link>
+            <router-link
+              to="/questions"
+              :class="[isQuestionActive ? 'activate' : '']"
+              class="nav_link"
+            >
+              <fa
+                class="bx bx-layer nav_logo-icon"
+                :icon="['fas', 'circle-question']"
+              />
+              <span class="nav_name">Test Variantlari</span>
+            </router-link>
+            <router-link to="/results" class="nav_link">
+              <fa
+                class="bx bx-layer nav_logo-icon"
+                :icon="['fas', 'circle-check']"
+              />
+              <span class="nav_name">Imtihon Natijalari</span>
+            </router-link>
+            <router-link to="/newuser" class="nav_link">
+              <fa
+                class="bx bx-layer nav_logo-icon"
+                :icon="['fas', 'user-plus']"
+              />
+              <span class="nav_name">Foydalanuvchi qo'shish</span>
+            </router-link>
+          </template>
         </div>
       </div>
       <p @click="logout" class="nav_link mb-3 log-out">
@@ -109,6 +113,9 @@ export default {
     isUserActive() {
       return this.$store.state.isUserActive;
     },
+    isUserAdmin() {
+      return this.$store.state.isAdmin;
+    },
     isExamActive() {
       return this.$store.state.isExamActive;
     },
@@ -124,8 +131,11 @@ export default {
       this.$store.commit("toggleNavbar");
     },
     logout() {
-      localStorage.removeItem("token");
-      this.$store.commit("logout");
+      if (confirm("Rostdan ham tizimdan chiqmoqchimisiz?")) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("isAdmin");
+        this.$store.commit("logout");
+      }
     },
   },
 };

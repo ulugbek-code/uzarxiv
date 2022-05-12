@@ -47,6 +47,9 @@
                               >
                                 Variantlar orasida to'g'ri javob bo'lishi kerak?
                               </div>
+                              <div v-if="isCorrectMore" class="correct">
+                                Savolning bitta to'g'ri javobi bo'lishi kerak
+                              </div>
                               <ul
                                 class="nav nav-tabs"
                                 id="myTab"
@@ -320,6 +323,7 @@ export default {
       isEmpty: false,
       isVariantsEmpty: false,
       isCorrectEmpty: false,
+      isCorrectMore: false,
       isNoCorrectValue: 1,
       // copyQuestion: {},
       questionName: "",
@@ -388,14 +392,21 @@ export default {
         this.isEmpty = true;
         return;
       }
+      let correctLength = this.getQuestion.variants.filter(
+        (variant) => variant.status === "Correct"
+      ).length;
+      if (correctLength > 1) {
+        this.isCorrectMore = true;
+        return;
+      }
       // console.log(this.getQuestion);
-      await costumAxios.post("main/question/update_question/", {
-        id: this.getQuestion.id,
-        name: this.questionName,
-        variant: this.getQuestion.variant_id,
-        variants: this.getQuestion.variants,
-      });
-      this.$router.push("/questions");
+      // await costumAxios.post("main/question/update_question/", {
+      //   id: this.getQuestion.id,
+      //   name: this.questionName,
+      //   variant: this.getQuestion.variant_id,
+      //   variants: this.getQuestion.variants,
+      // });
+      // this.$router.push("/questions");
     },
     getQuestionCategory(val) {
       // if (typeof val === "string") return;
@@ -441,6 +452,9 @@ export default {
     },
     isNoCorrectValue() {
       setTimeout(() => (this.isNoCorrectValue = 1), 2500);
+    },
+    isCorrectMore() {
+      setTimeout(() => (this.isCorrectMore = false), 2500);
     },
     getQuestion(newObj) {
       this.questionName = newObj.name;

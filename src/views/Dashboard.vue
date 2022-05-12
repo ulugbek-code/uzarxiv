@@ -1,8 +1,130 @@
 <template>
-  <div class="container-fluid pt-4">
-    <div class="row">
-      <h1>Dashboard</h1>
-      {{ statistics }}
+  <div class="container pt-4">
+    <div class="row d-flex justify-content-between mb-4">
+      <div class="col-md-8">
+        <h1>Dashboard</h1>
+        <!-- {{ getExams }} -->
+      </div>
+      <template v-if="isUserAdmin">
+        <div class="col-md-3 d-flex align-items-center mx-lg-3">
+          <base-dropdown
+            :options="groups"
+            :withObj="true"
+            default="Guruh tanlang..."
+            @input="selectedGroup"
+          ></base-dropdown>
+        </div>
+      </template>
+      <!-- {{ statistics }} -->
+    </div>
+    <div v-if="isUserAdmin" class="row d-flex justify-content-around">
+      <div class="col-lg-3 my-2">
+        <div class="card">
+          <div class="card-body d-flex gap-4">
+            <div class="icon-img w-25">
+              <!-- <fa class="icon-users" :icon="['fas', 'user']" /> -->
+              <img src="../assets/user.png" alt="" />
+            </div>
+            <div class="info">
+              <p>{{ statistics.number_users }}</p>
+              <p class="mb-0">O'quvchilar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 my-2">
+        <div class="card">
+          <div class="card-body d-flex gap-4">
+            <div class="icon-img w-25">
+              <!-- <fa class="icon-group" :icon="['fas', 'people-group']" /> -->
+              <img src="../assets/groups.png" alt="" />
+            </div>
+            <div class="info">
+              <p>{{ statistics.number_groups }}</p>
+              <p class="mb-0">Guruhlar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 my-2">
+        <div class="card">
+          <div class="card-body d-flex gap-3">
+            <div class="icon-img w-25">
+              <!-- <fa class="icon-paid" :icon="['fas', 'user-check']" /> -->
+              <img src="../assets/paid.png" alt="" />
+            </div>
+            <div class="info">
+              <p>{{ statistics.number_paid_users }}</p>
+              <p class="mb-0">To'langan o'quvchilar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- user dashboard -->
+    <div v-else class="row">
+      <!-- {{ getExams }} -->
+      <div class="col-md-9">
+        <table class="table text-center table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>O'quvchi</th>
+              <th>Kurs</th>
+              <th>Ball</th>
+              <th>Foiz</th>
+              <th>Holati</th>
+              <th>Sana</th>
+              <th>Tahrirlash</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="result in examResults" :key="result.id">
+              <td>{{ result.id }}</td>
+              <td>{{ result.user_first_name }} {{ result.user_last_name }}</td>
+              <td>{{ result.module_name }}</td>
+              <td>{{ result.collect_ball ? result.collect_ball : 0 }}</td>
+              <td>{{ result.percent ? result.percent : 0 }} %</td>
+              <td>{{ result.status }}</td>
+              <td>{{ formatDate(result.date) }}</td>
+              <td>Ko'rish</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-3">
+        <div v-for="exam in getExams" :key="exam.id" class="card p-3">
+          <!-- {{ exam }} -->
+          <div class="card-body px-0">
+            <h5 class="card-title text-bold pb-1">
+              {{ exam.name }}
+            </h5>
+            <p>Boshlanish vaqti: {{ exam.start_date }}</p>
+            <p>Tugash vaqti: {{ exam.finish_date }}</p>
+            <p>Davomiyligi: {{ exam.duration }} minutes</p>
+            <p>
+              <span class="bg-success text-light p-1"
+                >Passed students: {{ exam.total_passed_students }}
+              </span>
+              <br />
+
+              <span class="bg-danger text-light p-1"
+                >Yiqilgan o'quvchilar: {{ exam.total_failed_students }} </span
+              ><br />
+
+              <span class="bg-warning p-1"
+                >Topshirmagan o'quvchilar:
+                {{ exam.total_missed_students }} </span
+              ><br />
+            </p>
+
+            <p></p>
+            <div class="d-flex" style="justify-content: space-between">
+              <button class="btn btn-primary">Ko'rish</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -12,10 +134,38 @@ import customAxios from "../api";
 export default {
   data() {
     return {
+      id: 4,
       statistics: [],
+      examResults: null,
+      exams: null,
     };
   },
+  computed: {
+    getExams() {
+      return this.$store.getters.exams[0];
+    },
+    groups() {
+      return this.$store.getters.groups;
+    },
+    isUserAdmin() {
+      return this.$store.state.isAdmin;
+    },
+  },
   methods: {
+    selectedGroup(val) {
+      console.log(val);
+    },
+    formatDate(date) {
+      let day = new Date(date).toUTCString().slice(5, 22);
+      day =
+        day.substring(0, 2) +
+        "-" +
+        day.substring(3, 6) +
+        ", " +
+        day.substring(7, 11) +
+        "-yil";
+      return day;
+    },
     async getStatistics() {
       try {
         const res = await customAxios.get("statistic/");
@@ -24,77 +174,67 @@ export default {
         console.log(e.response);
       }
     },
+    async getExamResults() {
+      try {
+        const res = await customAxios.get(
+          `operation/result/filter/?user_id=${this.id}`
+        );
+        this.examResults = res.data;
+        console.log(this.examResults);
+      } catch (e) {
+        console.log(e.response.data);
+      }
+    },
+    async getExamByUser() {
+      try {
+        const res = await customAxios.get(`main/exams/get/?user_id=${this.id}`);
+        this.exams = res.data;
+        console.log(this.exams);
+      } catch (e) {
+        console.log(e.response.data);
+      }
+    },
   },
-  created() {
-    this.getStatistics();
+  async created() {
+    if (!this.isUserAdmin) {
+      await this.$store.dispatch("getExams");
+      await this.getExamResults();
+      await this.getExamByUser();
+      return;
+    }
+    await this.getStatistics();
+    this.$store.dispatch("getGroups");
   },
 };
 </script>
 
 <style scoped>
-.timeline {
-  margin: 0 0 45px;
-  padding: 0;
-  position: relative;
+.container h1,
+.info p:first-child {
+  color: #444;
 }
-.timeline::before {
-  border-radius: 0.25rem;
-  background-color: #dee2e6;
-  bottom: 0;
-  content: "";
-  left: 31px;
-  margin: 0;
-  position: absolute;
-  top: 0;
-  width: 4px;
+.icon-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.timeline > div {
-  margin-bottom: 15px;
-  margin-right: 10px;
-  position: relative;
+.info p:first-child {
+  font-size: 2rem;
 }
-.timeline > div::after,
-.timeline > div::before {
-  content: "";
-  display: table;
+.info p:last-child {
+  color: #0dcaf0;
 }
-.timeline > div > .timeline-item {
-  box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
-  border-radius: 0.25rem;
-  background-color: #fff;
-  color: #495057;
-  margin-left: 60px;
-  margin-right: 15px;
-  margin-top: 0;
-  padding: 0;
-  position: relative;
+.icon-users {
+  font-size: 3rem;
 }
-.timeline > div > .timeline-item > .time {
-  color: #999;
-  float: right;
-  font-size: 12px;
-  padding: 10px;
+.card {
+  margin-bottom: 1rem;
 }
-.timeline > div > .timeline-item > .timeline-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-  color: #495057;
-  font-size: 16px;
-  line-height: 1.1;
-  margin: 0;
-  padding: 10px;
+p {
+  margin-bottom: 8px;
 }
-.timeline > div > .timeline-item > .timeline-body {
-  padding: 10px;
-}
-.time-icon {
-  border-radius: 50%;
-  font-size: 16px;
-  height: 26px;
-  left: 20px;
-  line-height: 30px;
-  position: absolute;
-  text-align: center;
-  top: 0;
-  width: 26px;
+
+p span {
+  line-height: 2;
 }
 </style>
