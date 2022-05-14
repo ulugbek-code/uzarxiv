@@ -76,6 +76,7 @@ export default {
           "isAdmin",
           JSON.stringify(response.data.is_superuser)
         );
+        localStorage.setItem("userId", JSON.stringify(response.data.id));
         this.$store.commit("setAuth");
         this.$router.replace("/");
       } catch (e) {

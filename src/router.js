@@ -4,6 +4,7 @@ import SignIn from "./views/SignIn.vue";
 import Dashboard from "./views/Dashboard.vue";
 const Users = () => import("./views/Users.vue");
 const Groups = () => import("./views/Groups.vue");
+const TakeExam = () => import("./components/quiz/TakeExam.vue");
 const GroupDetail = () => import("./components/groups/GroupDetail.vue");
 const OperationDetails = () =>
   import("./components/operation/OperationDetails");
@@ -39,6 +40,13 @@ const router = createRouter({
       path: "/users/:id",
       name: "user",
       component: EachUser,
+      props: true,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/quiz/:id",
+      name: "quiz",
+      component: TakeExam,
       props: true,
       meta: { requiresAuth: true },
     },

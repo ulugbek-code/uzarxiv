@@ -31,7 +31,8 @@
                   <th>Qisqartma</th>
                 </tr>
               </thead>
-              <tbody>
+              <!-- below changed -->
+              <tbody v-if="getGroups.length">
                 <tr
                   @click="goGroupDetail(group.id)"
                   v-for="group in getGroups"

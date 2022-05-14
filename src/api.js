@@ -3,7 +3,7 @@ import router from "./router.js";
 import store from "./store";
 
 const customAxios = axios.create({
-  baseURL: "http://quiz.uzarxiv-test.uz/",
+  baseURL: "https://quiz.uzarxiv-test.uz/",
   timeout: 18000,
   headers: {
     Authorization: `Token ${JSON.parse(localStorage.getItem("token"))}`,

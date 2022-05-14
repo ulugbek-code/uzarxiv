@@ -3,6 +3,7 @@
     <div class="row d-flex justify-content-between mb-4">
       <div class="col-md-8">
         <h1>Dashboard</h1>
+        <!-- {{ id }} -->
         <!-- {{ getExams }} -->
       </div>
       <template v-if="isUserAdmin">
@@ -64,11 +65,11 @@
     <!-- user dashboard -->
     <div v-else class="row">
       <!-- {{ getExams }} -->
-      <div class="col-md-9">
+      <div v-if="examResults.length" class="col-md-9">
         <table class="table text-center table-hover">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>O'quvchi</th>
               <th>Kurs</th>
               <th>Ball</th>
@@ -93,34 +94,24 @@
         </table>
       </div>
       <div class="col-md-3">
-        <div v-for="exam in getExams" :key="exam.id" class="card p-3">
-          <!-- {{ exam }} -->
+        <div v-for="exam in exams" :key="exam.id" class="card p-3">
+          <!-- {{ exam }}variant_id -->
           <div class="card-body px-0">
-            <h5 class="card-title text-bold pb-1">
-              {{ exam.name }}
+            <h5 class="card-title pb-1">
+              {{ exam.variant_name }}
             </h5>
-            <p>Boshlanish vaqti: {{ exam.start_date }}</p>
-            <p>Tugash vaqti: {{ exam.finish_date }}</p>
+            <p>Boshlanish vaqti: {{ formatDate(exam.start_date) }}</p>
+            <p>Tugash vaqti: {{ formatDate(exam.finish_date) }}</p>
             <p>Davomiyligi: {{ exam.duration }} minutes</p>
-            <p>
-              <span class="bg-success text-light p-1"
-                >Passed students: {{ exam.total_passed_students }}
-              </span>
-              <br />
-
-              <span class="bg-danger text-light p-1"
-                >Yiqilgan o'quvchilar: {{ exam.total_failed_students }} </span
-              ><br />
-
-              <span class="bg-warning p-1"
-                >Topshirmagan o'quvchilar:
-                {{ exam.total_missed_students }} </span
-              ><br />
-            </p>
-
-            <p></p>
-            <div class="d-flex" style="justify-content: space-between">
-              <button class="btn btn-primary">Ko'rish</button>
+            <div class="d-flex">
+              <router-link
+                :to="{
+                  name: 'quiz',
+                  params: { id: exam.variant_id, duration: exam.duration },
+                }"
+              >
+                <button class="btn btn-primary">Imtihon boshlash</button>
+              </router-link>
             </div>
           </div>
         </div>
@@ -134,15 +125,14 @@ import customAxios from "../api";
 export default {
   data() {
     return {
-      id: 4,
       statistics: [],
-      examResults: null,
-      exams: null,
+      examResults: [],
+      exams: [],
     };
   },
   computed: {
-    getExams() {
-      return this.$store.getters.exams[0];
+    id() {
+      return this.$store.state.userId;
     },
     groups() {
       return this.$store.getters.groups;
@@ -197,7 +187,6 @@ export default {
   },
   async created() {
     if (!this.isUserAdmin) {
-      await this.$store.dispatch("getExams");
       await this.getExamResults();
       await this.getExamByUser();
       return;
@@ -223,6 +212,9 @@ export default {
 }
 .info p:last-child {
   color: #0dcaf0;
+}
+.card-title {
+  font-weight: 500;
 }
 .icon-users {
   font-size: 3rem;

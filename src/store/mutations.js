@@ -20,12 +20,14 @@ export default {
     state.isAuth = true;
     state.token = JSON.parse(localStorage.getItem("token"));
     state.isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
+    state.userId = JSON.parse(localStorage.getItem("userId"));
     // console.log(state.token);
   },
   logout(state) {
     state.isAuth = false;
     state.token = null;
     state.isAdmin = false;
+    state.userId = null;
     router.replace("/login");
   },
   getUsers(state, payload) {
