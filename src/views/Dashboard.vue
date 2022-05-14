@@ -65,7 +65,7 @@
     <!-- user dashboard -->
     <div v-else class="row">
       <!-- {{ getExams }} -->
-      <div v-if="examResults.length" class="col-md-9">
+      <div v-if="examResults.length" class="col-lg-9 table-responsive">
         <table class="table text-center table-hover">
           <thead>
             <tr>
@@ -93,9 +93,9 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-3">
+      <div class="col-lg-3 spaced-top">
         <div v-for="exam in exams" :key="exam.id" class="card p-3">
-          <!-- {{ exam }}variant_id -->
+          <!-- {{ exam }} -->
           <div class="card-body px-0">
             <h5 class="card-title pb-1">
               {{ exam.variant_name }}
@@ -107,7 +107,11 @@
               <router-link
                 :to="{
                   name: 'quiz',
-                  params: { id: exam.variant_id, duration: exam.duration },
+                  params: {
+                    id: exam.variant_id,
+                    examId: exam.id,
+                    duration: exam.duration,
+                  },
                 }"
               >
                 <button class="btn btn-primary">Imtihon boshlash</button>
@@ -126,13 +130,16 @@ export default {
   data() {
     return {
       statistics: [],
-      examResults: [],
+      // examResults: [],
       exams: [],
     };
   },
   computed: {
     id() {
       return this.$store.state.userId;
+    },
+    examResults() {
+      return this.$store.getters.examResults;
     },
     groups() {
       return this.$store.getters.groups;
@@ -164,17 +171,7 @@ export default {
         console.log(e.response);
       }
     },
-    async getExamResults() {
-      try {
-        const res = await customAxios.get(
-          `operation/result/filter/?user_id=${this.id}`
-        );
-        this.examResults = res.data;
-        console.log(this.examResults);
-      } catch (e) {
-        console.log(e.response.data);
-      }
-    },
+
     async getExamByUser() {
       try {
         const res = await customAxios.get(`main/exams/get/?user_id=${this.id}`);
@@ -187,7 +184,7 @@ export default {
   },
   async created() {
     if (!this.isUserAdmin) {
-      await this.getExamResults();
+      await this.$store.dispatch("getExamResults");
       await this.getExamByUser();
       return;
     }
@@ -228,5 +225,11 @@ p {
 
 p span {
   line-height: 2;
+}
+
+@media screen and (max-width: 768px) {
+  .spaced-top {
+    margin-top: 2rem;
+  }
 }
 </style>

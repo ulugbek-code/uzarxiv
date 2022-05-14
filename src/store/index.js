@@ -18,6 +18,7 @@ const store = createStore({
       isNavOpened: true, //for hamburger menu
       users: [],
       exams: [],
+      examResults: [],
       questions: [],
       variants: [],
       answers: [],

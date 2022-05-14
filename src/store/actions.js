@@ -20,6 +20,17 @@ export default {
       console.log(e.response);
     }
   },
+  async getExamResults(context) {
+    try {
+      const res = await customAxios.get(
+        `operation/result/filter/?user_id=${context.state.userId}`
+      );
+      context.commit("getExamResults", res);
+      // console.log(this.examResults);
+    } catch (e) {
+      console.log(e.response.data);
+    }
+  },
   // questions
   async getQuestions(context) {
     try {

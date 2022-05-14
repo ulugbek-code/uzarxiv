@@ -36,6 +36,9 @@ export default {
   getExams(state, payload) {
     state.exams = payload.data;
   },
+  getExamResults(state, payload) {
+    state.examResults = payload.data;
+  },
   // questions
   getQuestions(state, payload) {
     state.questions = payload.data;

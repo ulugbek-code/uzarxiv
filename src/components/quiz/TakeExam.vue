@@ -1,62 +1,99 @@
 <template>
   <div class="quiz">
-    <!-- {{ questions[1] }} -->
-    <form id="quiz-form">
-      <div class="row">
+    <base-timer
+      :limit="changedDuration"
+      @lessTime="warnUser"
+      @submitData="timeOver"
+    ></base-timer>
+    <form v-if="questions.length" @submit.prevent id="quiz-form">
+      <!-- <div class="row">
         <h1 class="col text-center" id="timer-box"></h1>
-      </div>
+      </div> -->
       <div class="quize">
         <div class="question-bar">
-          <template v-for="(question, idx) in questions" :key="question.id">
-            <h2 class="question text-primary">
-              {{ ++idx }}&#41; {{ question.name }}
-            </h2>
-            <ul v-for="variant in question.variants" :key="variant.id">
-              <take-exam-variants :variant="variant"></take-exam-variants>
-            </ul>
+          <template v-for="(q, idx) in questions" :key="q.id">
+            <take-exam-each-question
+              :question="q"
+              :index="idx"
+              @getAnswer="getAns"
+            ></take-exam-each-question>
           </template>
-
-          <!-- <ul>
-            <li>
-              <input type="radio" id="a144" />
-              <label for="a144"
-                >Информацию об исполнении законов Республики Узбекистан, указов,
-                постановлений и распоряжений Президента Постановлений и
-                распоряжений правительства</label
-              >
-            </li>
-          </ul> -->
-
           <div class="footer-button">
-            <!-- Button trigger modal -->
-
             <router-link to="/" class="btn btn-outline-danger">
               Bekor qilish
             </router-link>
-            <button type="button" class="btn btn-success mx-3">Yuborish</button>
+            <button
+              @click="submitAnswers"
+              type="button"
+              class="btn btn-success mx-3"
+            >
+              Yuborish
+            </button>
           </div>
         </div>
       </div>
     </form>
+    <div v-if="lessTime" class="less" :style="location">
+      Imtihonni yakunlash uchun 5 daqiqadan kamroq vaqtingiz qoldi!
+    </div>
   </div>
 </template>
 
 <script>
 import customAxios from "../../api";
-import TakeExamVariants from "./TakeExamVariants.vue";
+import TakeExamEachQuestion from "./TakeExamEachQuestion.vue";
+import BaseTimer from "./BaseTimer.vue";
 
 export default {
-  props: ["id", "duration"],
+  props: ["id", "duration", "examId"],
   components: {
-    TakeExamVariants,
+    TakeExamEachQuestion,
+    BaseTimer,
   },
   data() {
     return {
+      location: {
+        top: 0,
+      },
+      lessTime: false,
       tutorials: "",
       questions: [],
+      answers: [],
     };
   },
+  computed: {
+    changedDuration() {
+      return parseInt(this.duration) * 60;
+      // return 6;
+    },
+  },
   methods: {
+    warnUser() {
+      this.lessTime = true;
+      // console.log(Math.floor(this.offset) + "px");
+    },
+    getAns(val) {
+      const i = this.answers.findIndex(
+        (object) => object.question === val.question
+      );
+      if (i > -1) this.answers[i] = val;
+      else this.answers.push(val);
+    },
+    timeOver() {
+      this.submitAnswers();
+    },
+    async submitAnswers() {
+      await customAxios.post("operation/result/post/", [
+        {
+          user: this.$store.state.userId,
+          exam: parseInt(this.examId),
+          variant: parseInt(this.id),
+          operationitem: this.answers,
+          // description: "desc",
+        },
+      ]);
+      this.$router.replace("/");
+    },
     async getQuestionsByVariantId() {
       try {
         const res = await customAxios.get(
@@ -71,10 +108,31 @@ export default {
   async created() {
     await this.getQuestionsByVariantId();
   },
+  watch: {
+    lessTime() {
+      this.location.top =
+        Math.floor(window.pageYOffset || document.documentElement.scrollTop) +
+        250 +
+        "px";
+      setTimeout(() => (this.lessTime = false), 4000);
+    },
+  },
 };
 </script>
 
 <style scoped>
+.less {
+  position: absolute;
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem;
+  background: orange;
+  border-radius: 5px;
+  font-size: 20px;
+  text-align: center;
+  z-index: 10;
+}
 .quiz {
   position: absolute;
   left: 0;
@@ -91,27 +149,11 @@ export default {
 .score-color--white {
   background: #fff;
 }
-
-h2 {
-  font-size: 20px;
-  margin: 0;
-  margin-top: 25px;
-  padding-bottom: 30px;
-  /* color: #0b03fc; */
-}
-
-/* h3 {
-  color: #0b03fc;
-  font-size: 25px;
-  padding-bottom: 20px;
-  margin: 0;
-} */
-
 .quize {
   max-width: 1100px;
   width: 100%;
-  margin: 50px auto;
-  padding: 50px;
+  margin: 0 auto;
+  padding: 40px;
   background: #ffffff;
   border-radius: 10px;
 }
@@ -130,9 +172,9 @@ ul {
   margin-top: 20px;
 }
 
-svg {
+/* svg {
   fill: #fff;
   height: 9px;
   margin-right: 6px;
-}
+} */
 </style>

@@ -1,23 +1,52 @@
 <template>
-  <li>
-    <input :value="variant.id" v-model="value" type="radio" :id="variant.id" />
-    <label :for="variant.id">{{ variant.name }}</label>
-    {{ value }}
-  </li>
+  <h2 class="question text-primary">{{ idx }}&#41; {{ question.name }}</h2>
+  <ul v-for="variant in question.variants" :key="variant.id">
+    <li>
+      <input
+        @change="$emit('getAnswer', { question: question.id, answer: value })"
+        :value="variant.id"
+        v-model="value"
+        type="radio"
+        :id="variant.id"
+      />
+      <label :for="variant.id">{{ variant.name }}</label>
+    </li>
+  </ul>
 </template>
 
 <script>
 export default {
-  props: ["variant"],
+  props: ["question", "index"],
+  emits: ["getAnswer"],
   data() {
     return {
-      value: true,
+      value: "",
     };
+  },
+  computed: {
+    idx() {
+      return this.index + 1;
+    },
   },
 };
 </script>
 
 <style scoped>
+h2 {
+  font-size: 20px;
+  margin: 0;
+  margin-top: 25px;
+  padding-bottom: 30px;
+}
+ul {
+  margin: 5px 0;
+  list-style: none;
+  color: #7c79c7;
+  border: 1px solid #efeeff;
+  padding: 20px;
+  border-radius: 10px;
+  background: #fcfcff;
+}
 ul li + li {
   margin-top: 16px;
   border-top: 1px solid #efeeff;
