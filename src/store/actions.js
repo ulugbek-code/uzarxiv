@@ -31,6 +31,15 @@ export default {
       console.log(e.response.data);
     }
   },
+  getDuration(context, payload) {
+    context.commit("getDuration", payload);
+  },
+  changeDuration(context, payload) {
+    context.commit("changeDuration", payload);
+  },
+  resetDuration(context, payload) {
+    context.commit("resetDuration", payload);
+  },
   // questions
   async getQuestions(context) {
     try {

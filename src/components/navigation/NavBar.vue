@@ -4,9 +4,9 @@
     <div @click="toggleHamburgerMenu" class="header_toggle">
       <fa class="bx-menu" :icon="['fas', 'bars']" />
     </div>
-    <div class="header_img">
+    <!-- <div class="header_img">
       <img src="https://i.imgur.com/hczKIze.jpg" alt="" />
-    </div>
+    </div> -->
   </header>
   <div :class="[isNavOpened ? 'show' : '']" class="l-navbar" id="nav-bar">
     <!-- show class above -->

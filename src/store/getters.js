@@ -32,6 +32,9 @@ export default {
   examResults(state) {
     return state.examResults;
   },
+  duration(state) {
+    return state.duration;
+  },
   questions(state) {
     return state.questions;
   },

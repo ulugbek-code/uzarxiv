@@ -104,12 +104,10 @@ export default {
       if (newValue === 300) {
         this.$emit("lessTime");
       }
+      this.$emit("trackDuration", newValue);
     },
   },
 
-  mounted() {
-    this.startTimer();
-  },
   unmounted() {
     clearInterval(this.timerInterval);
   },
@@ -124,6 +122,10 @@ export default {
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
     },
+  },
+  mounted() {
+    this.$store.commit("saveTime");
+    this.startTimer();
   },
 };
 </script>

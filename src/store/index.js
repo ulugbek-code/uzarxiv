@@ -1,12 +1,21 @@
 import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 import rootMutations from "./mutations.js";
 import rootActions from "./actions.js";
 import rootGetters from "./getters.js";
 
 const store = createStore({
+  plugins: [
+    createPersistedState({
+      paths: ["changedDuration"],
+    }),
+  ],
   state() {
     return {
+      changedDuration: null,
+      savedTime: 0,
+      duration: 0,
       isExamActive: false,
       isUserActive: false,
       isCategoryActive: false,

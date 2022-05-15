@@ -44,7 +44,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: "/quiz/:id",
+      path: "/quiz/variant-id=:id&exam-id=:examId&duration=:duration",
       name: "quiz",
       component: TakeExam,
       props: true,

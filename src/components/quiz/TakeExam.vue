@@ -1,16 +1,19 @@
 <template>
-  <div class="quiz">
-    <base-timer
-      :limit="changedDuration"
-      @lessTime="warnUser"
-      @submitData="timeOver"
-    ></base-timer>
-    <form v-if="questions.length" @submit.prevent id="quiz-form">
-      <!-- <div class="row">
-        <h1 class="col text-center" id="timer-box"></h1>
-      </div> -->
+  <div v-if="questions.length" class="quiz">
+    <template v-if="questions.length">
+      <base-timer
+        :limit="savedTime || changedDuration"
+        @lessTime="warnUser"
+        @submitData="timeOver"
+        @trackDuration="saveDuration"
+      ></base-timer>
+    </template>
+    <form @submit.prevent id="quiz-form">
       <div class="quize">
         <div class="question-bar">
+          <!-- {{ savedTime }}
+          <hr />
+          {{ changedDuration }} -->
           <template v-for="(q, idx) in questions" :key="q.id">
             <take-exam-each-question
               :question="q"
@@ -62,12 +65,18 @@ export default {
     };
   },
   computed: {
+    savedTime() {
+      return this.$store.state.savedTime;
+    },
     changedDuration() {
-      return parseInt(this.duration) * 60;
+      return this.$store.getters.duration;
       // return 6;
     },
   },
   methods: {
+    saveDuration(val) {
+      this.$store.dispatch("changeDuration", val);
+    },
     warnUser() {
       this.lessTime = true;
       // console.log(Math.floor(this.offset) + "px");
@@ -92,6 +101,7 @@ export default {
           // description: "desc",
         },
       ]);
+      this.$store.dispatch("resetDuration");
       this.$router.replace("/");
     },
     async getQuestionsByVariantId() {
@@ -106,6 +116,7 @@ export default {
     },
   },
   async created() {
+    this.$store.dispatch("getDuration", parseInt(this.duration) * 60);
     await this.getQuestionsByVariantId();
   },
   watch: {
@@ -116,6 +127,9 @@ export default {
         "px";
       setTimeout(() => (this.lessTime = false), 4000);
     },
+  },
+  unmounted() {
+    this.submitAnswers();
   },
 };
 </script>

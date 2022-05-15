@@ -39,6 +39,19 @@ export default {
   getExamResults(state, payload) {
     state.examResults = payload.data;
   },
+  getDuration(state, payload) {
+    state.duration = payload;
+  },
+  changeDuration(state, payload) {
+    state.changedDuration = payload;
+  },
+  resetDuration(state) {
+    state.changedDuration = null;
+    state.savedTime = 0;
+  },
+  saveTime(state) {
+    state.savedTime = state.changedDuration;
+  },
   // questions
   getQuestions(state, payload) {
     state.questions = payload.data;

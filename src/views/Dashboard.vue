@@ -76,7 +76,6 @@
               <th>Foiz</th>
               <th>Holati</th>
               <th>Sana</th>
-              <th>Tahrirlash</th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +87,6 @@
               <td>{{ result.percent ? result.percent : 0 }} %</td>
               <td>{{ result.status }}</td>
               <td>{{ formatDate(result.date) }}</td>
-              <td>Ko'rish</td>
             </tr>
           </tbody>
         </table>
@@ -176,7 +174,7 @@ export default {
       try {
         const res = await customAxios.get(`main/exams/get/?user_id=${this.id}`);
         this.exams = res.data;
-        console.log(this.exams);
+        // console.log(this.exams);
       } catch (e) {
         console.log(e.response.data);
       }
