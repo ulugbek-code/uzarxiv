@@ -13,7 +13,8 @@
     <nav class="nav">
       <div>
         <router-link to="/" class="nav_logo">
-          <fa class="bx bx-layer nav_logo-icon" :icon="['fas', 'a']" />
+          <img src="../../assets/logo.png" alt="" />
+          <!-- <fa class="bx bx-layer nav_logo-icon" :icon="['fas', 'a']" /> -->
           <span class="nav_logo-name">Uz Arxiv</span>
         </router-link>
         <div class="nav_list">
@@ -36,9 +37,6 @@
             <span class="nav_name px-1">Dashboard</span>
           </router-link>
           <template v-if="isUserAdmin">
-            <Transition mode="in-out">
-              <p v-if="isNavOpened" class="px-4 text-light">Quizapp</p>
-            </Transition>
             <router-link
               to="/users"
               :class="[isUserActive ? 'activate' : '']"
@@ -50,7 +48,11 @@
               />
               <span class="nav_name">Foydalanuvchilar</span>
             </router-link>
-            <router-link to="/groups" class="nav_link">
+            <router-link
+              to="/groups"
+              :class="[isGroupActive ? 'activate' : '']"
+              class="nav_link"
+            >
               <fa
                 class="bx bx-layer nav_logo-icon"
                 :icon="['fas', 'square-poll-horizontal']"
@@ -125,6 +127,9 @@ export default {
     isQuestionActive() {
       return this.$store.state.isQuestionActive;
     },
+    isGroupActive() {
+      return this.$store.state.isGroupActive;
+    },
   },
   methods: {
     toggleHamburgerMenu() {
@@ -135,6 +140,7 @@ export default {
         localStorage.removeItem("token");
         localStorage.removeItem("isAdmin");
         this.$store.commit("logout");
+        // this.$store.commit("toggleNavbar");
       }
     },
   },
@@ -153,7 +159,7 @@ export default {
   justify-content: space-between;
   padding: 0 1rem;
   background-color: var(--white-color);
-  z-index: var(--z-fixed);
+  z-index: 10;
   transition: 0.5s;
 }
 
@@ -218,7 +224,9 @@ export default {
   column-gap: 1rem;
   padding: 0.5rem 0 4px 2.5rem;
 }
-
+.nav_logo img {
+  width: 30px;
+}
 .nav_link:last-child {
   column-gap: 0.7rem;
 }
@@ -232,11 +240,12 @@ export default {
   padding: 5px 8px 6px;
   border-radius: 25px;
   background: #fff;
-  color: #555;
+  color: rgb(85, 82, 82);
 }
 .nav_logo-icon {
   font-size: 1.1rem;
-  color: var(--white-color);
+  color: var(--first-color-light);
+  /* color: var(--white-color); */
 }
 .nav_logo-name {
   color: var(--white-color);
@@ -244,22 +253,24 @@ export default {
   font-size: 1.4rem;
 }
 .nav_link {
-  /* background: aqua; */
   position: relative;
   color: var(--first-color-light);
   margin-bottom: 8px;
   transition: all 0.3s ease;
 }
+.nav_list h4,
+.nav_list h4 .nav_logo-icon:first-child,
 .router-link-active.nav_link,
+.router-link-active.nav_link .nav_logo-icon,
+.nav_link.activate .nav_logo-icon,
 .nav_link.activate {
   color: #fff;
 }
-.nav_link:hover {
+.nav_link:hover,
+.nav_link:hover .nav_logo-icon {
   color: var(--white-color);
 }
-.nav_list h4:hover {
-  color: var(--first-color-light);
-}
+
 .nav_icon {
   font-size: 1.25rem;
 }
@@ -276,17 +287,8 @@ export default {
   margin: 1rem auto;
   background: #fff;
 }
-.l-navbar.show .log-out {
+.log-out {
   cursor: pointer;
-}
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.35s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
 }
 
 @media screen and (min-width: 768px) {
@@ -316,9 +318,6 @@ export default {
   .l-navbar.show {
     padding: 1rem 1rem 0 0;
   }
-  .l-navbar:not(.show) .router-link-active .nav_logo-icon {
-    color: #0d6efd;
-  }
 
   .show {
     width: calc(var(--nav-width) + 156px);
@@ -332,15 +331,18 @@ export default {
   .l-navbar.show {
     padding: 1rem 1.8rem 0 0;
   }
+  .l-navbar.show {
+    width: calc(var(--nav-width) + 156px);
+    padding-right: 0;
+  }
+  .header {
+    padding: 0 2rem 0 1rem;
+  }
   p {
     display: none;
   }
-  hr {
+  /* hr {
     display: none;
-  }
-  .router-link-active .nav_logo-icon,
-  .nav_link.activate .nav_logo-icon {
-    color: #0d6efd;
-  }
+  } */
 }
 </style>

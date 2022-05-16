@@ -18,6 +18,7 @@ const store = createStore({
       duration: 0,
       isExamActive: false,
       isUserActive: false,
+      isGroupActive: false,
       isCategoryActive: false,
       isQuestionActive: false, //for navigation active class
       token: JSON.parse(localStorage.getItem("token")) || null,

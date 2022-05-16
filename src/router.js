@@ -4,6 +4,7 @@ import SignIn from "./views/SignIn.vue";
 import Dashboard from "./views/Dashboard.vue";
 const Users = () => import("./views/Users.vue");
 const Groups = () => import("./views/Groups.vue");
+const AddGroup = () => import("./components/groups/AddGroup.vue");
 const TakeExam = () => import("./components/quiz/TakeExam.vue");
 const GroupDetail = () => import("./components/groups/GroupDetail.vue");
 const OperationDetails = () =>
@@ -12,7 +13,7 @@ const EachUser = () => import("./components/users/EachUser.vue");
 const Questions = () => import("./views/Questions.vue");
 const AddQuestion = () => import("./components/questions/AddQuestion.vue");
 const EachQuestion = () => import("./components/questions/EachQuestion.vue");
-const Exams = () => import("./views/Exams.vue");
+// const Exams = () => import("./views/Exams.vue");
 const EachExam = () => import("./components/exams/EachExam.vue");
 const Categories = () => import("./views/Categories.vue");
 const Results = () => import("./views/Results.vue");
@@ -52,6 +53,12 @@ const router = createRouter({
     },
     { path: "/groups", component: Groups, meta: { requiresAuth: true } },
     {
+      path: "/groups/add-group",
+      name: "add-group",
+      component: AddGroup,
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/groups/:id",
       name: "group",
       component: GroupDetail,
@@ -79,7 +86,7 @@ const router = createRouter({
       props: true,
       meta: { requiresAuth: true },
     },
-    { path: "/exams", component: Exams, meta: { requiresAuth: true } },
+    // { path: "/exams", component: Exams, meta: { requiresAuth: true } },
     {
       path: "/exams/add-exam/:id",
       name: "exam",

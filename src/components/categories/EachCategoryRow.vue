@@ -52,7 +52,10 @@
         <p></p>
       </div>
       <template v-for="v in getVariants" :key="v.id">
-        <each-variant-of-category :v="v"></each-variant-of-category>
+        <each-variant-of-category
+          :v="v"
+          :moduleId="cat.id"
+        ></each-variant-of-category>
       </template>
       <div v-if="isAddVariantOpened" class="second-row">
         <input

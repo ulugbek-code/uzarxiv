@@ -4,11 +4,8 @@
       <div class="container-fluid">
         <div class="row mb-1">
           <div class="col-auto col-sm-3 mt-2">
-            <h1 class="m-0">Imtihonlar</h1>
+            <h1 class="m-0">Guruh</h1>
           </div>
-          <!-- {{ getVariants }} -->
-          <!-- {{ getUsersGroupById }} -->
-          <!-- {{ getGroupById }} -->
           <div class="col-auto col-sm-9 mt-4">
             <ol class="breadcrumb float-end">
               <li class="breadcrumb-item">
@@ -17,12 +14,7 @@
               <li class="breadcrumb-item">
                 <router-link to="/groups">Guruhlar</router-link>
               </li>
-              <li class="breadcrumb-item">
-                <router-link :to="`/groups/${id}`">{{
-                  getCurrentGroupName
-                }}</router-link>
-              </li>
-              <li v-if="id" class="breadcrumb-item active">Imtihon qo'shish</li>
+              <li class="breadcrumb-item active">Guruh qo'shish</li>
             </ol>
           </div>
         </div>
@@ -39,29 +31,45 @@
                   <div class="col-12 col-lg-9">
                     <div class="card card-primary card-outline">
                       <div class="card-header">
-                        <div class="card-title">Imtihonni o'zgartirish</div>
-                        <!-- {{ getExam }} -->
-                        <!-- {{ getGroups }} -->
-                        <!-- {{ getUsers }} -->
+                        <div class="card-title">Guruh qo'shish</div>
                       </div>
                       <div class="card-body">
                         <div class="form-group field-subject">
                           <div class="row">
                             <label class="col-sm-2 text-left" for="id_subject">
-                              Test variantlari
+                              Guruh nomi
+                              <span class="text-red">* </span>
+                            </label>
+                            <div class="col-sm-10 field-subject">
+                              <div class="related-widget-wrapper">
+                                <div class="d-inline-block w-50">
+                                  <input
+                                    v-model="groupName"
+                                    class="form-control"
+                                    type="text"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group field-subject">
+                          <div class="row">
+                            <label class="col-sm-2 text-left" for="id_subject">
+                              Kategoriya
                               <span class="text-red">* </span>
                             </label>
                             <div class="col-sm-10 field-subject">
                               <div class="related-widget-wrapper">
                                 <div
-                                  v-if="getVariants.length"
+                                  v-if="getCategories.length"
                                   class="d-inline-block w-50"
                                 >
                                   <base-dropdown
-                                    :options="getVariants"
+                                    :options="getCategories"
                                     :withObj="true"
                                     @input="getExamVariant"
-                                    default="Variant tanlang..."
+                                    default="Kategoriya tanlang..."
                                   ></base-dropdown>
                                 </div>
                               </div>
@@ -108,7 +116,7 @@
                                 <input
                                   v-model="startDate"
                                   class="form-control"
-                                  type="datetime-local"
+                                  type="date"
                                 />
                               </div>
                             </div>
@@ -130,36 +138,13 @@
                                 <input
                                   v-model="finishDate"
                                   class="form-control"
-                                  type="datetime-local"
+                                  type="date"
                                 />
                               </div>
                             </div>
                             <div v-if="isDateInvalid" class="mt-2 text-danger">
                               Yopilish sanasi ochilish sanasidan kegn bo'lishi
                               lozim
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="form-group field-duration">
-                          <div class="row">
-                            <label class="col-sm-2 text-left" for="id_duration">
-                              Davomiyligi
-
-                              <span class="text-red">* </span>
-                            </label>
-                            <div class="col-sm-10 field-duration">
-                              <div class="d-inline-block w-50">
-                                <input
-                                  v-model.number="duration"
-                                  type="number"
-                                  class="form-control"
-                                  required
-                                />
-                              </div>
-                              <div class="help-block">
-                                Imtihon davomiyligi minutda kiritilsin!
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -182,7 +167,7 @@
                         <div class="card-body">
                           <div class="d-grid my-2">
                             <button
-                              @click.prevent="addExam"
+                              @click.prevent="addGroup"
                               class="btn btn-outline-success"
                             >
                               Saqlash
@@ -207,7 +192,6 @@ import Multiselect from "@vueform/multiselect";
 import customAxios from "../../api";
 
 export default {
-  props: ["id"],
   components: {
     Multiselect,
   },
@@ -216,10 +200,10 @@ export default {
       isDateInvalid: false,
       isEmpty: false,
       value: [],
-      variantId: null,
+      groupName: "",
+      moduleId: null,
       startDate: "",
       finishDate: "",
-      duration: "",
     };
   },
   computed: {
@@ -231,73 +215,43 @@ export default {
         };
       });
     },
-    getGroups() {
-      return this.$store.getters.groups.map((group) => {
-        return {
-          name: group.name,
-          id: group.id,
-        };
-      });
-    },
-    getGroupModuleById() {
-      return this.$store.getters.groups
-        .filter(
-          (group) => group.id === parseInt(this.id) //.map((group) => group.module)
-        )
-        .map((group) => group.module)
-        .join();
-    },
-    getCurrentGroupName() {
-      return this.getGroups
-        .filter((group) => group.id === parseInt(this.id))
-        .map((group) => group.name)
-        .join();
-    },
-    getUsersGroupById() {
-      return this.$store.getters.groups
-        .filter(
-          (group) => group.id === parseInt(this.id) //.map((group) => group.module)
-        )
-        .map((group) => group.users);
-    },
-    getVariants() {
-      return this.$store.getters.variants
-        .filter(
-          (variant) => variant.module === parseInt(this.getGroupModuleById)
-        )
-        .map((variant) => {
-          return { id: variant.id, name: variant.name };
-        });
+    getCategories() {
+      return this.$store.getters.modules;
     },
   },
   methods: {
     getExamVariant(val) {
       if (typeof val === "string") return;
-      this.variantId = val.id;
-      // console.log(this.variantId);
+      this.moduleId = val.id;
+      console.log(this.moduleId);
     },
-    async addExam() {
+    async addGroup() {
       try {
         if (
           !this.startDate ||
           !this.finishDate ||
-          !this.duration ||
-          !this.variantId ||
+          !this.groupName ||
+          !this.moduleId ||
           !this.value.length > 0
         ) {
-          this.isEmpty = true;
-          return;
+          return (this.isEmpty = true);
         }
         if (new Date(this.startDate) < new Date(this.finishDate)) {
-          await customAxios.post("main/exam/", {
+          console.log({
+            name: this.groupName,
             start_date: this.startDate,
             finish_date: this.finishDate,
-            duration: this.duration,
-            group: parseInt(this.id),
-            variant: this.variantId,
-            user: this.value,
+            module: this.moduleId,
+            users: this.value,
           });
-          this.$router.replace("/groups/" + this.id);
+          await customAxios.post("main/group/post/", {
+            name: this.groupName,
+            start_date: this.startDate,
+            finish_date: this.finishDate,
+            module: this.moduleId,
+            users: this.value,
+          });
+          this.$router.replace("/groups");
         } else {
           this.isDateInvalid = true;
         }
@@ -309,9 +263,7 @@ export default {
   async created() {
     this.$store.commit("activateGroup");
     await this.$store.dispatch("getModules");
-    await this.$store.dispatch("getGroups");
     await this.$store.dispatch("getUsers");
-    await this.$store.dispatch("getVariants");
   },
   unmounted() {
     this.$store.commit("activateGroup");
@@ -343,7 +295,6 @@ export default {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
-
 .card {
   box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
   margin-bottom: 1rem;
@@ -377,7 +328,10 @@ export default {
 .form-group {
   margin-bottom: 1rem;
 }
-
+.btn-block {
+  display: block;
+  width: 100%;
+}
 .select2-container--default .select2-selection--single {
   background-color: #fff;
   border: 1px solid #aaa;
@@ -413,7 +367,29 @@ export default {
   user-select: none;
   -webkit-user-select: none;
 }
+.vTimeField,
+.vDateField {
+  min-width: 200px;
+}
 
+.vDateField,
+.vTimeField,
+.vIntegerField {
+  margin-bottom: 5px;
+  display: inline-block;
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: inset 0 0 0 transparent;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 .help-block,
 .timezonewarning {
   font-size: 0.8em;
@@ -428,12 +404,13 @@ export default {
   width: initial;
   cursor: pointer;
 }
-input[type="datetime-local"]::-webkit-inner-spin-button,
-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.3);
 }
-input[type="datetime-local"]::-webkit-inner-spin-button:hover,
-input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+input[type="date"]::-webkit-inner-spin-button:hover,
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
   cursor: pointer;
 }
 </style>

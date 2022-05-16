@@ -153,7 +153,6 @@ export default {
         if (
           !this.passportNumber ||
           !this.login ||
-          !this.login ||
           !this.firstname ||
           !this.lastname ||
           !this.password ||

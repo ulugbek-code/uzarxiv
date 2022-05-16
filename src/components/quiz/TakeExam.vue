@@ -62,6 +62,7 @@ export default {
       tutorials: "",
       questions: [],
       answers: [],
+      isSubmitted: false,
     };
   },
   computed: {
@@ -101,6 +102,8 @@ export default {
           // description: "desc",
         },
       ]);
+      this.isSubmitted = true;
+      console.log(this.isSubmitted);
       this.$store.dispatch("resetDuration");
       this.$router.replace("/");
     },
@@ -129,6 +132,7 @@ export default {
     },
   },
   unmounted() {
+    if (this.isSubmitted) return;
     this.submitAnswers();
   },
 };

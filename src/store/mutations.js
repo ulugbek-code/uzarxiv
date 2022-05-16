@@ -7,6 +7,9 @@ export default {
   activateUser(state) {
     state.isUserActive = !state.isUserActive;
   },
+  activateGroup(state) {
+    state.isGroupActive = !state.isGroupActive;
+  },
   activateQuestion(state) {
     state.isQuestionActive = !state.isQuestionActive;
   },

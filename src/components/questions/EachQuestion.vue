@@ -33,9 +33,9 @@
                     <div class="card card-primary card-outline">
                       <div class="card-header">
                         <div class="card-title">Savolni o'zgartirish</div>
-                        <!-- {{ getQuestion.variants }} -->
-                        <!-- {{ getAnswers }} -->
-                        <!-- {{ getQuestion }} -->
+                        {{ getQuestion }}
+                        <hr />
+                        {{ question }}
                       </div>
                       <div class="card-body">
                         <div class="form-group field-start_date">
@@ -310,7 +310,7 @@
 </template>
 
 <script>
-import costumAxios from "../../api";
+import customAxios from "../../api";
 import EachVariant from "./EachVariant.vue";
 
 export default {
@@ -325,8 +325,8 @@ export default {
       isCorrectEmpty: false,
       isCorrectMore: false,
       isNoCorrectValue: 1,
-      // copyQuestion: {},
       questionName: "",
+      question: {},
     };
   },
   computed: {
@@ -349,6 +349,14 @@ export default {
     },
   },
   methods: {
+    async getQuestionById() {
+      try {
+        const res = await customAxios.get(`main/question/get/?id=${this.id}`);
+        this.question = res.data[0];
+      } catch (e) {
+        console.log(e);
+      }
+    },
     getVariantChanges(val) {
       if (typeof val === "string") return;
       else {
@@ -400,13 +408,13 @@ export default {
         return;
       }
       // console.log(this.getQuestion);
-      // await costumAxios.post("main/question/update_question/", {
-      //   id: this.getQuestion.id,
-      //   name: this.questionName,
-      //   variant: this.getQuestion.variant_id,
-      //   variants: this.getQuestion.variants,
-      // });
-      // this.$router.push("/questions");
+      await customAxios.post("main/question/update_question/", {
+        id: this.getQuestion.id,
+        name: this.questionName,
+        variant: this.getQuestion.variant_id,
+        variants: this.getQuestion.variants,
+      });
+      this.$router.push("/questions");
     },
     getQuestionCategory(val) {
       // if (typeof val === "string") return;
@@ -418,7 +426,7 @@ export default {
         return;
       }
       if (confirm("Haqiqatan ham o'chirishni xohlaysizmi")) {
-        await costumAxios.get(`main/question/delete/?id=${val.id}`);
+        await customAxios.get(`main/question/delete/?id=${val.id}`);
         await this.$store.dispatch("getQuestions");
       }
     },
@@ -431,8 +439,9 @@ export default {
       });
     },
   },
-  created() {
+  async created() {
     this.$store.commit("activateQuestion");
+    await this.getQuestionById();
     this.$store.dispatch("getQuestions");
     this.$store.dispatch("getModules");
     this.$store.dispatch("getVariants");

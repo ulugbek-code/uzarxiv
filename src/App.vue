@@ -1,6 +1,11 @@
 <template>
-  <!-- <navigation-bar></navigation-bar> -->
-  <nav-bar v-if="isAuth || token"></nav-bar>
+  <template v-if="isAuth || token">
+    <nav-bar></nav-bar>
+    <div
+      @click="toggleHamburgerMenu"
+      :class="[isNavOpened ? 'offset' : '']"
+    ></div>
+  </template>
   <div :class="[isNavOpened ? 'body-pd' : '']" class="app-container">
     <!-- body-pd class above -->
     <router-view> </router-view>
@@ -80,6 +85,15 @@ input[type="number"]::-webkit-outer-spin-button {
   /* margin: 0; */
 }
 @media screen and (max-width: 768px) {
+  .offset {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 10;
+  }
   .app-wrapper {
     padding: 0;
   }
@@ -91,7 +105,8 @@ input[type="number"]::-webkit-outer-spin-button {
     padding-left: 0;
   }
   .app-container.body-pd {
-    padding-left: calc(var(--nav-width));
+    /* padding-left: calc(var(--nav-width)); */
+    padding-left: 0;
   }
 }
 </style>

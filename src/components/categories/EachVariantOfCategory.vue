@@ -43,7 +43,7 @@
 import customAxios from "../../api";
 
 export default {
-  props: ["v"],
+  props: ["v", "moduleId"],
   data() {
     return {
       isVariant: true,
@@ -59,7 +59,7 @@ export default {
       if (!this.variantName) return;
       await customAxios.patch(`main/variant/${id}/`, {
         name: this.variantName,
-        module: id,
+        module: this.moduleId,
         description: this.variantDesc ? this.variantDesc : "",
       });
       await this.$store.dispatch("getVariants");

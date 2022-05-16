@@ -96,7 +96,7 @@
                                   <router-link
                                     :to="{
                                       name: 'user',
-                                      params: { id: user.id },
+                                      params: { id: user.pass_number },
                                     }"
                                     >{{ user.username }}</router-link
                                   >
@@ -106,7 +106,7 @@
                                 <td>{{ user.position }}</td>
                                 <td>
                                   <button
-                                    @click="goUserDetails(user.id)"
+                                    @click="goUserDetails(user.pass_number)"
                                     class="btn btn-warning mx-2"
                                   >
                                     <fa
@@ -188,8 +188,8 @@ export default {
       }
     },
   },
-  created() {
-    this.$store.dispatch("getUsers");
+  async created() {
+    await this.$store.dispatch("getUsers");
   },
 };
 </script>

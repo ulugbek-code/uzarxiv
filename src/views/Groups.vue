@@ -7,13 +7,14 @@
             <div class="col-sm-3 mt-2">
               <h1 class="m-0 fw-normal">Guruhlar</h1>
             </div>
-            <div class="col-sm-9 mt-4">
-              <ol class="breadcrumb float-end">
-                <li class="breadcrumb-item">
-                  <router-link to="/">Bosh sahifa</router-link>
-                </li>
-                <li class="breadcrumb-item active">Guruhlar</li>
-              </ol>
+            <div class="col-sm-9 mt-3">
+              <router-link
+                to="/groups/add-group"
+                class="btn btn-outline-success float-end"
+              >
+                <fa :icon="['fas', 'plus-circle']" />
+                Guruh qo'shish
+              </router-link>
             </div>
           </div>
         </div>
@@ -89,9 +90,9 @@ export default {
       this.$router.push("/groups/" + id);
     },
   },
-  created() {
-    this.$store.dispatch("getModules");
-    this.$store.dispatch("getGroups");
+  async created() {
+    await this.$store.dispatch("getModules");
+    await this.$store.dispatch("getGroups");
   },
 };
 </script>

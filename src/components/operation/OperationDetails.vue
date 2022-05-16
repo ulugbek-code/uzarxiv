@@ -3,26 +3,13 @@
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
-          <div class="row mb-4">
-            <!-- <div class="col-sm-3 mt-2">
-              <h1 class="m-0 fw-normal">Guruhlar</h1>
-            </div>
-            
-            <div class="col-sm-9 mt-4">
-              <ol class="breadcrumb float-end">
-                <li class="breadcrumb-item">
-                  <router-link to="/">Bosh sahifa</router-link>
-                </li>
-                <li class="breadcrumb-item active">Guruhlar</li>
-              </ol>
-            </div> -->
-          </div>
+          <div class="row mb-4"></div>
         </div>
       </div>
       <div class="content">
         <div class="container-fluid">
           <section class="content">
-            <table class="table text-center table-hover">
+            <table class="table text-center">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -90,8 +77,5 @@ export default {
 <style scoped>
 table {
   color: #444;
-}
-tr {
-  cursor: pointer;
 }
 </style>

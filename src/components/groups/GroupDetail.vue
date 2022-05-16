@@ -88,18 +88,10 @@
             </thead>
             <tbody>
               <tr v-for="users in getFilteredDetails" :key="users.user.id">
-                <td>
-                  {{ `${users.user.first_name} ${users.user.last_name}` }}
-                </td>
-                <td>{{ users.user.organization }}</td>
-                <td>{{ users.user.position }}</td>
-                <td>
-                  <input :checked="users.payment_status" type="checkbox" />
-                  <!-- {{ users.payment_status }}    -->
-                </td>
-                <td>{{ users.exam_status ? users.exam_status : "Missed" }}</td>
-
-                <td><a :href="users.sertification" target="_blank">link</a></td>
+                <detail-table-row
+                  :users="users"
+                  :groupId="id"
+                ></detail-table-row>
               </tr>
             </tbody>
           </table>
@@ -162,8 +154,12 @@
 
 <script>
 import customAxios from "../../api";
+import DetailTableRow from "./DetailTableRow.vue";
 export default {
   props: ["id"],
+  components: {
+    DetailTableRow,
+  },
   data() {
     return {
       groupDetails: [],
@@ -179,6 +175,9 @@ export default {
     },
   },
   methods: {
+    updatePayment() {
+      console.log(this.paymentStatus);
+    },
     formatDate(date) {
       let day = new Date(date).toUTCString().slice(5, 22);
       day =
@@ -202,7 +201,11 @@ export default {
     },
   },
   created() {
+    this.$store.commit("activateGroup");
     this.getGroupDetails(this.id);
+  },
+  unmounted() {
+    this.$store.commit("activateGroup");
   },
 };
 </script>

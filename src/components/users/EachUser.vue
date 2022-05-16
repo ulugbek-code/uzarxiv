@@ -26,13 +26,12 @@
         </div>
       </div>
     </div>
-
     <div class="content">
       <div class="container-fluid">
         <section id="content" class="content">
           <div class="row">
             <div id="content-main" class="col-12">
-              <form>
+              <form @submit.prevent>
                 <div class="row">
                   <div class="col-12 col-lg-9">
                     <div class="card card-primary card-outline">
@@ -53,8 +52,8 @@
                               <input
                                 v-model="passportNumber"
                                 type="text"
-                                class="vTextField"
-                                maxlength="128"
+                                class="form-control"
+                                maxlength="9"
                                 required
                               />
                             </div>
@@ -69,7 +68,7 @@
                               <input
                                 v-model="password"
                                 type="text"
-                                class="vTextField"
+                                class="form-control"
                                 maxlength="128"
                                 required
                               />
@@ -90,19 +89,15 @@
                               <input
                                 v-model="username"
                                 type="text"
-                                class="vTextField"
+                                class="form-control"
                                 maxlength="150"
                                 required
                               />
 
-                              <div class="help-block red"></div>
-
-                              <div class="help-block">
+                              <!-- <div class="help-block">
                                 Majburiy. 150 yoki undan kam belgi. Faqat
                                 harflar, raqamlar va @/./+/-/_.
-                              </div>
-
-                              <div class="help-block text-red"></div>
+                              </div> -->
                             </div>
                           </div>
                         </div>
@@ -120,7 +115,7 @@
                               <input
                                 v-model="firstname"
                                 type="text"
-                                class="vTextField"
+                                class="form-control"
                                 maxlength="150"
                               />
 
@@ -144,7 +139,7 @@
                               <input
                                 v-model="lastname"
                                 type="text"
-                                class="vTextField"
+                                class="form-control"
                                 maxlength="150"
                                 id="id_last_name"
                               />
@@ -170,7 +165,7 @@
                               <input
                                 v-model="organization"
                                 type="text"
-                                class="vTextField"
+                                class="form-control"
                                 maxlength="200"
                                 required
                               />
@@ -193,21 +188,19 @@
                               <input
                                 v-model="position"
                                 type="text"
-                                class="vTextField"
+                                class="form-control"
                                 maxlength="200"
                                 required
                               />
-
-                              <div class="help-block red"></div>
-
-                              <div class="help-block text-red"></div>
                             </div>
                           </div>
+                        </div>
+                        <div v-if="isEmpty" class="help-block text-red fs-4">
+                          Iltimos, barcha kerakli maydonlarni toʻldiring!
                         </div>
                       </div>
                     </div>
                   </div>
-
                   <div class="col-12 col-lg-3">
                     <div>
                       <div class="card card-primary card-outline">
@@ -219,18 +212,19 @@
                         </div>
                         <div class="card-body">
                           <div class="d-grid my-2">
-                            <input
-                              type="submit"
-                              value="Saqlash"
+                            <button
+                              @click="updateUser"
                               class="btn btn-outline-success"
-                            />
+                            >
+                              Saqlash
+                            </button>
                           </div>
 
-                          <div class="d-grid my-2">
+                          <!-- <div class="d-grid my-2">
                             <button class="btn btn-outline-danger">
                               O'chirish
                             </button>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -246,10 +240,12 @@
 </template>
 
 <script>
+import customAxios from "../../api";
 export default {
   props: ["id"],
   data() {
     return {
+      isEmpty: false,
       password: "",
       passportNumber: "",
       username: "",
@@ -257,21 +253,60 @@ export default {
       lastname: "",
       organization: "",
       position: "",
+      getUser: [],
     };
   },
-  computed: {
-    getUser() {
-      return this.$store.getters.user(parseInt(this.id));
+  methods: {
+    async updateUser() {
+      try {
+        if (
+          !this.passportNumber ||
+          !this.username ||
+          !this.firstname ||
+          !this.lastname ||
+          !this.password ||
+          !this.organization ||
+          !this.position
+        ) {
+          return (this.isEmpty = true);
+        }
+        await customAxios.patch(`main/user/${this.getUser.id}/`, {
+          password: this.password,
+          username: this.username,
+          first_name: this.firstname,
+          last_name: this.lastname,
+          organization: this.organization,
+          position: this.position,
+          pass_number: this.passportNumber,
+        });
+        // await this.getUserByPassNumber();
+        this.$router.push("/users");
+      } catch (e) {
+        console.log(e.response.message);
+      }
+    },
+    async getUserByPassNumber() {
+      try {
+        const res = await customAxios.get(
+          `main/user/filter_pass/?pass_number=${this.id}`
+        );
+        this.getUser = res.data;
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
-  created() {
-    this.$store.dispatch("getUsers");
+  async created() {
     this.$store.commit("activateUser");
+    await this.getUserByPassNumber();
   },
   unmounted() {
     this.$store.commit("activateUser");
   },
   watch: {
+    isEmpty() {
+      setTimeout(() => (this.isEmpty = false), 2500);
+    },
     getUser(newObj) {
       this.password = newObj.password;
       this.passportNumber = newObj.pass_number;
@@ -327,22 +362,7 @@ export default {
   display: inline-block;
   margin-bottom: 0.5rem;
 }
-.form-control {
-  display: block;
-  width: 100%;
-  height: calc(2.25rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 0 0 transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+
 .card {
   box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
   margin-bottom: 1rem;
@@ -354,21 +374,11 @@ export default {
 .djn-checkbox-select-all {
   padding-left: 1.5rem !important;
 }
-.card-primary.card-outline {
-  border-top: 3px solid #007bff;
-}
 .card {
   box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
   margin-bottom: 1rem;
 }
-.card-header {
-  background-color: transparent;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-  padding: 0.75rem 1.25rem;
-  position: relative;
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
-}
+
 .card-title {
   float: left;
   font-size: 1.1rem;
@@ -389,10 +399,6 @@ label:not(.form-check-label):not(.custom-file-label) {
 .text-red {
   color: #dc3545 !important;
 }
-.btn-block {
-  display: block;
-  width: 100%;
-}
 
 select {
   word-wrap: normal;
@@ -401,41 +407,6 @@ button {
   text-transform: none;
 }
 
-.form-group div .vTextField {
-  display: block;
-  width: 100%;
-}
-.vTextField {
-  height: calc(2.25rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 0 0 transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-.vDateField,
-.vTimeField {
-  min-width: 200px;
-  height: calc(2.25rem + 2px);
-  margin-top: 5px;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 0 0 transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
 .help-block,
 .timezonewarning {
   font-size: 0.8em;
