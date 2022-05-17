@@ -21,6 +21,9 @@ export default {
   },
   setAuth(state) {
     state.isAuth = true;
+    // state.token = JSON.parse(localStorage.getItem("userInfo")).token;
+    // state.isAdmin = JSON.parse(localStorage.getItem("userInfo")).is_superuser;
+    // state.userId = JSON.parse(localStorage.getItem("userInfo")).id;
     state.token = JSON.parse(localStorage.getItem("token"));
     state.isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
     state.userId = JSON.parse(localStorage.getItem("userId"));

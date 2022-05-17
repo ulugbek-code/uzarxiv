@@ -1,4 +1,5 @@
 <template>
+  <vue-progress-bar></vue-progress-bar>
   <template v-if="isAuth || token">
     <nav-bar></nav-bar>
     <div
@@ -34,6 +35,21 @@ export default {
     toggleHamburgerMenu() {
       this.$store.commit("toggleNavbar");
     },
+  },
+  created() {
+    this.$router.beforeEach((to, from, next) => {
+      //  does the page we want to go to have a meta.progress object
+
+      //  start the progress bar
+      this.$Progress.start();
+      //  continue to next page
+      next();
+    });
+    //  hook the progress bar to finish after we've finished moving router-view
+    this.$router.afterEach(() => {
+      //  finish the progress bar
+      this.$Progress.finish();
+    });
   },
 };
 </script>

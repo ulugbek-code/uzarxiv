@@ -4,7 +4,7 @@ import store from "./store";
 
 const customAxios = axios.create({
   baseURL: "https://quiz.uzarxiv-test.uz/",
-  timeout: 18000,
+  timeout: 15000,
   headers: {
     Authorization: `Token ${JSON.parse(localStorage.getItem("token"))}`,
   },
@@ -20,9 +20,11 @@ customAxios.interceptors.response.use(
       router.push("/notFound");
     } else if (error.response.status === 401) {
       // console.log(error.response.status);
-      store.commit("logout");
-      // localStorage.removeItem("token");
-      router.replace("/login");
+      localStorage.removeItem("token");
+      localStorage.removeItem("isAdmin");
+      localStorage.removeItem("userId");
+      // localStorage.removeItem('userInfo')
+      store.dispatch("logout");
     }
     return Promise.reject(error);
   }

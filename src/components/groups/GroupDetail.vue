@@ -91,6 +91,7 @@
                 <detail-table-row
                   :users="users"
                   :groupId="id"
+                  @updatedStatus="refreshStatus"
                 ></detail-table-row>
               </tr>
             </tbody>
@@ -146,8 +147,6 @@
           </div>
         </div>
       </div>
-      <!-- {{ groupDetails }} -->
-      <!-- {{ getFilteredDetails }} -->
     </div>
   </div>
 </template>
@@ -198,6 +197,9 @@ export default {
       } catch (e) {
         console.log(e.response);
       }
+    },
+    refreshStatus() {
+      this.getGroupDetails(this.id);
     },
   },
   created() {

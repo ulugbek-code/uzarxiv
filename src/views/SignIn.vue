@@ -4,7 +4,7 @@
       <img class="logo" src="../assets/logo.png" alt="" />
     </div>
     <div class="d-flex justify-content-center">
-      <form @submit.prevent="loginUser" class="border rounded p-4">
+      <form @submit.prevent class="border rounded p-4">
         <div v-if="error" class="alert alert-danger" role="alert">
           {{ error }}
         </div>
@@ -37,7 +37,9 @@
           /></span>
         </div>
         <div class="d-grid">
-          <button type="submit" class="btn btn-outline-primary">Log in</button>
+          <button @click.prevent="loginUser" class="btn btn-outline-primary">
+            Log in
+          </button>
         </div>
       </form>
     </div>
@@ -58,6 +60,7 @@ export default {
   methods: {
     async loginUser() {
       try {
+        this.$Progress.start();
         const response = await customAxios.post(
           "api/login/",
           {
@@ -70,19 +73,25 @@ export default {
             },
           }
         );
+        this.$Progress.finish();
         console.log(response.data);
+        // localStorage.setItem('userInfo',JSON.stringify(response.data))
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem(
           "isAdmin",
           JSON.stringify(response.data.is_superuser)
         );
         localStorage.setItem("userId", JSON.stringify(response.data.id));
-        this.$store.commit("setAuth");
+        this.$store.dispatch("setAuth");
         this.$router.replace("/");
       } catch (e) {
-        // console.log(e.response.data);
-        // if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
-        this.error = e ? e.response.data : "error";
+        this.$Progress.fail();
+        console.log(e);
+        if (e.response.status === 400) {
+          this.error = "Bunday xodim mavjud emas.";
+          return;
+        }
+        this.error = e ? e.response.message : "error";
       }
     },
   },

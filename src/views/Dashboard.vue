@@ -1,6 +1,6 @@
 <template>
   <div class="container pt-4">
-    <div class="row d-flex justify-content-between mb-4">
+    <div class="row d-flex justify-content-between mb-3">
       <div class="col-md-8">
         <h1>Dashboard</h1>
         <!-- {{ id }} -->
@@ -81,7 +81,7 @@
     <!-- user dashboard -->
     <div v-else class="row">
       <!-- {{ getExams }} -->
-      <div v-if="examResults.length" class="col-lg-9 table-responsive">
+      <div v-if="examResults.length" class="col-lg-9 table-responsive mb-4">
         <table class="table text-center table-hover">
           <thead>
             <tr>

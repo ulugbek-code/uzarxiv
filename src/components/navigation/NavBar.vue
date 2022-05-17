@@ -139,7 +139,9 @@ export default {
       if (confirm("Rostdan ham tizimdan chiqmoqchimisiz?")) {
         localStorage.removeItem("token");
         localStorage.removeItem("isAdmin");
-        this.$store.commit("logout");
+        localStorage.removeItem("userId");
+        // localStorage.removeItem('userInfo')
+        this.$store.dispatch("logout");
         // this.$store.commit("toggleNavbar");
       }
     },

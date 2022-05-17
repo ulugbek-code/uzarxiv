@@ -100,4 +100,10 @@ export default {
       console.log(e.response);
     }
   },
+  setAuth(context) {
+    context.commit("setAuth");
+  },
+  logout(context) {
+    context.commit("logout");
+  },
 };

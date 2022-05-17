@@ -215,9 +215,9 @@ form {
   min-height: 1px;
   padding: 1.25rem;
 }
-.table td.action-checkbox,
+/* .table td.action-checkbox,
 .djn-checkbox-select-all {
   width: 45px;
   padding-left: 1.5rem;
-}
+} */
 </style>

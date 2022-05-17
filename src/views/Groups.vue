@@ -33,6 +33,9 @@
                 </tr>
               </thead>
               <!-- below changed -->
+              <!-- {{
+                getGroups
+              }} -->
               <tbody v-if="getGroups.length">
                 <tr
                   @click="goGroupDetail(group.id)"
@@ -42,8 +45,8 @@
                   <td>{{ group.name }}</td>
                   <td>{{ formatDate(group.start_date) }}</td>
                   <td>{{ formatDate(group.finish_date) }}</td>
-                  <td>{{ group.module }}</td>
-                  <td>{{ group.abbreviation }}</td>
+                  <td>{{ group.module.name }}</td>
+                  <td>{{ group.module.AT }}</td>
                 </tr>
               </tbody>
             </table>
@@ -57,18 +60,19 @@
 <script>
 export default {
   computed: {
-    getModules() {
-      return this.$store.getters.modules;
-    },
+    // getModules() {
+    //   return this.$store.getters.modules;
+    // },
     getGroups() {
-      return this.$store.getters.groups.map((group) => {
-        return {
-          ...group,
-          module: this.getModules.find((mod) => mod.id === group.module).name,
-          abbreviation: this.getModules.find((mod) => mod.id === group.module)
-            .AT,
-        };
-      });
+      return this.$store.getters.groups;
+      // .map((group) => {
+      //   return {
+      //     ...group,
+      //     module: this.getModules.find((mod) => mod.id === group.module).name,
+      //     abbreviation: this.getModules.find((mod) => mod.id === group.module)
+      //       .AT,
+      //   };
+      // });
     },
     // filteredGroups() {
     //   return this.getGroups
@@ -91,7 +95,7 @@ export default {
     },
   },
   async created() {
-    await this.$store.dispatch("getModules");
+    // await this.$store.dispatch("getModules");
     await this.$store.dispatch("getGroups");
   },
 };

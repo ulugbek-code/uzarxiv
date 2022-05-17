@@ -8,8 +8,8 @@
     <input
       v-model="paymentStatus"
       @change="updatePayment"
-      :checked="users.payment_status"
       type="checkbox"
+      :disabled="isLoading"
     />
   </td>
   <td>{{ users.exam_status ? users.exam_status : "Missed" }}</td>
@@ -21,13 +21,16 @@
 import customAxios from "../../api";
 export default {
   props: ["users", "groupId"],
+  emits: ["updatedStatus"],
   data() {
     return {
       paymentStatus: null,
+      isLoading: false,
     };
   },
   methods: {
     async updatePayment() {
+      this.isLoading = true;
       //   console.log(this.paymentStatus);
       //   console.log(this.groupId);
       //   console.log(this.users.user.id);
@@ -38,10 +41,19 @@ export default {
           user: this.users.user.id,
         },
       ]);
-      await this.$store.dispatch("getGroups");
+      this.isLoading = false;
+      this.$emit("updatedStatus");
+      // await this.$store.dispatch("getGroups");
     },
+  },
+  created() {
+    this.paymentStatus = this.users.payment_status;
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+input {
+  cursor: pointer;
+}
+</style>

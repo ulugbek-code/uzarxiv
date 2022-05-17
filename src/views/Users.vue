@@ -236,7 +236,7 @@ export default {
   display: inline-block;
   margin-bottom: 0.5rem;
 }
-.form-control {
+/* .form-control {
   display: block;
   width: 100%;
   height: calc(2.25rem + 2px);
@@ -251,18 +251,18 @@ export default {
   border-radius: 0.25rem;
   box-shadow: inset 0 0 0 transparent;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+} */
 .card {
   box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
   margin-bottom: 1rem;
 }
-.table td.action-checkbox {
+/* .table td.action-checkbox {
   width: 45px;
   padding-left: 1.5rem;
 }
 .djn-checkbox-select-all {
   padding-left: 1.5rem !important;
-}
+} */
 .card-primary.card-outline {
   border-top: 3px solid #007bff;
 }
@@ -310,7 +310,7 @@ button {
   text-transform: none;
 }
 
-.form-group div .vTextField {
+/* .form-group div .vTextField {
   display: block;
   width: 100%;
 }
@@ -350,7 +350,7 @@ button {
   font-size: 0.8em;
   color: #859099;
   font-style: italic;
-}
+} */
 .input-group {
   flex-wrap: nowrap;
 }
