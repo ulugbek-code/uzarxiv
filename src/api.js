@@ -1,6 +1,6 @@
 import axios from "axios";
 import router from "./router.js";
-import store from "./store";
+// import store from "./store";
 
 const customAxios = axios.create({
   baseURL: "https://quiz.uzarxiv-test.uz/",
@@ -19,12 +19,13 @@ customAxios.interceptors.response.use(
     if (error.response.status === 404) {
       router.push("/notFound");
     } else if (error.response.status === 401) {
+      alert("Iltimos, yana avvaldan login qiling");
       // console.log(error.response.status);
-      localStorage.removeItem("token");
-      localStorage.removeItem("isAdmin");
-      localStorage.removeItem("userId");
+      // localStorage.removeItem("token");
+      // localStorage.removeItem("isAdmin");
+      // localStorage.removeItem("userId");
       // localStorage.removeItem('userInfo')
-      store.dispatch("logout");
+      // store.dispatch("logout");
     }
     return Promise.reject(error);
   }
