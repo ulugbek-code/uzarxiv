@@ -2,7 +2,7 @@
   <li>
     <input :value="variant.id" v-model="value" type="radio" :id="variant.id" />
     <label :for="variant.id">{{ variant.name }}</label>
-    {{ value }}
+    <!-- {{ value }} -->
   </li>
 </template>
 

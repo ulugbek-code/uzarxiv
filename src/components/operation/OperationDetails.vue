@@ -33,7 +33,16 @@
                   <td>{{ group.percent ? group.percent : 0 }} %</td>
                   <td>{{ group.status }}</td>
                   <td>{{ formatDate(group.date) }}</td>
-                  <td>Ko'rish</td>
+                  <td>
+                    <router-link
+                      :to="{
+                        name: 'operation-result',
+                        params: { id: group.id },
+                      }"
+                    >
+                      {{ group }}
+                    </router-link>
+                  </td>
                 </tr>
               </tbody>
             </table>

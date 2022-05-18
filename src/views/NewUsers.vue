@@ -7,8 +7,9 @@
             <!-- {{ getUsers }}
             {{ isInvalidPassportNumber.length }} -->
             <h2>
-              Xush kelibsiz <br /><span class="text-danger">Uz</span>
-              <span class="text-success">Arxiv</span> ga
+              <span class="text-danger">Uz</span>
+              <span class="text-success">Arxiv</span> loyihasiga yangi o'quvchi
+              qo'shing
             </h2>
           </div>
           <div v-if="isEmpty" class="custom-toast bg-danger text-light">

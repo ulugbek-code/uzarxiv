@@ -73,8 +73,8 @@ export default {
             },
           }
         );
-        this.$Progress.finish();
-        console.log(response.data);
+
+        // console.log(response.data);
         // localStorage.setItem('userInfo',JSON.stringify(response.data))
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem(
@@ -82,8 +82,9 @@ export default {
           JSON.stringify(response.data.is_superuser)
         );
         localStorage.setItem("userId", JSON.stringify(response.data.id));
-        this.$store.dispatch("setAuth");
-        this.$router.replace("/");
+        await this.$store.dispatch("setAuth");
+        // this.$router.replace("/");
+        this.$Progress.finish();
       } catch (e) {
         this.$Progress.fail();
         console.log(e);

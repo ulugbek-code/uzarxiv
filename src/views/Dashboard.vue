@@ -18,59 +18,74 @@
       </template>
       <!-- {{ statistics }} -->
     </div>
-    <div v-if="isUserAdmin" class="row d-flex justify-content-around">
-      <div class="col-lg-3 my-2">
+    <div v-if="isUserAdmin" class="row d-flex justify-content-center">
+      <div class="col-lg-4 my-2">
         <div class="card">
           <div class="card-body d-flex gap-4">
             <div class="icon-img w-25">
-              <!-- <fa class="icon-users" :icon="['fas', 'user']" /> -->
-              <img src="../assets/user.png" alt="" />
+              <fa class="icon icon-users" :icon="['fas', 'user']" />
+              <!-- <img src="../assets/user.png" alt="" /> -->
             </div>
-            <div class="info">
+            <div class="info-users">
               <p>{{ statistics.number_users }}</p>
               <p class="mb-0">O'quvchilar</p>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="statistics.number_groups" class="col-lg-3 my-2">
+      <div v-if="statistics.number_groups" class="col-lg-4 my-2">
         <div class="card">
           <div class="card-body d-flex gap-4">
             <div class="icon-img w-25">
-              <!-- <fa class="icon-group" :icon="['fas', 'people-group']" /> -->
-              <img src="../assets/groups.png" alt="" />
+              <fa class="icon icon-group" :icon="['fas', 'people-group']" />
             </div>
-            <div class="info">
+            <div class="info-group">
               <p>{{ statistics.number_groups }}</p>
               <p class="mb-0">Guruhlar</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 my-2">
+      <div class="col-lg-4 my-2">
         <div class="card">
           <div class="card-body d-flex gap-4">
             <div class="icon-img w-25">
-              <!-- <fa class="icon-group" :icon="['fas', 'people-group']" /> -->
-              <img src="../assets/exam.png" alt="" />
+              <fa class="icon icon-all-exam" :icon="['fas', 'list']" />
+              <!-- <img src="../assets/exam.png" alt="" /> -->
             </div>
-            <div class="info">
+            <div class="info-all-exam">
               <p>
-                {{ statistics.number_exams ? statistics.number_exams : "0" }}
+                {{ statistics.all_exams }}
               </p>
               <p class="mb-0">Imtihonlar</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 my-2">
+      <div class="col-lg-4 my-2">
+        <div class="card">
+          <div class="card-body d-flex gap-4">
+            <div class="icon-img w-25">
+              <fa class="icon icon-exam" :icon="['fas', 'list-check']" />
+              <!-- <img src="../assets/exam.png" alt="" /> -->
+            </div>
+            <div class="info-exams">
+              <p>
+                {{ statistics.taken_exams }}
+              </p>
+              <p class="mb-0">Topshirilgan imtihonlar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 my-2">
         <div class="card">
           <div class="card-body d-flex gap-3">
             <div class="icon-img w-25">
-              <!-- <fa class="icon-paid" :icon="['fas', 'user-check']" /> -->
-              <img src="../assets/paid.png" alt="" />
+              <fa class="icon icon-paid" :icon="['fas', 'user-check']" />
+              <!-- <img src="../assets/paid.png" alt="" /> -->
             </div>
-            <div class="info">
+            <div class="info-paid">
               <p>{{ statistics.number_paid_users }}</p>
               <p class="mb-0">To'langan o'quvchilar</p>
             </div>
@@ -92,10 +107,14 @@
               <th>Foiz</th>
               <th>Holati</th>
               <th>Sana</th>
+              <th>Sertifikat</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="result in examResults" :key="result.id">
+              <!-- {{
+                result
+              }} -->
               <td>{{ result.id }}</td>
               <td>{{ result.user_first_name }} {{ result.user_last_name }}</td>
               <td>{{ result.module_name }}</td>
@@ -103,6 +122,29 @@
               <td>{{ result.percent ? result.percent : 0 }} %</td>
               <td>{{ result.status }}</td>
               <td>{{ formatDate(result.date) }}</td>
+              <td
+                v-if="
+                  result.status === 'Pass' && result.payment_status === true
+                "
+                class="td-link"
+              >
+                <fa
+                  class="link-icon text-primary"
+                  @click.prevent="getCertificate(result.id)"
+                  :icon="['fas', 'file-arrow-down']"
+                />
+              </td>
+              <td
+                v-else-if="
+                  result.status === 'Pass' && result.payment_status === false
+                "
+                class="text-danger"
+              >
+                To'lanmagan
+              </td>
+              <td v-else>
+                <fa class="text-danger" :icon="['fas', 'circle-xmark']" />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -164,6 +206,25 @@ export default {
     },
   },
   methods: {
+    async getCertificate(id) {
+      try {
+        this.$Progress.start();
+        const res = await customAxios.get(
+          `operation/sertificate/get/?id=${id}`
+        );
+        // console.log(res.data.url);
+        let fileLink = document.createElement("a");
+
+        fileLink.href = res.data.url;
+        fileLink.setAttribute("download", "certificate.docx");
+        document.body.appendChild(fileLink);
+
+        this.$Progress.finish();
+        fileLink.click();
+      } catch {
+        this.$Progress.fail();
+      }
+    },
     async selectedGroup(val) {
       if (typeof val === "string") return;
       const res = await customAxios.get(`filter_statistic/?group_id=${val.id}`);
@@ -241,17 +302,44 @@ export default {
 .info p:first-child {
   font-size: 2rem;
 }
+
+.info p:last-child {
+  color: #0dcaf0;
+}
+.info p:last-child {
+  color: #0dcaf0;
+}
 .info p:last-child {
   color: #0dcaf0;
 }
 .card-title {
   font-weight: 500;
 }
-.icon-users {
-  font-size: 3rem;
+.icon-users,
+.info-users p:last-child {
+  color: rgb(151, 52, 243);
+}
+.icon-exam,
+.info-exams p:last-child {
+  color: rgb(51, 238, 44);
+}
+.icon-all-exam,
+.info-all-exam p:last-child {
+  color: rgb(235, 56, 25);
+}
+.icon-paid,
+.info-paid p:last-child {
+  color: rgb(231, 192, 15);
 }
 .card {
   margin-bottom: 1rem;
+}
+.icon {
+  font-size: 2rem;
+}
+.icon-group,
+.info-group p:last-child {
+  color: #0dcaf0;
 }
 p {
   margin-bottom: 8px;
@@ -259,6 +347,18 @@ p {
 
 p span {
   line-height: 2;
+}
+.link-icon {
+  font-size: 20px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  /* pointer-events: none; */
+}
+.link-icon:hover {
+  color: #08367a !important;
+}
+.link-icon:active {
+  color: #156ff7 !important;
 }
 
 @media screen and (max-width: 768px) {

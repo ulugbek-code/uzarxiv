@@ -13,6 +13,8 @@ const EachUser = () => import("./components/users/EachUser.vue");
 const Questions = () => import("./views/Questions.vue");
 const AddQuestion = () => import("./components/questions/AddQuestion.vue");
 const EachQuestion = () => import("./components/questions/EachQuestion.vue");
+const OperationResult = () =>
+  import("./components/operation/OperationResult.vue");
 // const Exams = () => import("./views/Exams.vue");
 const EachExam = () => import("./components/exams/EachExam.vue");
 const Categories = () => import("./views/Categories.vue");
@@ -69,6 +71,13 @@ const router = createRouter({
       path: "/operation-detail/:id",
       name: "operation",
       component: OperationDetails,
+      props: true,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/operation-result/:id",
+      name: "operation-result",
+      component: OperationResult,
       props: true,
       meta: { requiresAuth: true },
     },

@@ -105,15 +105,18 @@
                                 <td>{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
                                 <td>
-                                  <button
-                                    @click="goUserDetails(user.pass_number)"
-                                    class="btn btn-warning mx-2"
+                                  <router-link
+                                    :to="{
+                                      name: 'user',
+                                      params: { id: user.pass_number },
+                                    }"
                                   >
-                                    <fa
-                                      class="text-light"
-                                      :icon="['fas', 'pencil']"
-                                    />
-                                  </button>
+                                    <button class="btn btn-warning mx-2">
+                                      <fa
+                                        class="text-light"
+                                        :icon="['fas', 'pencil']"
+                                      /></button
+                                  ></router-link>
                                   <button
                                     @click="deleteUser(user.id)"
                                     class="btn btn-danger"
@@ -178,9 +181,9 @@ export default {
     },
   },
   methods: {
-    goUserDetails(userId) {
-      this.$router.push({ name: "user", params: { id: userId } });
-    },
+    // goUserDetails(userId) {
+    //   this.$router.push({ name: "user", params: { id: userId } });
+    // },
     async deleteUser(id) {
       if (confirm("Siz haqiqatan ham o'chirmoqchimisiz")) {
         await costumAxios.delete(`main/user/${id}/`);
@@ -236,33 +239,11 @@ export default {
   display: inline-block;
   margin-bottom: 0.5rem;
 }
-/* .form-control {
-  display: block;
-  width: 100%;
-  height: calc(2.25rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 0 0 transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-} */
 .card {
   box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
   margin-bottom: 1rem;
 }
-/* .table td.action-checkbox {
-  width: 45px;
-  padding-left: 1.5rem;
-}
-.djn-checkbox-select-all {
-  padding-left: 1.5rem !important;
-} */
+
 .card-primary.card-outline {
   border-top: 3px solid #007bff;
 }
@@ -309,48 +290,6 @@ select {
 button {
   text-transform: none;
 }
-
-/* .form-group div .vTextField {
-  display: block;
-  width: 100%;
-}
-.vTextField {
-  height: calc(2.25rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 0 0 transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-.vDateField,
-.vTimeField {
-  min-width: 200px;
-  height: calc(2.25rem + 2px);
-  margin-top: 5px;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 0 0 transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-.help-block,
-.timezonewarning {
-  font-size: 0.8em;
-  color: #859099;
-  font-style: italic;
-} */
 .input-group {
   flex-wrap: nowrap;
 }

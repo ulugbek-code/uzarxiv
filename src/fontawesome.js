@@ -12,7 +12,6 @@ import {
   faCircleQuestion,
   faCircleCheck,
   faUserPlus,
-  faA,
   faClock,
   faPlusCircle,
   faCircleMinus,
@@ -23,8 +22,11 @@ import {
   faTrashAlt,
   faAngleDown,
   faCircleXmark,
-  // faPeopleGroup,
-  // faUserCheck,
+  faPeopleGroup,
+  faUserCheck,
+  faList,
+  faListCheck,
+  faFileArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -39,7 +41,6 @@ library.add(
   faCircleQuestion,
   faCircleCheck,
   faUserPlus,
-  faA,
   faClock,
   faPlusCircle,
   faCircleMinus,
@@ -49,9 +50,12 @@ library.add(
   faSearch,
   faTrashAlt,
   faAngleDown,
-  faCircleXmark
-  // faPeopleGroup,
-  // faUserCheck
+  faCircleXmark,
+  faPeopleGroup,
+  faUserCheck,
+  faList,
+  faListCheck,
+  faFileArrowDown
 );
 
 export default FontAwesomeIcon;

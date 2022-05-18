@@ -19,7 +19,7 @@ customAxios.interceptors.response.use(
     if (error.response.status === 404) {
       router.push("/notFound");
     } else if (error.response.status === 401) {
-      alert("Iltimos, yana avvaldan login qiling");
+      alert("Iltimos, sahifani yangilab, yana avvaldan login qiling");
       // console.log(error.response.status);
       // localStorage.removeItem("token");
       // localStorage.removeItem("isAdmin");

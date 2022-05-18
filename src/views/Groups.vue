@@ -60,9 +60,6 @@
 <script>
 export default {
   computed: {
-    // getModules() {
-    //   return this.$store.getters.modules;
-    // },
     getGroups() {
       return this.$store.getters.groups;
       // .map((group) => {

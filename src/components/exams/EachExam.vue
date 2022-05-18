@@ -245,6 +245,7 @@ export default {
           (group) => group.id === parseInt(this.id) //.map((group) => group.module)
         )
         .map((group) => group.module)
+        .map((module) => module.id)
         .join();
     },
     getCurrentGroupName() {

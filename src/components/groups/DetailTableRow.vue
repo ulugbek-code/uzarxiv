@@ -14,7 +14,16 @@
   </td>
   <td>{{ users.exam_status ? users.exam_status : "Missed" }}</td>
 
-  <td><a :href="users.sertification" target="_blank">link</a></td>
+  <td v-if="users.operation_id" class="td-link">
+    <fa
+      class="link-icon text-primary"
+      @click.prevent="getCertificate(users.operation_id)"
+      :icon="['fas', 'file-arrow-down']"
+    />
+  </td>
+  <td v-else>
+    <fa class="text-danger" :icon="['fas', 'circle-xmark']" />
+  </td>
 </template>
 
 <script>
@@ -29,20 +38,44 @@ export default {
     };
   },
   methods: {
+    async getCertificate(id) {
+      try {
+        this.$Progress.start();
+        const res = await customAxios.get(
+          `operation/sertificate/get/?id=${id}`
+        );
+        // console.log(res.data.url);
+        let fileLink = document.createElement("a");
+
+        fileLink.href = res.data.url;
+        fileLink.setAttribute("download", "certificate.docx");
+        document.body.appendChild(fileLink);
+
+        this.$Progress.finish();
+        fileLink.click();
+      } catch {
+        this.$Progress.fail();
+      }
+    },
     async updatePayment() {
-      this.isLoading = true;
-      //   console.log(this.paymentStatus);
-      //   console.log(this.groupId);
-      //   console.log(this.users.user.id);
-      await customAxios.post("operation/payment/update_status/", [
-        {
-          status: this.paymentStatus,
-          group: parseInt(this.groupId),
-          user: this.users.user.id,
-        },
-      ]);
-      this.isLoading = false;
-      this.$emit("updatedStatus");
+      try {
+        this.$Progress.start();
+        this.isLoading = true;
+
+        await customAxios.post("operation/payment/update_status/", [
+          {
+            status: this.paymentStatus,
+            group: parseInt(this.groupId),
+            user: this.users.user.id,
+          },
+        ]);
+        this.$Progress.finish();
+        this.isLoading = false;
+        this.$emit("updatedStatus");
+      } catch {
+        this.$Progress.fail();
+      }
+
       // await this.$store.dispatch("getGroups");
     },
   },
@@ -53,7 +86,19 @@ export default {
 </script>
 
 <style scoped>
-input {
+input,
+.link-icon {
   cursor: pointer;
+}
+.link-icon {
+  font-size: 20px;
+  transition: all 0.2s ease;
+  /* pointer-events: none; */
+}
+.link-icon:hover {
+  color: #08367a !important;
+}
+.link-icon:active {
+  color: #156ff7 !important;
 }
 </style>
