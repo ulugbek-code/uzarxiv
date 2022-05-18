@@ -246,9 +246,13 @@ export default {
       this.isFormOpened = false;
     },
   },
-  created() {
-    this.$store.dispatch("getModules");
-    this.$store.dispatch("getVariants");
+  async created() {
+    this.$Progress.start();
+    await this.$store.dispatch("getModules");
+    await this.$store.dispatch("getVariants");
+  },
+  mounted() {
+    this.$Progress.finish();
   },
 };
 </script>

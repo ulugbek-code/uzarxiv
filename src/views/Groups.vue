@@ -92,8 +92,12 @@ export default {
     },
   },
   async created() {
+    this.$Progress.start();
     // await this.$store.dispatch("getModules");
     await this.$store.dispatch("getGroups");
+  },
+  mounted() {
+    this.$Progress.finish();
   },
 };
 </script>

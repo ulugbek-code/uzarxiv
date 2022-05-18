@@ -184,9 +184,13 @@ export default {
       }
     },
   },
-  created() {
-    this.$store.dispatch("getQuestions");
-    this.$store.dispatch("getVariants");
+  async created() {
+    this.$Progress.start();
+    await this.$store.dispatch("getQuestions");
+    await this.$store.dispatch("getVariants");
+  },
+  mounted() {
+    this.$Progress.finish();
   },
 };
 </script>

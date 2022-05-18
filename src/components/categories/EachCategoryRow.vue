@@ -171,7 +171,7 @@ export default {
 
 <style scoped>
 .contrast-bg {
-  background: rgba(176, 184, 185, 0.6);
+  background: rgba(176, 184, 185, 0.3);
 }
 .first-row {
   width: 100%;

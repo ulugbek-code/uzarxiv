@@ -75,8 +75,12 @@ export default {
       return day;
     },
   },
-  created() {
-    this.$store.dispatch("getExams");
+  async created() {
+    this.$Progress.start();
+    await this.$store.dispatch("getExams");
+  },
+  mounted() {
+    this.$Progress.finish();
   },
 };
 </script>

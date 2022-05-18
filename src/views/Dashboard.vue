@@ -19,9 +19,9 @@
       <!-- {{ statistics }} -->
     </div>
     <div v-if="isUserAdmin" class="row d-flex justify-content-center">
-      <div class="col-lg-4 my-2">
+      <div class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex gap-4">
+          <div class="card-body d-flex gap-3">
             <div class="icon-img w-25">
               <fa class="icon icon-users" :icon="['fas', 'user']" />
               <!-- <img src="../assets/user.png" alt="" /> -->
@@ -33,9 +33,9 @@
           </div>
         </div>
       </div>
-      <div v-if="statistics.number_groups" class="col-lg-4 my-2">
+      <div v-if="statistics.number_groups" class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex gap-4">
+          <div class="card-body d-flex gap-3">
             <div class="icon-img w-25">
               <fa class="icon icon-group" :icon="['fas', 'people-group']" />
             </div>
@@ -46,9 +46,9 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 my-2">
+      <div class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex gap-4">
+          <div class="card-body d-flex gap-3">
             <div class="icon-img w-25">
               <fa class="icon icon-all-exam" :icon="['fas', 'list']" />
               <!-- <img src="../assets/exam.png" alt="" /> -->
@@ -62,9 +62,9 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 my-2">
+      <div class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex gap-4">
+          <div class="card-body d-flex gap-2">
             <div class="icon-img w-25">
               <fa class="icon icon-exam" :icon="['fas', 'list-check']" />
               <!-- <img src="../assets/exam.png" alt="" /> -->
@@ -78,9 +78,23 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 my-2">
+      <!-- <div class="col-lg-3 my-1">
+       
+      </div> -->
+    </div>
+    <div class="row dash-chart">
+      <div class="col-lg-9 my-3">
+        <div class="card dash-col">
+          <div
+            class="card-body d-flex justify-content-center align-items-center"
+          >
+            Chart
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 mt-3">
         <div class="card">
-          <div class="card-body d-flex gap-3">
+          <div class="card-body d-flex gap-2">
             <div class="icon-img w-25">
               <fa class="icon icon-paid" :icon="['fas', 'user-check']" />
               <!-- <img src="../assets/paid.png" alt="" /> -->
@@ -91,10 +105,46 @@
             </div>
           </div>
         </div>
+        <div class="card">
+          <div class="card-body d-flex gap-2">
+            <div class="icon-img w-25">
+              <fa class="icon icon-users" :icon="['fas', 'user']" />
+              <!-- <img src="../assets/user.png" alt="" /> -->
+            </div>
+            <div class="info-users">
+              <p>{{ statistics.passed_users }}</p>
+              <p class="mb-0">Imtihondan o'tganlar</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body d-flex gap-2">
+            <div class="icon-img w-25">
+              <fa class="icon icon-users" :icon="['fas', 'user']" />
+              <!-- <img src="../assets/user.png" alt="" /> -->
+            </div>
+            <div class="info-users">
+              <p>{{ statistics.failed_users }}</p>
+              <p class="mb-0">Imtihondan yeqilganlar</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body d-flex gap-2">
+            <div class="icon-img w-25">
+              <fa class="icon icon-users" :icon="['fas', 'user']" />
+              <!-- <img src="../assets/user.png" alt="" /> -->
+            </div>
+            <div class="info-users">
+              <p>{{ statistics.missed_users }}</p>
+              <p class="mb-0">Imtihon topshirmaganlar</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- user dashboard -->
-    <div v-else class="row">
+    <div v-if="!isUserAdmin" class="row">
       <!-- {{ getExams }} -->
       <div v-if="examResults.length" class="col-lg-9 table-responsive mb-4">
         <table class="table text-center table-hover">
@@ -265,6 +315,7 @@ export default {
     },
   },
   async created() {
+    this.$Progress.start();
     if (!this.isUserAdmin) {
       await this.getExamByUser();
       await this.$store.dispatch("getExamResults");
@@ -273,6 +324,9 @@ export default {
     }
     await this.getStatistics();
     this.$store.dispatch("getGroups");
+  },
+  mounted() {
+    this.$Progress.finish();
   },
   unmounted() {
     clearInterval(this.fetchTimeInterval);
@@ -290,6 +344,12 @@ export default {
 </script>
 
 <style scoped>
+.dash-chart {
+  min-height: 45vh;
+}
+.dash-col {
+  height: 100%;
+}
 .container h1,
 .info p:first-child {
   color: #444;
@@ -306,12 +366,7 @@ export default {
 .info p:last-child {
   color: #0dcaf0;
 }
-.info p:last-child {
-  color: #0dcaf0;
-}
-.info p:last-child {
-  color: #0dcaf0;
-}
+
 .card-title {
   font-weight: 500;
 }

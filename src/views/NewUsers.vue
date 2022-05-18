@@ -202,8 +202,12 @@ export default {
         (this.position = "");
     },
   },
-  created() {
-    this.$store.dispatch("getUsers");
+  async created() {
+    this.$Progress.start();
+    await this.$store.dispatch("getUsers");
+  },
+  mounted() {
+    this.$Progress.finish();
   },
   watch: {
     passportNumber(newVal) {

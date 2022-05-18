@@ -83,7 +83,7 @@ export default {
           JSON.stringify(response.data.is_superuser)
         );
         localStorage.setItem("userId", JSON.stringify(response.data.id));
-        await this.$store.dispatch("setAuth");
+        await this.$store.commit("setAuth");
         // this.$router.replace("/");
         this.$Progress.finish();
       } catch (e) {
