@@ -33,9 +33,9 @@
                     <div class="card card-primary card-outline">
                       <div class="card-header">
                         <div class="card-title">Savolni o'zgartirish</div>
-                        {{ getQuestion }}
+                        <!-- {{ getQuestion }}
                         <hr />
-                        {{ question }}
+                        {{ question }} -->
                       </div>
                       <div class="card-body">
                         <div class="form-group field-start_date">
@@ -326,7 +326,7 @@ export default {
       isCorrectMore: false,
       isNoCorrectValue: 1,
       questionName: "",
-      question: {},
+      // question: {},
     };
   },
   computed: {
@@ -349,14 +349,14 @@ export default {
     },
   },
   methods: {
-    async getQuestionById() {
-      try {
-        const res = await customAxios.get(`main/question/get/?id=${this.id}`);
-        this.question = res.data[0];
-      } catch (e) {
-        console.log(e);
-      }
-    },
+    // async getQuestionById() {
+    //   try {
+    //     const res = await customAxios.get(`main/question/get/?id=${this.id}`);
+    //     this.question = res.data[0];
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // },
     getVariantChanges(val) {
       if (typeof val === "string") return;
       else {
@@ -441,7 +441,7 @@ export default {
   },
   async created() {
     this.$store.commit("activateQuestion");
-    await this.getQuestionById();
+    // await this.getQuestionById();
     this.$store.dispatch("getQuestions");
     this.$store.dispatch("getModules");
     this.$store.dispatch("getVariants");
