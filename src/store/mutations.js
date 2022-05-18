@@ -38,7 +38,7 @@ export default {
     state.users = payload.data;
   },
   getExams(state, payload) {
-    state.exams = payload.data;
+    state.exams = payload.data.reverse();
   },
   getExamResults(state, payload) {
     state.examResults = payload.data;
