@@ -12,7 +12,7 @@
             <table class="table text-center">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <!-- <th>ID</th> -->
                   <th>O'quvchi</th>
                   <th>Kurs</th>
                   <th>Ball</th>
@@ -24,7 +24,7 @@
               </thead>
               <tbody>
                 <tr v-for="group in getOperationDetails" :key="group.id">
-                  <td>{{ group.id }}</td>
+                  <!-- <td>{{ group.id }}</td> -->
                   <td>
                     {{ group.user_first_name }} {{ group.user_last_name }}
                   </td>
@@ -40,7 +40,7 @@
                         params: { id: group.id },
                       }"
                     >
-                      {{ group }}
+                      Ko'rish
                     </router-link>
                   </td>
                 </tr>

@@ -12,7 +12,17 @@
       :disabled="isLoading"
     />
   </td>
-  <td>{{ users.exam_status ? users.exam_status : "Missed" }}</td>
+  <td
+    :class="
+      users.exam_status === 'Pass'
+        ? 'text-success'
+        : users.exam_status === 'Fail'
+        ? 'text-danger'
+        : 'text-secondary'
+    "
+  >
+    {{ users.exam_status ? users.exam_status : "Hali topshirmadi" }}
+  </td>
 
   <td v-if="users.operation_id" class="td-link">
     <fa

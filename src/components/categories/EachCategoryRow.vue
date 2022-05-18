@@ -1,5 +1,9 @@
 <template>
-  <div @click.stop="isVariantsOpen = !isVariantsOpen" class="first-row">
+  <div
+    @click.stop="isVariantsOpen = !isVariantsOpen"
+    class="first-row"
+    :class="isVariantsOpen ? 'contrast-bg' : ''"
+  >
     <p v-if="isLabel">
       <fa
         :class="{ spin: isVariantsOpen }"
@@ -45,7 +49,7 @@
     </div>
   </div>
   <template v-if="isVariantsOpen">
-    <div class="">
+    <div :class="isVariantsOpen ? 'contrast-bg' : ''">
       <div class="second-row">
         <p class="bolder">Variant nomi</p>
         <p class="bolder p-left">Izoh</p>
@@ -166,10 +170,14 @@ export default {
 </script>
 
 <style scoped>
+.contrast-bg {
+  background: rgba(176, 184, 185, 0.6);
+}
 .first-row {
   width: 100%;
   display: flex;
-  margin-bottom: 4px;
+  padding: 8px;
+  /* margin-bottom: 4px; */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }

@@ -29,7 +29,7 @@
               <p>{{ allOperation.percent }}/100 %</p>
               <p
                 :class="
-                  allOperation.status === 'Pass'
+                  allOperation.status === 'Passed'
                     ? 'text-success'
                     : 'text-danger'
                 "

@@ -18,15 +18,16 @@ customAxios.interceptors.response.use(
     // Do something with response error
     if (error.response.status === 404) {
       router.push("/notFound");
-    } else if (error.response.status === 401) {
-      alert("Iltimos, sahifani yangilab, yana avvaldan login qiling");
-      // console.log(error.response.status);
-      // localStorage.removeItem("token");
-      // localStorage.removeItem("isAdmin");
-      // localStorage.removeItem("userId");
-      // localStorage.removeItem('userInfo')
-      // store.dispatch("logout");
     }
+    //  else if (error.response.status === 401) {
+    //   alert("Iltimos, sahifani yangilab, yana avvaldan login qiling");
+    // console.log(error.response.status);
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("isAdmin");
+    // localStorage.removeItem("userId");
+    // localStorage.removeItem('userInfo')
+    // store.dispatch("logout");
+    // }
     return Promise.reject(error);
   }
 );
