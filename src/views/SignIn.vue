@@ -27,9 +27,10 @@
         <div @click="error = false" class="input-group mb-3">
           <input
             v-model.trim="password"
-            type="text"
+            type="password"
             class="form-control"
             placeholder="Password"
+            autocomplete="off"
             required
           />
           <span class="input-group-text" id="basic-addon1"

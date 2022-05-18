@@ -28,7 +28,7 @@ export default {
       context.commit("getExamResults", res);
       // console.log(this.examResults);
     } catch (e) {
-      console.log(e.response.data);
+      console.log(e.response);
     }
   },
   getDuration(context, payload) {

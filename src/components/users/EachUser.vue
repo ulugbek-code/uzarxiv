@@ -133,7 +133,7 @@
                               for="id_last_name"
                             >
                               Last name
-                              <span class="text-red">* </span>
+                              <!-- <span class="text-red">* </span> -->
                             </label>
                             <div class="col-sm-10 field-last_name">
                               <input
@@ -263,7 +263,7 @@ export default {
           !this.passportNumber ||
           !this.username ||
           !this.firstname ||
-          !this.lastname ||
+          // !this.lastname ||
           !this.password ||
           !this.organization ||
           !this.position
@@ -287,9 +287,8 @@ export default {
     },
     async getUserByPassNumber() {
       try {
-        const res = await customAxios.get(
-          `main/user/filter_pass/?pass_number=${this.id}`
-        );
+        const res = await customAxios.get(`main/user/${this.id}`);
+        console.log(res.data);
         this.getUser = res.data;
       } catch (e) {
         console.log(e);

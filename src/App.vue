@@ -95,6 +95,7 @@ a {
 .table {
   margin-bottom: 0px !important;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

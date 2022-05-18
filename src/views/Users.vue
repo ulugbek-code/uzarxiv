@@ -67,11 +67,11 @@
                                     <span>Foydalanuvchilar</span>
                                   </div>
                                 </th>
-                                <th class="sorting">
+                                <!-- <th class="sorting">
                                   <div class="text">
                                     <span>Passport raqami</span>
                                   </div>
-                                </th>
+                                </th> -->
                                 <th class="sorting">
                                   <div class="text">
                                     <span>Tashkilot</span>
@@ -96,19 +96,23 @@
                                   <router-link
                                     :to="{
                                       name: 'user',
-                                      params: { id: user.pass_number },
+                                      params: { id: user.id },
                                     }"
                                     >{{ user.username }}</router-link
                                   >
                                 </td>
-                                <td>{{ user.pass_number }}</td>
-                                <td>{{ user.organization }}</td>
+                                <!-- <td>
+                                  {{
+                                    user.pass_number ? user.pass_number : "-"
+                                  }}
+                                </td> -->
+                                <td width="40%">{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
                                 <td>
                                   <router-link
                                     :to="{
                                       name: 'user',
-                                      params: { id: user.pass_number },
+                                      params: { id: user.id },
                                     }"
                                   >
                                     <button class="btn btn-warning mx-2">
@@ -171,7 +175,7 @@ export default {
     filteredUsers() {
       return this.users.filter((user) => {
         return (
-          user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
+          // user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
           user.username.toLowerCase().includes(this.search.toLowerCase())
         );
       });

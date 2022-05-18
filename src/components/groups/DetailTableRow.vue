@@ -21,7 +21,7 @@
         : 'text-secondary'
     "
   >
-    {{ users.exam_status ? users.exam_status : "Hali topshirmadi" }}
+    {{ users.exam_status ? users.exam_status : "Topshirmagan" }}
   </td>
 
   <td v-if="users.operation_id" class="td-link">

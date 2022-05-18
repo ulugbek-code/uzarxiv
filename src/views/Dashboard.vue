@@ -266,8 +266,8 @@ export default {
   },
   async created() {
     if (!this.isUserAdmin) {
-      await this.$store.dispatch("getExamResults");
       await this.getExamByUser();
+      await this.$store.dispatch("getExamResults");
       this.startFetching();
       return;
     }

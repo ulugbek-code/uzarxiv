@@ -73,9 +73,9 @@ export default {
         "-yil";
       return day;
     },
-    goGroupDetail(id) {
-      this.$router.push("/groups/" + id);
-    },
+    // goGroupDetail(id) {
+    //   this.$router.push("/groups/" + id);
+    // },
   },
   created() {
     this.$store.dispatch("getOperationDetails", this.id);

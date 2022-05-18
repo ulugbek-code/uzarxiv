@@ -10,7 +10,9 @@
               class="card col-lg-3 col-10 mx-2"
             >
               <div class="card-body px-0">
-                <h5 class="card-title text-bold">{{ exam.group.name }}</h5>
+                <h5 v-if="exam.group" class="card-title text-bold">
+                  {{ exam.group.name }}
+                </h5>
                 <br />
                 <p>Boshlanish vaqti: {{ getStartDate(exam.start_date) }}</p>
                 <p>Tugash vaqti: {{ getStartDate(exam.finish_date) }}</p>

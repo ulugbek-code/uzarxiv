@@ -489,7 +489,7 @@ export default {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
-.form-control {
+/* .form-control {
   display: block;
   width: 100%;
   height: calc(2.25rem + 2px);
@@ -504,7 +504,7 @@ export default {
   border-radius: 0.25rem;
   box-shadow: inset 0 0 0 transparent;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+} */
 .card {
   box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
   margin-bottom: 1rem;
@@ -539,7 +539,7 @@ export default {
   display: block;
   width: 100%;
 }
-.select2-container--default .select2-selection--single {
+/* .select2-container--default .select2-selection--single {
   background-color: #fff;
   border: 1px solid #aaa;
   border-radius: 4px;
@@ -596,7 +596,7 @@ export default {
   border-radius: 0.25rem;
   box-shadow: inset 0 0 0 transparent;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+} */
 .help-block,
 .timezonewarning {
   font-size: 0.8em;
