@@ -76,7 +76,7 @@ export default {
       // console.log(res);
       context.commit("getModules", res);
     } catch (e) {
-      console.log(e.response);
+      console.log(e.response.data);
     }
   },
   //get Groups
@@ -86,7 +86,7 @@ export default {
       // console.log(res);
       context.commit("getGroups", res);
     } catch (e) {
-      console.log(e.response);
+      if (e.response.data === 401) location.reload();
     }
   },
   async getOperationDetails(context, payload) {

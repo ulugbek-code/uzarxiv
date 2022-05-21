@@ -313,6 +313,10 @@ export default {
     startFetching() {
       this.fetchTimeInterval = setInterval(() => this.getExamByUser(), 40000);
     },
+    refreshing() {
+      console.log("hello");
+      // location.reload();
+    },
   },
   async created() {
     this.$Progress.start();
