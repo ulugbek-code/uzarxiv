@@ -6,9 +6,9 @@
     <textarea
       v-model.lazy="variantName"
       :class="[
-        'form-control',
-        isEmpty && !variantName ? 'red-border' : '',
-        isBlank && !variantName ? 'red-border' : '',
+        'form-control border',
+        isEmpty && !variantName ? 'border-danger' : '',
+        isBlank && !variantName ? 'border-danger' : '',
       ]"
       placeholder="Savolning variantlari bo'lishi shart!"
     ></textarea>
@@ -28,9 +28,11 @@
       v-model.lazy="variantBall"
       type="number"
       :class="[
-        'form-control',
-        isEmpty && !variantBall ? 'red-border' : '',
-        isBlank && status == 'Correct' && variantBall == 0 ? 'red-border' : '',
+        'form-control border',
+        isEmpty && !variantBall ? 'border-danger' : '',
+        isBlank && status == 'Correct' && variantBall == 0
+          ? 'border-danger'
+          : '',
       ]"
     />
     <div class="help-block text-danger"></div>
@@ -132,6 +134,9 @@ export default {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
     0 0 8px rgba(239, 104, 104, 1);
   /* outline: none; */
+}
+.border-danger::placeholder {
+  color: #dc3545;
 }
 .correct {
   position: absolute;

@@ -173,11 +173,12 @@
                                             <textarea
                                               v-model="questionName"
                                               :class="[
-                                                'form-control',
+                                                'form-control border',
                                                 isEmpty && !questionName
-                                                  ? 'red-border'
+                                                  ? 'border-danger'
                                                   : '',
                                               ]"
+                                              placeholder="Savol nomi..."
                                             ></textarea>
                                           </div>
                                         </div>
@@ -290,11 +291,13 @@
                             </button>
                           </div>
 
-                          <!-- <div class="d-grid my-2">
-                            <button class="btn btn-outline-danger">
-                              O'chirish
-                            </button>
-                          </div> -->
+                          <div class="d-grid my-2">
+                            <router-link to="/questions">
+                              <button class="btn btn-outline-danger w-100">
+                                Bekor qilish
+                              </button>
+                            </router-link>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -441,10 +444,14 @@ export default {
   },
   async created() {
     this.$store.commit("activateQuestion");
+    this.$Progress.start();
     // await this.getQuestionById();
-    this.$store.dispatch("getQuestions");
-    this.$store.dispatch("getModules");
-    this.$store.dispatch("getVariants");
+    await this.$store.dispatch("getQuestions");
+    await this.$store.dispatch("getModules");
+    await this.$store.dispatch("getVariants");
+  },
+  mounted() {
+    this.$Progress.finish();
   },
   unmounted() {
     this.$store.commit("activateQuestion");
@@ -539,64 +546,7 @@ export default {
   display: block;
   width: 100%;
 }
-/* .select2-container--default .select2-selection--single {
-  background-color: #fff;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-}
 
-.select2-container .select2-selection--single {
-  box-sizing: border-box;
-  cursor: pointer;
-  display: block;
-  height: 28px;
-  user-select: none;
-}
-.select2-container .select2-selection--single {
-  min-height: 40px;
-  padding-top: 5px;
-}
-.select2-container--default .select2-selection--multiple {
-  background-color: white;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  cursor: text;
-  padding-bottom: 5px;
-  padding-right: 5px;
-  position: relative;
-}
-
-.select2-container .select2-selection--multiple {
-  box-sizing: border-box;
-  cursor: pointer;
-  display: block;
-  min-height: 32px;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.vTimeField,
-.vDateField {
-  min-width: 200px;
-}
-
-.vDateField,
-.vTimeField,
-.vIntegerField {
-  margin-bottom: 5px;
-  display: inline-block;
-  height: calc(2.25rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 0 0 transparent;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-} */
 .help-block,
 .timezonewarning {
   font-size: 0.8em;
@@ -656,6 +606,9 @@ textarea {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
     0 0 8px rgba(239, 104, 104, 1);
   /* outline: none; */
+}
+.border-danger::placeholder {
+  color: #dc3545;
 }
 .correct {
   position: absolute;

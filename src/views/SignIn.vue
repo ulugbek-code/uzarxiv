@@ -74,6 +74,7 @@ export default {
             },
           }
         );
+        console.log(response);
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem(
           "isAdmin",
@@ -83,7 +84,7 @@ export default {
         await this.$store.commit("setAuth");
         // this.$router.replace("/");
         this.$Progress.finish();
-        location.reload();
+        // location.reload();
       } catch (e) {
         this.$Progress.fail();
         console.log(e);

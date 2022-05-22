@@ -4,6 +4,7 @@
     <div @click="toggleHamburgerMenu" class="header_toggle">
       <fa class="bx-menu" :icon="['fas', 'bars']" />
     </div>
+    <div v-if="!isUserAdmin">firstname lastname</div>
     <!-- <div class="header_img">
       <img src="https://i.imgur.com/hczKIze.jpg" alt="" />
     </div> -->
@@ -109,6 +110,9 @@
 <script>
 export default {
   computed: {
+    // fullname() {
+    //   return localStorage.getItem("fullname");
+    // },
     isNavOpened() {
       return this.$store.getters.isNavOpened;
     },

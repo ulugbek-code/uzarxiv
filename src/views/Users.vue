@@ -64,14 +64,14 @@
                                   colspan="1"
                                 >
                                   <div class="text">
-                                    <span>Foydalanuvchilar</span>
+                                    <span>FIO</span>
                                   </div>
                                 </th>
-                                <!-- <th class="sorting">
+                                <th class="sorting">
                                   <div class="text">
                                     <span>Passport raqami</span>
                                   </div>
-                                </th> -->
+                                </th>
                                 <th class="sorting">
                                   <div class="text">
                                     <span>Tashkilot</span>
@@ -90,23 +90,21 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="user in filteredUsers" :key="user.id">
+                              <tr
+                                @click="toEachUser(user.id)"
+                                v-for="user in filteredUsers"
+                                :key="user.id"
+                              >
                                 <td>
                                   <!-- <router-link :to="`/users/${user.id}`">{{user.username}}</router-link> -->
-                                  <router-link
-                                    :to="{
-                                      name: 'user',
-                                      params: { id: user.id },
-                                    }"
-                                    >{{ user.username }}</router-link
-                                  >
+                                  {{ user.first_name }}
                                 </td>
-                                <!-- <td>
+                                <td>
                                   {{
                                     user.pass_number ? user.pass_number : "-"
                                   }}
-                                </td> -->
-                                <td width="40%">{{ user.organization }}</td>
+                                </td>
+                                <td width="30%">{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
                                 <td>
                                   <router-link
@@ -122,7 +120,7 @@
                                       /></button
                                   ></router-link>
                                   <button
-                                    @click="deleteUser(user.id)"
+                                    @click.prevent.stop="deleteUser(user.id)"
                                     class="btn btn-danger"
                                   >
                                     <fa
@@ -185,9 +183,9 @@ export default {
     },
   },
   methods: {
-    // goUserDetails(userId) {
-    //   this.$router.push({ name: "user", params: { id: userId } });
-    // },
+    toEachUser(userId) {
+      this.$router.push({ name: "user", params: { id: userId } });
+    },
     async deleteUser(id) {
       if (confirm("Siz haqiqatan ham o'chirmoqchimisiz")) {
         await costumAxios.delete(`main/user/${id}/`);
@@ -287,10 +285,10 @@ label:not(.form-check-label):not(.custom-file-label) {
 .text-red {
   color: #dc3545 !important;
 }
-.btn-block {
+/* .btn-block {
   display: block;
   width: 100%;
-}
+} */
 
 select {
   word-wrap: normal;
@@ -300,5 +298,8 @@ button {
 }
 .input-group {
   flex-wrap: nowrap;
+}
+tr {
+  cursor: pointer;
 }
 </style>

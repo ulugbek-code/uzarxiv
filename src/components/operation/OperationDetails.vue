@@ -19,6 +19,7 @@
                   <th>Foiz</th>
                   <th>Holati</th>
                   <th>Sana</th>
+                  <th>Tavsifi</th>
                   <th>Tahrirlash</th>
                 </tr>
               </thead>
@@ -33,6 +34,19 @@
                   <td>{{ group.percent ? group.percent : 0 }} %</td>
                   <td>{{ group.status }}</td>
                   <td>{{ formatDate(group.date) }}</td>
+                  <td v-if="isLabel" @dblclick="isLabel = false">
+                    Description
+                  </td>
+                  <td v-else width="20%">
+                    <textarea
+                      @blur="isLabel = true"
+                      @keydown.enter="isLabel = true"
+                      type="text"
+                      class="form-control"
+                      rows="1"
+                      placeholder="description..."
+                    ></textarea>
+                  </td>
                   <td>
                     <router-link
                       :to="{
@@ -56,6 +70,11 @@
 <script>
 export default {
   props: ["id"],
+  data() {
+    return {
+      isLabel: true,
+    };
+  },
   computed: {
     getOperationDetails() {
       return this.$store.getters.operationDetails;

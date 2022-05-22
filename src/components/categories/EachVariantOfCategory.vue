@@ -1,5 +1,5 @@
 <template>
-  <div class="second-row">
+  <div class="second-row my-1">
     <p v-if="isVariant">{{ v.name }}</p>
     <p v-if="isVariant">
       {{ v.description ? v.description : "No description" }}

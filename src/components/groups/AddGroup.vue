@@ -173,6 +173,15 @@
                               Saqlash
                             </button>
                           </div>
+                          <div class="d-grid my-2">
+                            <router-link to="/groups">
+                              <button
+                                class="btn btn-outline-danger display-block"
+                              >
+                                Bekor qilish
+                              </button>
+                            </router-link>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -328,8 +337,8 @@ export default {
 .form-group {
   margin-bottom: 1rem;
 }
-.btn-block {
-  display: block;
+.display-block {
+  /* display: block; */
   width: 100%;
 }
 .select2-container--default .select2-selection--single {

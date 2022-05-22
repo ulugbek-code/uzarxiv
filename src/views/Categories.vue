@@ -96,36 +96,58 @@
                                 </template>
                                 <div
                                   v-if="isFormOpened"
+                                  @click="resetCategoryEmpty"
                                   id="add-category"
-                                  class="third-row"
+                                  class="third-row my-1"
                                 >
                                   <input
                                     v-model="categoryName"
+                                    @blur="isCategoryEmpty = false"
                                     class="form-control"
+                                    :class="
+                                      isCategoryEmpty && !categoryName
+                                        ? 'border border-danger'
+                                        : ''
+                                    "
                                     type="text"
                                     placeholder="Kategoriya nomi*"
                                   />
                                   <input
                                     v-model="categoryAbb"
                                     class="form-control"
+                                    :class="
+                                      isCategoryEmpty && !categoryAbb
+                                        ? 'border border-danger'
+                                        : ''
+                                    "
                                     type="text"
                                     placeholder="Kategoriya qisqartmasi*"
                                   />
                                   <input
                                     v-model.number="categoryNo1"
                                     class="form-control"
+                                    :class="
+                                      isCategoryEmpty && !categoryNo1
+                                        ? 'border border-danger'
+                                        : ''
+                                    "
                                     type="number"
                                     placeholder="Nomer 1*"
                                   />
                                   <input
                                     v-model.number="categoryNo2"
                                     class="form-control"
+                                    :class="
+                                      isCategoryEmpty && !categoryNo2
+                                        ? 'border border-danger'
+                                        : ''
+                                    "
                                     type="number"
                                     placeholder="Nomer 2*"
                                   />
                                   <div class="actions">
                                     <button
-                                      @click="createCategory"
+                                      @click.stop="createCategory"
                                       class="btn btn-success"
                                     >
                                       <fa
@@ -134,7 +156,7 @@
                                       />
                                     </button>
                                     <button
-                                      @click="resetCategory"
+                                      @click.stop="resetCategory"
                                       class="btn btn-danger mx-2"
                                     >
                                       <fa
@@ -188,6 +210,7 @@ export default {
   },
   data() {
     return {
+      isCategoryEmpty: false,
       isFormOpened: false,
       search: "",
       categoryName: "",
@@ -207,6 +230,9 @@ export default {
     },
   },
   methods: {
+    resetCategoryEmpty() {
+      if (this.isCategoryEmpty) this.isCategoryEmpty = false;
+    },
     async removeCategory(id) {
       if (confirm("Siz haqiqatan ham o'chirmoqchimisiz?")) {
         await customAxios.delete(`main/module/${id}`);
@@ -214,10 +240,11 @@ export default {
       }
     },
     denyCreatingNewCategory() {
-      this.isFormOpened = false;
       this.resetCategory();
     },
     resetCategory() {
+      this.isCategoryEmpty = false;
+      this.isFormOpened = false;
       this.categoryName = "";
       this.categoryAbb = "";
       this.categoryNo1 = "";
@@ -234,8 +261,10 @@ export default {
         !this.categoryAbb ||
         !this.categoryNo1 ||
         !this.categoryNo2
-      )
+      ) {
+        this.isCategoryEmpty = true;
         return;
+      }
       await customAxios.post("main/module/", {
         name: this.categoryName,
         AT: this.categoryAbb,
@@ -243,7 +272,7 @@ export default {
         no_2: this.categoryNo2,
       });
       await this.$store.dispatch("getModules");
-      this.isFormOpened = false;
+      this.resetCategory();
     },
   },
   async created() {
@@ -254,6 +283,11 @@ export default {
   mounted() {
     this.$Progress.finish();
   },
+  // watch: {
+  //   isCategoryEmpty() {
+  //     setTimeout(() => (this.isCategoryEmpty = false), 2000);
+  //   },
+  // },
 };
 </script>
 
@@ -270,7 +304,7 @@ export default {
 .third-row {
   width: 100%;
   display: flex;
-  margin-bottom: 4px;
+  /* margin-bottom: 4px; */
 }
 .third-row input {
   margin: 0 4px;
@@ -336,5 +370,8 @@ form {
 }
 button:hover .add-cat {
   color: #f8f9fa;
+}
+input.border::placeholder {
+  color: #dc3545;
 }
 </style>

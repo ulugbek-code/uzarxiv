@@ -65,6 +65,7 @@
         <input
           v-model="newVariantName"
           class="form-control mx-2 mb-1"
+          :class="isVariantNameEmpty ? 'border border-danger' : ''"
           type="text"
           placeholder="To'ldirish shart!"
         />
@@ -86,14 +87,15 @@
       <button
         v-if="!isAddVariantOpened"
         @click="isAddVariantOpened = true"
-        class="btn btn-primary float-end mb-1 mx-2"
+        class="btn btn-primary float-end my-1 mx-2"
       >
         Variant qo'shish
+        <fa class="fas fa-edit" :icon="['fas', 'turn-up']" />
       </button>
       <button
         v-else
         @click="denyCreating"
-        class="btn btn-danger float-end mb-2 mx-2"
+        class="btn btn-danger float-end my-2 mx-2"
       >
         Bekor qilish
       </button>
@@ -112,6 +114,7 @@ export default {
   },
   data() {
     return {
+      isVariantNameEmpty: false,
       isVariantsOpen: false,
       isAddVariantOpened: false,
       isLabel: true,
@@ -132,13 +135,17 @@ export default {
     resetNewVariant() {
       this.newVariantName = "";
       this.newVariantDesc = "";
+      this.isAddVariantOpened = false;
     },
     denyCreating() {
       this.isAddVariantOpened = false;
       this.resetNewVariant();
     },
     async createVariant() {
-      if (!this.newVariantName) return;
+      if (!this.newVariantName) {
+        this.isVariantNameEmpty = true;
+        return;
+      }
       await customAxios.post("main/variant/", {
         name: this.newVariantName,
         module: this.cat.id,
@@ -163,6 +170,11 @@ export default {
       this.isLabel = true;
     },
   },
+  watch: {
+    isVariantNameEmpty() {
+      setTimeout(() => (this.isVariantNameEmpty = false), 2000);
+    },
+  },
   // created() {
   //   this.$store.dispatch("getVariants");
   // },
@@ -171,7 +183,9 @@ export default {
 
 <style scoped>
 .contrast-bg {
-  background: rgba(176, 184, 185, 0.3);
+  background: rgba(184, 186, 189, 0.2);
+  border: 1px solid #b8babd;
+  border-bottom: none;
 }
 .first-row {
   width: 100%;
@@ -184,7 +198,7 @@ export default {
 .second-row {
   width: 100%;
   display: flex;
-  margin-bottom: 4px;
+  font-size: 14px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .second-row:first-child {
@@ -242,5 +256,8 @@ p {
 }
 .p-left {
   padding-left: 24px !important;
+}
+input.border::placeholder {
+  color: #dc3545;
 }
 </style>

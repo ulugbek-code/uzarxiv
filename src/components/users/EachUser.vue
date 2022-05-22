@@ -220,11 +220,15 @@
                             </button>
                           </div>
 
-                          <!-- <div class="d-grid my-2">
-                            <button class="btn btn-outline-danger">
-                              O'chirish
-                            </button>
-                          </div> -->
+                          <div class="d-grid my-2">
+                            <router-link to="/users">
+                              <button
+                                class="btn btn-outline-danger display-block"
+                              >
+                                Bekor qilish
+                              </button>
+                            </router-link>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -331,10 +335,11 @@ export default {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
-.table-responsive {
-  display: block;
+/* .table-responsive { */
+.display-block {
+  /* display: block; */
+  /* overflow-x: auto; */
   width: 100%;
-  overflow-x: auto;
 }
 .card-body > .table > thead > tr > th {
   border-top-width: 0;

@@ -24,7 +24,12 @@
     {{ users.exam_status ? users.exam_status : "Topshirmagan" }}
   </td>
 
-  <td v-if="users.operation_id" class="td-link">
+  <td
+    v-if="
+      users.operation_id && users.payment_status && users.exam_status === 'Pass'
+    "
+    class="td-link"
+  >
     <fa
       class="link-icon text-primary"
       @click.prevent="getCertificate(users.operation_id)"

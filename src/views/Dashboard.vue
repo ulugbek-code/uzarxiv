@@ -1,15 +1,13 @@
 <template>
-  <div class="container pt-4">
+  <div class="container-fluid pt-4">
     <div class="row d-flex justify-content-between mb-3">
       <div class="col-md-8">
         <h1>Dashboard</h1>
-        <!-- {{ id }} -->
-        <!-- {{ getExams }} -->
       </div>
       <template v-if="isUserAdmin">
         <div class="col-md-3 d-flex align-items-center">
           <base-dropdown
-            :options="groups"
+            :options="addedGroups"
             :withObj="true"
             default="Guruh tanlang..."
             @input="selectedGroup"
@@ -18,131 +16,89 @@
       </template>
       <!-- {{ statistics }} -->
     </div>
-    <div v-if="isUserAdmin" class="row d-flex justify-content-center">
+    <div v-if="isUserAdmin" class="row dash-chart">
       <div class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex gap-3">
-            <div class="icon-img w-25">
-              <fa class="icon icon-users" :icon="['fas', 'user']" />
-              <!-- <img src="../assets/user.png" alt="" /> -->
+          <div class="card-body d-flex">
+            <div class="info w-75">
+              <p class="mb-0 text-primary">Guruhlar</p>
+              <p class="fs-2">{{ statistics.number_groups }}</p>
             </div>
-            <div class="info-users">
-              <p>{{ statistics.number_users }}</p>
-              <p class="mb-0">O'quvchilar</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-if="statistics.number_groups" class="col-lg-3 my-1">
-        <div class="card">
-          <div class="card-body d-flex gap-3">
-            <div class="icon-img w-25">
+            <div class="icon-img w-25 text-primary">
               <fa class="icon icon-group" :icon="['fas', 'people-group']" />
             </div>
-            <div class="info-group">
-              <p>{{ statistics.number_groups }}</p>
-              <p class="mb-0">Guruhlar</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body d-flex">
+            <div class="info-group w-75">
+              <p class="mb-0 text-primary">O'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_users }}</p>
+            </div>
+            <div class="icon-img w-25 text-primary">
+              <fa class="icon icon-group" :icon="['fas', 'user']" />
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body d-flex">
+            <div class="info-group w-75">
+              <p class="mb-0 text-primary">To'lov qilgan o'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_paid_users }}</p>
+            </div>
+            <div class="icon-img w-25 text-primary">
+              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
             </div>
           </div>
         </div>
       </div>
       <div class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex gap-3">
-            <div class="icon-img w-25">
-              <fa class="icon icon-all-exam" :icon="['fas', 'list']" />
-              <!-- <img src="../assets/exam.png" alt="" /> -->
+          <div class="card-body d-flex">
+            <div class="info-group w-75">
+              <p class="mb-0 text-primary">Imtihonlar</p>
+              <p class="fs-2">{{ statistics.all_exams }}</p>
             </div>
-            <div class="info-all-exam">
-              <p>
-                {{ statistics.all_exams }}
-              </p>
-              <p class="mb-0">Imtihonlar</p>
+            <div class="icon-img w-25 text-primary">
+              <fa class="icon icon-group" :icon="['fas', 'list']" />
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex gap-2">
-            <div class="icon-img w-25">
-              <fa class="icon icon-exam" :icon="['fas', 'list-check']" />
-              <!-- <img src="../assets/exam.png" alt="" /> -->
+          <div class="card-body d-flex">
+            <div class="info-group w-75">
+              <p class="mb-0 text-primary">Topshirilgan imtihonlar</p>
+              <p class="fs-2">{{ statistics.taken_exams }}</p>
             </div>
-            <div class="info-exams">
-              <p>
-                {{ statistics.taken_exams }}
-              </p>
-              <p class="mb-0">Topshirilgan imtihonlar</p>
+            <div class="icon-img w-25 text-primary">
+              <fa class="icon icon-group" :icon="['fas', 'list-check']" />
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="col-lg-3 my-1">
-       
-      </div> -->
-    </div>
-    <div class="row dash-chart">
-      <div class="col-lg-9 my-3">
+      <div class="col-lg-6 my-1">
         <div class="card dash-col">
           <div
             class="card-body d-flex justify-content-center align-items-center"
           >
-            Chart
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 mt-3">
-        <div class="card">
-          <div class="card-body d-flex gap-2">
-            <div class="icon-img w-25">
-              <fa class="icon icon-paid" :icon="['fas', 'user-check']" />
-              <!-- <img src="../assets/paid.png" alt="" /> -->
-            </div>
-            <div class="info-paid">
-              <p>{{ statistics.number_paid_users }}</p>
-              <p class="mb-0">To'langan o'quvchilar</p>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-body d-flex gap-2">
-            <div class="icon-img w-25">
-              <fa class="icon icon-users" :icon="['fas', 'user']" />
-              <!-- <img src="../assets/user.png" alt="" /> -->
-            </div>
-            <div class="info-users">
-              <p>{{ statistics.passed_users }}</p>
-              <p class="mb-0">Imtihondan o'tganlar</p>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-body d-flex gap-2">
-            <div class="icon-img w-25">
-              <fa class="icon icon-users" :icon="['fas', 'user']" />
-              <!-- <img src="../assets/user.png" alt="" /> -->
-            </div>
-            <div class="info-users">
-              <p>{{ statistics.failed_users }}</p>
-              <p class="mb-0">Imtihondan yeqilganlar</p>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-body d-flex gap-2">
-            <div class="icon-img w-25">
-              <fa class="icon icon-users" :icon="['fas', 'user']" />
-              <!-- <img src="../assets/user.png" alt="" /> -->
-            </div>
-            <div class="info-users">
-              <p>{{ statistics.missed_users }}</p>
-              <p class="mb-0">Imtihon topshirmaganlar</p>
-            </div>
+            <!-- {{  statistics.passed_users }} -->
+            <pie-chart
+              v-if="
+                statistics.passed_users ||
+                statistics.failed_users ||
+                statistics.missed_users
+              "
+              :series="[
+                statistics.passed_users,
+                statistics.failed_users,
+                statistics.missed_users,
+              ]"
+            ></pie-chart>
           </div>
         </div>
       </div>
     </div>
+
     <!-- user dashboard -->
     <div v-if="!isUserAdmin" class="row">
       <!-- {{ getExams }} -->
@@ -232,6 +188,7 @@
 
 <script>
 import customAxios from "../api";
+import PieChart from "../components/PieChart.vue";
 export default {
   data() {
     return {
@@ -240,6 +197,9 @@ export default {
       // examResults: [],
       exams: [],
     };
+  },
+  components: {
+    PieChart,
   },
   computed: {
     id() {
@@ -250,6 +210,9 @@ export default {
     },
     groups() {
       return this.$store.getters.groups;
+    },
+    addedGroups() {
+      return [{ id: "all", name: "Umumiy" }, ...this.groups];
     },
     isUserAdmin() {
       return this.$store.state.isAdmin;
@@ -276,7 +239,13 @@ export default {
       }
     },
     async selectedGroup(val) {
-      if (typeof val === "string") return;
+      if (val.id === "all") {
+        await this.getStatistics();
+        return;
+      }
+      if (typeof val === "string") {
+        return;
+      }
       const res = await customAxios.get(`filter_statistic/?group_id=${val.id}`);
       // console.log(res.data);
       this.statistics = res.data;
@@ -352,56 +321,57 @@ export default {
   min-height: 45vh;
 }
 .dash-col {
-  height: 100%;
+  height: 94%;
 }
-.container h1,
-.info p:first-child {
+.container-fluid h1,
+.info p:last-child {
   color: #444;
 }
 .icon-img {
   display: flex;
   justify-content: center;
-  align-items: center;
-}
-.info p:first-child {
-  font-size: 2rem;
+  align-items: flex-start;
 }
 
-.info p:last-child {
+/* .info p:first-child {
   color: #0dcaf0;
-}
+} */
 
 .card-title {
   font-weight: 500;
 }
-.icon-users,
-.info-users p:last-child {
+/* .icon-users,
+.info-users p:first-child {
   color: rgb(151, 52, 243);
 }
 .icon-exam,
-.info-exams p:last-child {
+.info-exams p:first-child {
   color: rgb(51, 238, 44);
 }
 .icon-all-exam,
-.info-all-exam p:last-child {
+.info-all-exam p:first-child {
   color: rgb(235, 56, 25);
 }
 .icon-paid,
-.info-paid p:last-child {
+.info-paid p:first-child {
   color: rgb(231, 192, 15);
-}
+} */
 .card {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 .icon {
   font-size: 2rem;
 }
-.icon-group,
-.info-group p:last-child {
-  color: #0dcaf0;
-}
+/* .icon-group,
+.info-group p:first-child {
+  color: #0dcaf0;#f7f6fb
+} */
 p {
-  margin-bottom: 8px;
+  margin: 0;
+}
+.info p:last-child {
+  font-size: 2rem;
+  color: #444;
 }
 
 p span {

@@ -26,11 +26,23 @@
               <div class="col-12">
                 <div class="card card-primary card-outline">
                   <div class="card-header mt-2">
-                    <h4 class="card-title fw-normal">
+                    <h4 class="col-md-5 card-title fw-normal">
                       O'zgartirish uchun savolni tanlang
                     </h4>
-                    <div v-if="variants.length" class="col-md-3 col-sm-6 col-6">
+                    <div
+                      v-if="categories.length"
+                      class="col-md-3 col-sm-6 col-6"
+                    >
                       <base-dropdown
+                        :options="categories"
+                        :withObj="true"
+                        :default="categories[0].name"
+                        @input="getCategoryChanges"
+                      ></base-dropdown>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-6">
+                      <base-dropdown
+                        v-if="variants.length"
                         :options="variants"
                         :withObj="true"
                         :default="variants[0].name"
@@ -62,7 +74,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-md-8">
+                              <div class="col-md-8 mb-2">
                                 <router-link
                                   to="/questions/add"
                                   class="btn btn-outline-success float-end"
@@ -74,7 +86,10 @@
                             </div>
                             <div class="card">
                               <div class="card-body table-responsive p-0">
-                                <table id="result_list" class="table">
+                                <table
+                                  id="result_list"
+                                  class="table table-hover text-center"
+                                >
                                   <thead>
                                     <tr>
                                       <th class="sorting" tabindex="0">
@@ -89,21 +104,16 @@
                                   </thead>
                                   <tbody>
                                     <tr
+                                      @click="toEachQuestion(q.id)"
                                       v-for="q in filteredQuestions"
                                       :key="q.id"
                                     >
-                                      <td class="field-subject nowrap">
-                                        <router-link
-                                          :to="{
-                                            name: 'question',
-                                            params: { id: q.id },
-                                          }"
-                                          >{{ q.name }}</router-link
-                                        >
+                                      <td width="50%" class="text-start">
+                                        {{ q.name }}
                                       </td>
                                       <td>{{ q.module_name }}</td>
                                       <td>{{ q.variant_name }}</td>
-                                      <td @click="removeQuestion(q.id)">
+                                      <td @click.stop="removeQuestion(q.id)">
                                         <button class="btn btn-danger">
                                           O'chirish
                                         </button>
@@ -148,6 +158,7 @@ export default {
   data() {
     return {
       search: "",
+      categoryId: null,
       filterByVariant: null,
     };
   },
@@ -155,8 +166,13 @@ export default {
     questions() {
       return this.$store.getters.questions;
     },
+    categories() {
+      return this.$store.getters.modules;
+    },
     variants() {
-      return this.$store.getters.variants;
+      return this.$store.getters.variants.filter(
+        (variant) => variant.module === this.categoryId
+      );
     },
     chosenQuestionsByVariant() {
       return this.questions.filter(
@@ -170,6 +186,16 @@ export default {
     },
   },
   methods: {
+    toEachQuestion(categoryId) {
+      this.$router.push({ name: "question", params: { id: categoryId } });
+    },
+    getCategoryChanges(val) {
+      if (typeof val === "string") {
+        this.categoryId = this.categories[1].id;
+      } else {
+        this.categoryId = val.id;
+      }
+    },
     getVariantChanges(val) {
       if (typeof val === "string") {
         this.filterByVariant = this.variants[0].id;
@@ -186,8 +212,9 @@ export default {
   },
   async created() {
     this.$Progress.start();
-    await this.$store.dispatch("getQuestions");
+    await this.$store.dispatch("getModules");
     await this.$store.dispatch("getVariants");
+    await this.$store.dispatch("getQuestions");
   },
   mounted() {
     this.$Progress.finish();
@@ -218,6 +245,9 @@ form {
   flex: 1 1 auto;
   min-height: 1px;
   padding: 1.25rem;
+}
+tr {
+  cursor: pointer;
 }
 /* .table td.action-checkbox,
 .djn-checkbox-select-all {

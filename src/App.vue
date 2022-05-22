@@ -95,6 +95,9 @@ a {
 .table {
   margin-bottom: 0px !important;
 }
+td {
+  vertical-align: middle;
+}
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
