@@ -425,7 +425,8 @@ export default {
         day.substring(3, 6) +
         ", " +
         day.substring(7, 11) +
-        "-yil";
+        "-yil" +
+        day.substring(11);
       return day;
     },
     async getStatistics() {

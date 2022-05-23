@@ -37,13 +37,13 @@
                 <li class="list-group-item">
                   Boshlangan sana:
                   <span class="text-success">{{
-                    formatDate(groupDetails[0].group.start_date)
+                    formatDate(groupDetails[0].group.start_date).slice(0, 16)
                   }}</span>
                 </li>
                 <li class="list-group-item">
                   Tugaydigan sana:
                   <span class="text-success">{{
-                    formatDate(groupDetails[0].group.finish_date)
+                    formatDate(groupDetails[0].group.finish_date).slice(0, 16)
                   }}</span>
                 </li>
                 <li class="list-group-item">
