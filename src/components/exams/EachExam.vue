@@ -104,13 +104,26 @@
                               <span class="text-red">* </span>
                             </label>
                             <div class="col-sm-10 field-start_date">
+                              Sana:
                               <div class="d-inline-block w-50">
                                 <input
                                   v-model="startDate"
-                                  class="form-control"
+                                  class="form-control my-2"
                                   type="datetime-local"
                                 />
                               </div>
+                              <br />
+                              <template v-if="startDate">
+                                Vaqt:
+                                <div class="d-inline-block w-50">
+                                  <input
+                                    disabled
+                                    :value="formattedStart"
+                                    class="form-control without_ampm"
+                                    type="text"
+                                  />
+                                </div>
+                              </template>
                             </div>
                           </div>
                         </div>
@@ -126,13 +139,26 @@
                               <span class="text-red">* </span>
                             </label>
                             <div class="col-sm-10 field-finish_date">
+                              Sana:
                               <div class="d-inline-block w-50">
                                 <input
                                   v-model="finishDate"
-                                  class="form-control"
+                                  class="form-control my-2"
                                   type="datetime-local"
                                 />
                               </div>
+                              <br />
+                              <template v-if="finishDate">
+                                Vaqt:
+                                <div class="d-inline-block w-50">
+                                  <input
+                                    disabled
+                                    :value="formattedFinish"
+                                    class="form-control"
+                                    type="text"
+                                  />
+                                </div>
+                              </template>
                             </div>
                             <div v-if="isDateInvalid" class="mt-2 text-danger">
                               Yopilish sanasi ochilish sanasidan kegn bo'lishi
@@ -188,6 +214,15 @@
                               Saqlash
                             </button>
                           </div>
+                          <div class="d-grid my-2">
+                            <button
+                              @click="previousPage"
+                              class="btn btn-outline-danger"
+                              type="button"
+                            >
+                              Bekor qilish
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -223,6 +258,12 @@ export default {
     };
   },
   computed: {
+    formattedFinish() {
+      return new Date(`${this.finishDate}`).toTimeString().slice(0, 8);
+    },
+    formattedStart() {
+      return new Date(`${this.startDate}`).toTimeString().slice(0, 8);
+    },
     getUsers() {
       return this.$store.getters.users.map((user) => {
         return {
@@ -272,6 +313,9 @@ export default {
     },
   },
   methods: {
+    previousPage() {
+      this.$router.push(`/groups/${this.id}`);
+    },
     getExamVariant(val) {
       if (typeof val === "string") return;
       this.variantId = val.id;
@@ -436,5 +480,19 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 input[type="datetime-local"]::-webkit-inner-spin-button:hover,
 input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
   cursor: pointer;
+}
+.without_ampm::-webkit-datetime-edit-ampm-field {
+  display: none;
+}
+input[type="time"]::-webkit-clear-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  margin: -10px;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
 }
 </style>

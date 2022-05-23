@@ -6,6 +6,7 @@
           <div class="row mb-4"></div>
         </div>
       </div>
+      <!-- {{ getOperationDetails }} -->
       <div class="content">
         <div class="container-fluid">
           <section class="content">
@@ -24,39 +25,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="group in getOperationDetails" :key="group.id">
-                  <!-- <td>{{ group.id }}</td> -->
-                  <td>
-                    {{ group.user_first_name }} {{ group.user_last_name }}
-                  </td>
-                  <td>{{ group.module_name }}</td>
-                  <td>{{ group.collect_ball ? group.collect_ball : 0 }}</td>
-                  <td>{{ group.percent ? group.percent : 0 }} %</td>
-                  <td>{{ group.status }}</td>
-                  <td>{{ formatDate(group.date) }}</td>
-                  <td v-if="isLabel" @dblclick="isLabel = false">
-                    Description
-                  </td>
-                  <td v-else width="20%">
-                    <textarea
-                      @blur="isLabel = true"
-                      @keydown.enter="isLabel = true"
-                      type="text"
-                      class="form-control"
-                      rows="1"
-                      placeholder="description..."
-                    ></textarea>
-                  </td>
-                  <td>
-                    <router-link
-                      :to="{
-                        name: 'operation-result',
-                        params: { id: group.id },
-                      }"
-                    >
-                      Ko'rish
-                    </router-link>
-                  </td>
+                <tr
+                  v-for="eachGroup in getOperationDetails"
+                  :key="eachGroup.id"
+                >
+                  <operation-details-row
+                    :group="eachGroup"
+                    :examId="id"
+                  ></operation-details-row>
                 </tr>
               </tbody>
             </table>
@@ -68,36 +44,21 @@
 </template>
 
 <script>
+import OperationDetailsRow from "./OperationDetailsRow.vue";
 export default {
   props: ["id"],
-  data() {
-    return {
-      isLabel: true,
-    };
+  components: {
+    OperationDetailsRow,
   },
+
   computed: {
     getOperationDetails() {
       return this.$store.getters.operationDetails;
     },
   },
-  methods: {
-    formatDate(date) {
-      let day = new Date(date).toUTCString().slice(5, 22);
-      day =
-        day.substring(0, 2) +
-        "-" +
-        day.substring(3, 6) +
-        ", " +
-        day.substring(7, 11) +
-        "-yil";
-      return day;
-    },
-    // goGroupDetail(id) {
-    //   this.$router.push("/groups/" + id);
-    // },
-  },
-  created() {
-    this.$store.dispatch("getOperationDetails", this.id);
+
+  async created() {
+    await this.$store.dispatch("getOperationDetails", this.id);
   },
 };
 </script>

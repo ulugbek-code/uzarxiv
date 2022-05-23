@@ -159,7 +159,7 @@ export default {
 
 .custom-select .items {
   /* was 14rem below */
-  max-height: 11rem;
+  max-height: 11.5rem;
   overflow-y: scroll;
   color: rgb(68, 68, 68);
   border: 1px solid #ced4da;

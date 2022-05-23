@@ -1,18 +1,26 @@
 import axios from "axios";
 // import router from "./router.js";
-import store from "./store";
+// import store from "./store";
 
 const customAxios = axios.create({
   baseURL: "https://quiz.uzarxiv-test.uz/",
   timeout: 15000,
-  headers: {
-    Authorization: `Token ${
-      store.state.token
-        ? store.state.token
-        : JSON.parse(localStorage.getItem("token"))
-    }`,
-    // Authorization: `Token ${JSON.parse(localStorage.getItem("token"))}`,
-  },
+  // headers: {
+  //   Authorization: `Token ${
+  //     store.state.token
+  //       ? store.state.token
+  //       : JSON.parse(localStorage.getItem("token"))
+  //   }`,
+  //   // Authorization: `Token ${JSON.parse(localStorage.getItem("token"))}`,
+  // },
+});
+
+customAxios.interceptors.request.use((config) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  if (token) {
+    config.headers.Authorization = `Token ${token}`;
+  }
+  return config;
 });
 
 // customAxios.interceptors.response.use(

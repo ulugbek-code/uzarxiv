@@ -28,6 +28,7 @@ import {
   faListCheck,
   faFileArrowDown,
   faTurnUp,
+  faChartLine,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -57,7 +58,8 @@ library.add(
   faList,
   faListCheck,
   faFileArrowDown,
-  faTurnUp
+  faTurnUp,
+  faChartLine
 );
 
 export default FontAwesomeIcon;

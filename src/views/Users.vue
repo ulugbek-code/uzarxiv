@@ -172,10 +172,13 @@ export default {
   computed: {
     filteredUsers() {
       return this.users.filter((user) => {
-        return (
-          // user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
-          user.username.toLowerCase().includes(this.search.toLowerCase())
-        );
+        if (user.pass_number) {
+          return user.pass_number
+            .toLowerCase()
+            .includes(this.search.toLowerCase());
+        }
+        return user.username.toLowerCase().includes(this.search.toLowerCase());
+        // user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
       });
     },
     users() {

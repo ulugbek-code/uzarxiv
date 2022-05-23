@@ -4,7 +4,9 @@
     <div @click="toggleHamburgerMenu" class="header_toggle">
       <fa class="bx-menu" :icon="['fas', 'bars']" />
     </div>
-    <div v-if="!isUserAdmin">firstname lastname</div>
+    <div v-if="!isUserAdmin" class="fs-5">
+      {{ fullname ? fullname : "No name" }}
+    </div>
     <!-- <div class="header_img">
       <img src="https://i.imgur.com/hczKIze.jpg" alt="" />
     </div> -->
@@ -110,9 +112,9 @@
 <script>
 export default {
   computed: {
-    // fullname() {
-    //   return localStorage.getItem("fullname");
-    // },
+    fullname() {
+      return JSON.parse(localStorage.getItem("fullname"));
+    },
     isNavOpened() {
       return this.$store.getters.isNavOpened;
     },
@@ -144,6 +146,7 @@ export default {
         localStorage.removeItem("token");
         localStorage.removeItem("isAdmin");
         localStorage.removeItem("userId");
+        localStorage.removeItem("fullname");
         // localStorage.removeItem('userInfo')
         this.$store.dispatch("logout");
         // this.$store.commit("toggleNavbar");

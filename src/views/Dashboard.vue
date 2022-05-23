@@ -15,68 +15,191 @@
         </div>
       </template>
       <!-- {{ statistics }} -->
+      <!-- {{ statistics }} -->
     </div>
     <div v-if="isUserAdmin" class="row dash-chart">
-      <div class="col-lg-3 my-1">
-        <div class="card">
-          <div class="card-body d-flex">
+      <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
+        <div v-if="statistics.number_groups" class="card">
+          <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0 text-primary">Guruhlar</p>
+              <p class="mb-0">Guruhlar</p>
               <p class="fs-2">{{ statistics.number_groups }}</p>
+              <span>
+                <fa
+                  :class="
+                    varGroups > 0
+                      ? 'text-success'
+                      : varGroups < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  :icon="['fas', 'chart-line']"
+                />
+                <i
+                  :class="
+                    varGroups > 0
+                      ? 'text-success'
+                      : varGroups < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  >&nbsp;{{ varGroups }}%</i
+                >
+                Avvalgi oydan</span
+              >
             </div>
-            <div class="icon-img w-25 text-primary">
+            <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'people-group']" />
             </div>
           </div>
         </div>
         <div class="card">
-          <div class="card-body d-flex">
-            <div class="info-group w-75">
-              <p class="mb-0 text-primary">O'quvchilar</p>
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">O'quvchilar</p>
               <p class="fs-2">{{ statistics.number_users }}</p>
+              <span>
+                <fa
+                  :class="
+                    varUsers > 0
+                      ? 'text-success'
+                      : varUsers < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  :icon="['fas', 'chart-line']"
+                />
+                <i
+                  :class="
+                    varUsers > 0
+                      ? 'text-success'
+                      : varUsers < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  >&nbsp;{{ varUsers }}%</i
+                >
+                Avvalgi oydan</span
+              >
             </div>
-            <div class="icon-img w-25 text-primary">
+            <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'user']" />
             </div>
           </div>
         </div>
         <div class="card">
-          <div class="card-body d-flex">
-            <div class="info-group w-75">
-              <p class="mb-0 text-primary">To'lov qilgan o'quvchilar</p>
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">To'lov qilgan o'quvchilar</p>
               <p class="fs-2">{{ statistics.number_paid_users }}</p>
+              <span>
+                <fa
+                  :class="
+                    varPaidUsers > 0
+                      ? 'text-success'
+                      : varPaidUsers < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  :icon="['fas', 'chart-line']"
+                />
+                <i
+                  :class="
+                    varPaidUsers > 0
+                      ? 'text-success'
+                      : varPaidUsers < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  >&nbsp;{{ varPaidUsers }}%</i
+                >
+                Avvalgi oydan</span
+              >
             </div>
-            <div class="icon-img w-25 text-primary">
+            <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'user-check']" />
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 my-1">
+      <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
         <div class="card">
-          <div class="card-body d-flex">
-            <div class="info-group w-75">
-              <p class="mb-0 text-primary">Imtihonlar</p>
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">Imtihonlar</p>
               <p class="fs-2">{{ statistics.all_exams }}</p>
+              <span>
+                <fa
+                  :class="
+                    varExams > 0
+                      ? 'text-success'
+                      : varExams < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  :icon="['fas', 'chart-line']"
+                />
+                <i
+                  :class="
+                    varExams > 0
+                      ? 'text-success'
+                      : varExams < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  >&nbsp;{{ varExams }}%</i
+                >
+                Avvalgi oydan</span
+              >
             </div>
-            <div class="icon-img w-25 text-primary">
+            <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'list']" />
             </div>
           </div>
         </div>
         <div class="card">
-          <div class="card-body d-flex">
-            <div class="info-group w-75">
-              <p class="mb-0 text-primary">Topshirilgan imtihonlar</p>
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">Topshirilgan imtihonlar</p>
               <p class="fs-2">{{ statistics.taken_exams }}</p>
+              <span>
+                <fa
+                  :class="
+                    varTakenExams > 0
+                      ? 'text-success'
+                      : varTakenExams < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  :icon="['fas', 'chart-line']"
+                />
+                <i
+                  :class="
+                    varTakenExams > 0
+                      ? 'text-success'
+                      : varTakenExams < 0
+                      ? 'text-danger'
+                      : ''
+                  "
+                  >&nbsp;{{ varTakenExams }}%</i
+                >
+                Avvalgi oydan</span
+              >
             </div>
-            <div class="icon-img w-25 text-primary">
+            <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'list-check']" />
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-6 my-1">
+      <div
+        v-if="
+          statistics.passed_users ||
+          statistics.failed_users ||
+          statistics.missed_users
+        "
+        class="col-lg-6 my-1"
+      >
         <div class="card dash-col">
           <div
             class="card-body d-flex justify-content-center align-items-center"
@@ -193,7 +316,7 @@ export default {
   data() {
     return {
       fetchTimeInterval: null,
-      statistics: [],
+      statistics: {},
       // examResults: [],
       exams: [],
     };
@@ -202,6 +325,50 @@ export default {
     PieChart,
   },
   computed: {
+    varGroups() {
+      let a =
+        ((this.statistics.number_groups -
+          this.statistics.last_month_number_groups) /
+          this.statistics.last_month_number_groups) *
+        100;
+      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
+      return a;
+    },
+    varUsers() {
+      let a =
+        ((this.statistics.number_users -
+          this.statistics.last_month_number_users) /
+          this.statistics.last_month_number_users) *
+        100;
+      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
+      return a;
+    },
+    varPaidUsers() {
+      let a =
+        ((this.statistics.number_paid_users -
+          this.statistics.last_month_number_paid_users) /
+          this.statistics.last_month_number_paid_users) *
+        100;
+      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
+      return a;
+    },
+    varExams() {
+      let a =
+        ((this.statistics.all_exams - this.statistics.last_month_all_exams) /
+          this.statistics.last_month_all_exams) *
+        100;
+      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
+      return a;
+    },
+    varTakenExams() {
+      let a =
+        ((this.statistics.taken_exams -
+          this.statistics.last_month_taken_exams) /
+          this.statistics.last_month_taken_exams) *
+        100;
+      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
+      return a;
+    },
     id() {
       return this.$store.state.userId;
     },
@@ -321,7 +488,7 @@ export default {
   min-height: 45vh;
 }
 .dash-col {
-  height: 94%;
+  height: 92%;
 }
 .container-fluid h1,
 .info p:last-child {
@@ -330,7 +497,12 @@ export default {
 .icon-img {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  background: #c1d3ee;
+  height: 55px;
+  width: 58px;
+  border-radius: 50%;
+  padding: 2px;
 }
 
 /* .info p:first-child {
@@ -368,6 +540,14 @@ export default {
 } */
 p {
   margin: 0;
+}
+.info p:first-child {
+  color: rgba(148, 144, 144, 0.8);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.info span {
+  color: rgba(148, 144, 144, 0.9);
 }
 .info p:last-child {
   font-size: 2rem;
