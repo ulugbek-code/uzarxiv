@@ -4,7 +4,7 @@
       <base-timer
         :limit="savedTime || changedDuration"
         @lessTime="warnUser"
-        @submitData="timeOver"
+        @submitData="submitAnswers"
         @trackDuration="saveDuration"
       ></base-timer>
     </template>
@@ -89,9 +89,9 @@ export default {
       if (i > -1) this.answers[i] = val;
       else this.answers.push(val);
     },
-    timeOver() {
-      this.submitAnswers();
-    },
+    // timeOver() {
+    //   this.submitAnswers();
+    // },
     async submitAnswers() {
       await customAxios.post("operation/result/post/", [
         {
@@ -119,7 +119,8 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch("getDuration", parseInt(this.duration) * 60);
+    // this.$store.dispatch("getDuration", parseInt(this.duration) * 60);
+    this.$store.dispatch("getDuration", this.duration);
     await this.getQuestionsByVariantId();
   },
   watch: {

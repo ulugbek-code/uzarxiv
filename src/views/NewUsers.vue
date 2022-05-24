@@ -4,19 +4,12 @@
       <div class="container">
         <div class="user signinBx">
           <div class="imgBx">
-            <!-- {{ getUsers }} -->
-            <!-- {{ isInvalidPassportNumber.length }} -->
             <h2>
               <span class="text-danger">Uz</span>
               <span class="text-success">Arxiv</span> loyihasiga yangi o'quvchi
               qo'shing
             </h2>
           </div>
-          <!-- <div v-if="isEmpty" class="custom-toast bg-danger text-light">
-            <div class="d-flex">
-              <div class="toast-body">Please, fill in all required fields!</div>
-            </div>
-          </div> -->
         </div>
         <div class="user signupBx">
           <div class="formBx">
@@ -171,7 +164,8 @@ export default {
           this.password === this.confirmPassword &&
           !this.isInvalidPassportNumber
         ) {
-          const response = await customAxios.post("main/user/", {
+          this.$Progress.start();
+          await customAxios.post("main/user/", {
             password: this.password,
             username: this.login,
             first_name: this.firstname,
@@ -180,7 +174,8 @@ export default {
             position: this.position,
             pass_number: this.passportNumber,
           });
-          console.log(response);
+          // console.log(response);
+          this.$Progress.finish();
           this.$router.replace("/users");
         } else {
           // this.isInvalidPassportNumber.length !== 0 below logic
@@ -192,6 +187,7 @@ export default {
           this.passwordValidity = true;
         }
       } catch (e) {
+        this.$Progress.fail();
         // console.log(e.response.data);
         // if (e.response.status === 400) this.error = "Bunday xodim mavjud emas.";
         console.log(e.response);
@@ -211,7 +207,9 @@ export default {
   },
   async created() {
     this.$Progress.start();
-    await this.$store.dispatch("getUsers");
+    if (!this.getUsers.length) {
+      await this.$store.dispatch("getUsers");
+    }
   },
   mounted() {
     this.$Progress.finish();
@@ -240,11 +238,6 @@ export default {
 </script>
 
 <style scoped>
-.custom-toast {
-  position: absolute;
-  right: 60%;
-  top: 10%;
-}
 .imgBx h2 {
   font-size: 38px;
   margin-top: 50%;
@@ -288,15 +281,6 @@ section .container .user .imgBx {
   transition: 0.5s;
 }
 
-section .container .user .imgBx img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 section .container .user .formBx {
   position: relative;
   width: 50%;
@@ -322,21 +306,6 @@ section .container .user .formBx form h2 {
 input::placeholder {
   opacity: 0.7;
 }
-section .container .user .formBx form .signup {
-  position: relative;
-  margin-top: 20px;
-  font-size: 12px;
-  letter-spacing: 1px;
-  color: #555;
-  text-transform: uppercase;
-  font-weight: 300;
-}
-
-section .container .user .formBx form .signup a {
-  font-weight: 600;
-  text-decoration: none;
-  color: #677eff;
-}
 
 section .container.active .signupBx {
   pointer-events: initial;
@@ -354,22 +323,15 @@ section .container .signupBx .imgBx {
   left: -100%;
 }
 
-section .container.active .signupBx .imgBx {
-  left: 0%;
-}
-
-section .container .signinBx .formBx {
+section .container.active .signupBx .imgBx,
+section .container .signinBx .formBx,
+section .container .signinBx .imgBx {
   left: 0%;
 }
 
 section .container.active .signinBx .formBx {
   left: 100%;
 }
-
-section .container .signinBx .imgBx {
-  left: 0%;
-}
-
 section .container.active .signinBx .imgBx {
   left: -100%;
 }

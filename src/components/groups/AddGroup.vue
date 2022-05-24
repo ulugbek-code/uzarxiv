@@ -232,7 +232,7 @@ export default {
     getExamVariant(val) {
       if (typeof val === "string") return;
       this.moduleId = val.id;
-      console.log(this.moduleId);
+      // console.log(this.moduleId);
     },
     async addGroup() {
       try {
@@ -246,13 +246,13 @@ export default {
           return (this.isEmpty = true);
         }
         if (new Date(this.startDate) < new Date(this.finishDate)) {
-          console.log({
-            name: this.groupName,
-            start_date: this.startDate,
-            finish_date: this.finishDate,
-            module: this.moduleId,
-            users: this.value,
-          });
+          // console.log({
+          //   name: this.groupName,
+          //   start_date: this.startDate,
+          //   finish_date: this.finishDate,
+          //   module: this.moduleId,
+          //   users: this.value,
+          // });
           await customAxios.post("main/group/post/", {
             name: this.groupName,
             start_date: this.startDate,
@@ -260,6 +260,7 @@ export default {
             module: this.moduleId,
             users: this.value,
           });
+          await this.$store.dispatch("getGroups");
           this.$router.replace("/groups");
         } else {
           this.isDateInvalid = true;

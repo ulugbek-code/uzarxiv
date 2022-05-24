@@ -19,6 +19,7 @@ const OperationResult = () =>
 const EachExam = () => import("./components/exams/EachExam.vue");
 const Categories = () => import("./views/Categories.vue");
 const Results = () => import("./views/Results.vue");
+const SoonExpiredUsers = () => import("./views/SoonExpiredUsers.vue");
 const NewUsers = () => import("./views/NewUsers.vue");
 // import Users from "./views/Users.vue";
 // import Groups from "./views/Groups.vue";
@@ -116,6 +117,11 @@ const router = createRouter({
     //   meta: { requiresAuth: true },
     // },
     { path: "/results", component: Results, meta: { requiresAuth: true } },
+    {
+      path: "/soon-expired-users",
+      component: SoonExpiredUsers,
+      meta: { requiresAuth: true },
+    },
     { path: "/newuser", component: NewUsers, meta: { requiresAuth: true } },
     { path: "/login", component: SignIn, meta: { requiresUnauth: true } },
     { path: "/:notFound(.*)", component: NotFound },

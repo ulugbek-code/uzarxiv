@@ -274,6 +274,7 @@ export default {
         ) {
           return (this.isEmpty = true);
         }
+        this.$Progress.start();
         await customAxios.patch(`main/user/${this.getUser.id}/`, {
           password: this.password,
           username: this.username,
@@ -284,24 +285,34 @@ export default {
           pass_number: this.passportNumber,
         });
         // await this.getUserByPassNumber();
+        this.$Progress.finish();
+        await this.$store.dispatch("getUsers");
         this.$router.push("/users");
       } catch (e) {
+        this.$Progress.fail();
         console.log(e.response.message);
       }
     },
     async getUserByPassNumber() {
       try {
+        this.$Progress.start();
         const res = await customAxios.get(`main/user/${this.id}`);
-        console.log(res.data);
+        // console.log(res.data);
         this.getUser = res.data;
+        this.$Progress.finish();
       } catch (e) {
+        this.$Progress.fail();
         console.log(e);
       }
     },
   },
   async created() {
     this.$store.commit("activateUser");
+    this.$Progress.start();
     await this.getUserByPassNumber();
+  },
+  mounted() {
+    this.$Progress.finish();
   },
   unmounted() {
     this.$store.commit("activateUser");

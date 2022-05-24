@@ -64,6 +64,9 @@
                                     default="Variant tanlang..."
                                   ></base-dropdown>
                                 </div>
+                                <div v-else class="text-danger">
+                                  Kategoriyaning test variantlari mavjud emas
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -108,7 +111,10 @@
                               <div class="d-inline-block w-50">
                                 <input
                                   v-model="startDate"
-                                  class="form-control my-2"
+                                  class="form-control border my-2"
+                                  :class="
+                                    isEmpty && !startDate ? 'border-danger' : ''
+                                  "
                                   type="datetime-local"
                                 />
                               </div>
@@ -143,7 +149,12 @@
                               <div class="d-inline-block w-50">
                                 <input
                                   v-model="finishDate"
-                                  class="form-control my-2"
+                                  class="form-control border my-2"
+                                  :class="
+                                    isEmpty && !finishDate
+                                      ? 'border-danger'
+                                      : ''
+                                  "
                                   type="datetime-local"
                                 />
                               </div>
@@ -179,7 +190,10 @@
                                 <input
                                   v-model.number="duration"
                                   type="number"
-                                  class="form-control"
+                                  class="form-control border"
+                                  :class="
+                                    isEmpty && !duration ? 'border-danger' : ''
+                                  "
                                   required
                                 />
                               </div>
@@ -255,9 +269,18 @@ export default {
       startDate: "",
       finishDate: "",
       duration: "",
+      groupDetails: [],
     };
   },
   computed: {
+    getFilteredUsers() {
+      {
+        return this.groupDetails
+          .filter((detail) => !Object.keys(detail).includes("group"))
+          .filter((users) => users.exam_status !== "Passed")
+          .map((users) => users.user.id);
+      }
+    },
     formattedFinish() {
       return new Date(`${this.finishDate}`).toTimeString().slice(0, 8);
     },
@@ -295,13 +318,13 @@ export default {
         .map((group) => group.name)
         .join();
     },
-    getUsersGroupById() {
-      return this.$store.getters.groups
-        .filter(
-          (group) => group.id === parseInt(this.id) //.map((group) => group.module)
-        )
-        .map((group) => group.users);
-    },
+    // getUsersGroupById() {
+    //   return this.$store.getters.groups
+    //     .filter(
+    //       (group) => group.id === parseInt(this.id) //.map((group) => group.module)
+    //     )
+    //     .map((group) => group.users);
+    // },
     getVariants() {
       return this.$store.getters.variants
         .filter(
@@ -313,6 +336,16 @@ export default {
     },
   },
   methods: {
+    async getGroupDetails(id) {
+      try {
+        const res = await customAxios.get(
+          "main/group/get_details/?group_id=" + id
+        );
+        this.groupDetails = res.data;
+      } catch (e) {
+        console.log(e.response);
+      }
+    },
     previousPage() {
       this.$router.push(`/groups/${this.id}`);
     },
@@ -357,13 +390,15 @@ export default {
     await this.$store.dispatch("getGroups");
     await this.$store.dispatch("getUsers");
     await this.$store.dispatch("getVariants");
+    await this.getGroupDetails(this.id);
   },
   unmounted() {
     this.$store.commit("activateGroup");
   },
   watch: {
-    getUsersGroupById(newUsers) {
-      this.value = newUsers[0];
+    getFilteredUsers(newUsers) {
+      // console.log(newUsers);
+      this.value = newUsers;
     },
     isEmpty() {
       setTimeout(() => (this.isEmpty = false), 2000);

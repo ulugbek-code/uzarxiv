@@ -23,7 +23,7 @@
           <div class="card card-primary card-outline">
             <div class="card-header">
               <h4 class="card-title">
-                O'zgartirish uchun foydalanuvchini tanlang
+                Tez orada amal qilish muddati tugaydigan foydalanuvchilar
               </h4>
             </div>
             <div class="card-body">
@@ -31,7 +31,7 @@
                 <div class="module">
                   <div class="row">
                     <div class="col-12">
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-md-4">
                           <div class="actions">
                             <div class="input-group mb-3">
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-12 col-sm-4"></div>
                       </div>
-                      <hr />
+                      <hr /> -->
                       <div class="card">
                         <div class="card-body table-responsive p-0">
                           <table class="table table-hover">
@@ -90,11 +90,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr
-                                @click="toEachUser(user.id)"
-                                v-for="user in filteredUsers"
-                                :key="user.id"
-                              >
+                              <tr v-for="user in expiredUsers" :key="user.id">
                                 <td>
                                   <!-- <router-link :to="`/users/${user.id}`">{{user.username}}</router-link> -->
                                   {{ user.first_name }}
@@ -143,17 +139,8 @@
                         role="status"
                         aria-live="polite"
                       >
-                        {{ filteredUsers.length }} ta foydalanuvchilar
+                        {{ expiredUsers.length }} ta foydalanuvchilar
                       </div>
-                    </div>
-
-                    <div v-if="users.length > 50" class="col-7">
-                      <base-pagination
-                        :totalPages="Math.ceil(users.length / 50)"
-                        :perPage="50"
-                        :currentPage="currentPage"
-                        @pagechanged="onPageChange"
-                      ></base-pagination>
                     </div>
                   </div>
                 </div>
@@ -167,68 +154,24 @@
 </template>
 
 <script>
-import costumAxios from "../api";
-import BasePagination from "../components/BasePagination.vue";
+import customAxios from "../api";
 export default {
-  components: {
-    BasePagination,
-  },
   data() {
     return {
-      search: "",
-      currentPage: 1,
+      expiredUsers: [],
     };
   },
-  computed: {
-    filteredUsers() {
-      return this.paginatedUsers.filter((user) => {
-        if (user.pass_number) {
-          return (
-            user.pass_number
-              .toLowerCase()
-              .includes(this.search.toLowerCase()) ||
-            user.first_name.toLowerCase().includes(this.search.toLowerCase())
-          );
-        }
-        return user.first_name
-          .toLowerCase()
-          .includes(this.search.toLowerCase());
-        // user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
-      });
-    },
-    users() {
-      return this.$store.getters.users;
-    },
-    startPage() {
-      return (this.currentPage - 1) * 50;
-    },
-    endPage() {
-      return this.currentPage * 50;
-    },
-    paginatedUsers() {
-      return this.users.slice(this.startPage, this.endPage);
-    },
-  },
+  computed: {},
   methods: {
-    onPageChange(page) {
-      // console.log(page);
-      this.currentPage = page;
-    },
-    toEachUser(userId) {
-      this.$router.push({ name: "user", params: { id: userId } });
-    },
-    async deleteUser(id) {
-      if (confirm("Siz haqiqatan ham o'chirmoqchimisiz")) {
-        await costumAxios.delete(`main/user/${id}/`);
-        await this.$store.dispatch("getUsers");
-      }
+    async getExpiredUsers() {
+      const res = await customAxios.get("deadline_statistic/");
+      //   this.expiredUsers = res.data;
+      console.log(res);
     },
   },
   async created() {
     this.$Progress.start();
-    if (!this.users.length) {
-      await this.$store.dispatch("getUsers");
-    }
+    await this.getExpiredUsers();
   },
   mounted() {
     this.$Progress.finish();

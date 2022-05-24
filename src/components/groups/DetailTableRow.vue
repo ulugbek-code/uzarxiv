@@ -14,7 +14,7 @@
   </td>
   <td
     :class="
-      users.exam_status === 'Pass'
+      users.exam_status === 'Passed'
         ? 'text-success'
         : users.exam_status === 'Fail'
         ? 'text-danger'
@@ -26,12 +26,12 @@
   <!--users.operation_id && users.payment_status && users.exam_status === 'Pass' for below td -->
   <!-- @click.prevent="getCertificate(users.operation_id)" -->
   <td
-    v-if="users.user.first_name === 'Litvinova Viktoriya Valentinov'"
+    v-if="users.operation_id && users.exam_status === 'Passed'"
     class="td-link"
   >
     <fa
       class="link-icon text-primary"
-      @click.prevent="getCertificate(299)"
+      @click.prevent="getCertificate(users.operation_id)"
       :icon="['fas', 'file-arrow-down']"
     />
   </td>

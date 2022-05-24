@@ -206,11 +206,6 @@
           >
             <!-- {{  statistics.passed_users }} -->
             <pie-chart
-              v-if="
-                statistics.passed_users ||
-                statistics.failed_users ||
-                statistics.missed_users
-              "
               :series="[
                 statistics.passed_users,
                 statistics.failed_users,
@@ -249,11 +244,21 @@
               <td>{{ result.module_name }}</td>
               <td>{{ result.collect_ball ? result.collect_ball : 0 }}</td>
               <td>{{ result.percent ? result.percent : 0 }} %</td>
-              <td>{{ result.status }}</td>
+              <td
+                :class="
+                  result.status === 'Passed'
+                    ? 'text-success'
+                    : result.status === 'Fail'
+                    ? 'text-danger'
+                    : 'text-warning'
+                "
+              >
+                {{ result.status }}
+              </td>
               <td>{{ formatDate(result.date) }}</td>
               <td
                 v-if="
-                  result.status === 'Pass' && result.payment_status === true
+                  result.status === 'Passed' && result.payment_status === true
                 "
                 class="td-link"
               >
@@ -265,7 +270,7 @@
               </td>
               <td
                 v-else-if="
-                  result.status === 'Pass' && result.payment_status === false
+                  result.status === 'Passed' && result.payment_status === false
                 "
                 class="text-danger"
               >
@@ -286,7 +291,7 @@
               {{ exam.variant_name }}
             </h5>
             <p>Boshlanish vaqti: {{ formatDate(exam.start_date) }}</p>
-            <p>Tugash vaqti: {{ formatDate(exam.finish_date) }}</p>
+            <p>Tugash vaqti: {{ exam.finish_date }}</p>
             <p>Davomiyligi: {{ exam.duration }} minutes</p>
             <div class="d-flex">
               <router-link
@@ -295,7 +300,10 @@
                   params: {
                     id: exam.variant_id,
                     examId: exam.id,
-                    duration: exam.duration,
+                    duration: Math.ceil(
+                      (new Date(exam.finish_date.slice(0, -1)) - new Date()) /
+                        1000
+                    ),
                   },
                 }"
               >
@@ -444,7 +452,7 @@ export default {
         this.exams = res.data;
         // console.log(this.exams);
       } catch (e) {
-        console.log(e.response.data);
+        console.log(e.response);
       }
     },
     startFetching() {

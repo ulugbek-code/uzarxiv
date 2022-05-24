@@ -98,7 +98,10 @@ export default {
 
   watch: {
     timeLeft(newValue) {
-      if (newValue === 0) {
+      if (
+        newValue === 0
+        // new Date(this.finishBy).getTime() < new Date().getTime()
+      ) {
         this.onTimesUp();
       }
       if (newValue === 300) {

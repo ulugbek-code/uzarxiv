@@ -116,23 +116,23 @@
                 <p>Davomiyligi: {{ exam.duration }} minutes</p>
                 <p>
                   <span class="bg-success text-light p-1"
-                    >Passed students: {{ exam.total_passed_students }}
+                    >Imtihondan o'tganlar: {{ exam.total_passed_students }}
                   </span>
                   <br />
 
                   <span class="bg-danger text-light p-1"
-                    >Yiqilgan o'quvchilar:
+                    >Imtihondan o'tolmaganlar:
                     {{ exam.total_failed_students }} </span
                   ><br />
 
                   <span class="bg-warning p-1"
-                    >Topshirmagan o'quvchilar:
+                    >Imtihon topshirmaganlar:
                     {{ exam.total_missed_students }} </span
                   ><br />
                 </p>
 
                 <p></p>
-                <div class="d-flex" style="justify-content: space-between">
+                <div class="d-flex justify-content-between">
                   <router-link
                     :to="{
                       name: 'operation',
@@ -141,6 +141,16 @@
                   >
                     <button class="btn btn-primary">Ko'rish</button>
                   </router-link>
+                  <div>
+                    <button class="btn btn-warning mx-2">
+                      <fa
+                        class="text-light"
+                        :icon="['fas', 'pencil']"
+                      /></button
+                    ><button class="btn btn-danger">
+                      <fa class="text-light" :icon="['fas', 'trash-alt']" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
