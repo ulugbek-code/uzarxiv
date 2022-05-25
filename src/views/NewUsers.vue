@@ -174,6 +174,7 @@ export default {
             position: this.position,
             pass_number: this.passportNumber,
           });
+          await this.$store.dispatch("getUsers");
           // console.log(response);
           this.$Progress.finish();
           this.$router.replace("/users");

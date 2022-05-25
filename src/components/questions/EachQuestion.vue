@@ -417,6 +417,7 @@ export default {
         variant: this.getQuestion.variant_id,
         variants: this.getQuestion.variants,
       });
+      await this.$store.dispatch("getQuestions");
       this.$router.push("/questions");
     },
     getQuestionCategory(val) {
