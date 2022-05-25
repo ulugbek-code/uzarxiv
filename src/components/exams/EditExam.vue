@@ -6,9 +6,6 @@
           <div class="col-auto col-sm-3 mt-2">
             <h1 class="m-0">Imtihonlar</h1>
           </div>
-          <!-- {{ getVariants }} -->
-          <!-- {{ getUsersGroupById }} -->
-          <!-- {{ getGroupById }} -->
           <div class="col-auto col-sm-9 mt-4">
             <ol class="breadcrumb float-end">
               <li class="breadcrumb-item">
@@ -17,9 +14,9 @@
               <li class="breadcrumb-item">
                 <router-link to="/groups">Guruhlar</router-link>
               </li>
-              <li class="breadcrumb-item">
+              <li v-if="Object.keys(eachExam).length" class="breadcrumb-item">
                 <router-link :to="`/groups/${id}`">{{
-                  getCurrentGroupName
+                  eachExam.group.name
                 }}</router-link>
               </li>
               <li v-if="id" class="breadcrumb-item active">Imtihon qo'shish</li>
@@ -29,6 +26,9 @@
       </div>
     </div>
 
+    <!-- {{ eachExam }}
+    <hr /> -->
+    <!-- {{ eachExamUsers }} -->
     <div class="content">
       <div class="container-fluid">
         <section id="content" class="content">
@@ -39,7 +39,7 @@
                   <div class="col-12 col-lg-9">
                     <div class="card card-primary card-outline">
                       <div class="card-header">
-                        <div class="card-title">Imtihon qo'shish</div>
+                        <div class="card-title">Imtihonni o'zgartirish</div>
                         <!-- {{ getExam }} -->
                         <!-- {{ getGroups }} -->
                         <!-- {{ getUsers }} -->
@@ -54,14 +54,14 @@
                             <div class="col-sm-10 field-subject">
                               <div class="related-widget-wrapper">
                                 <div
-                                  v-if="getVariants.length"
+                                  v-if="Object.keys(eachExam).length"
                                   class="d-inline-block w-50"
                                 >
                                   <base-dropdown
                                     :options="getVariants"
                                     :withObj="true"
                                     @input="getExamVariant"
-                                    default="Variant tanlang..."
+                                    :default="eachExam.variant.name"
                                   ></base-dropdown>
                                 </div>
                                 <div v-else class="text-danger">
@@ -172,16 +172,13 @@
                               </template>
                             </div>
                             <div v-if="isDateInvalid" class="mt-2 text-danger">
-                              Yopilish sanasi ochilish sanasidan kegn bo'lishi
-                              lozim
+                              Yopilish sanasi ochilish sanasidan so'ng bo'lishi
+                              va ochilish sanasi hozirdan katta bo'lishi lozim
                             </div>
                           </div>
                         </div>
 
-                        <div
-                          v-if="startDate && finishDate"
-                          class="form-group field-duration"
-                        >
+                        <div class="form-group field-duration">
                           <div class="row">
                             <label class="col-sm-2 text-left" for="id_duration">
                               Davomiyligi
@@ -192,7 +189,6 @@
                                   :value="duration"
                                   type="number"
                                   class="form-control"
-                                  disabled
                                 />
                               </div>
                               <div class="help-block">
@@ -220,7 +216,7 @@
                         <div class="card-body">
                           <div class="d-grid my-2">
                             <button
-                              @click.prevent="addExam"
+                              @click.prevent="editExam"
                               class="btn btn-outline-success"
                             >
                               Saqlash
@@ -254,7 +250,7 @@ import Multiselect from "@vueform/multiselect";
 import customAxios from "../../api";
 
 export default {
-  props: ["id"],
+  props: ["id", "examId"],
   components: {
     Multiselect,
   },
@@ -266,21 +262,16 @@ export default {
       variantId: null,
       startDate: "",
       finishDate: "",
-      groupDetails: [],
-      // duration: "",
+      eachExam: {},
+      //   duration: "",
     };
   },
   computed: {
+    eachExamUsers() {
+      return this.eachExam.user.map((user) => user.id);
+    },
     duration() {
       return (new Date(this.finishDate) - new Date(this.startDate)) / 60000;
-    },
-    getFilteredUsers() {
-      {
-        return this.groupDetails
-          .filter((detail) => !Object.keys(detail).includes("group"))
-          .filter((users) => users.exam_status !== "Passed")
-          .map((users) => users.user.id);
-      }
     },
     formattedFinish() {
       return new Date(`${this.finishDate}`).toTimeString().slice(0, 8);
@@ -296,53 +287,17 @@ export default {
         };
       });
     },
-    getGroups() {
-      return this.$store.getters.groups.map((group) => {
-        return {
-          name: group.name,
-          id: group.id,
-        };
-      });
-    },
-    getGroupModuleById() {
-      return this.$store.getters.groups
-        .filter(
-          (group) => group.id === parseInt(this.id) //.map((group) => group.module)
-        )
-        .map((group) => group.module)
-        .map((module) => module.id)
-        .join();
-    },
-    getCurrentGroupName() {
-      return this.getGroups
-        .filter((group) => group.id === parseInt(this.id))
-        .map((group) => group.name)
-        .join();
-    },
-    // getUsersGroupById() {
-    //   return this.$store.getters.groups
-    //     .filter(
-    //       (group) => group.id === parseInt(this.id) //.map((group) => group.module)
-    //     )
-    //     .map((group) => group.users);
-    // },
     getVariants() {
-      return this.$store.getters.variants
-        .filter(
-          (variant) => variant.module === parseInt(this.getGroupModuleById)
-        )
-        .map((variant) => {
-          return { id: variant.id, name: variant.name };
-        });
+      return this.$store.getters.variants.filter(
+        (variant) => variant.module === this.eachExam.group.module.id
+      );
     },
   },
   methods: {
-    async getGroupDetails(id) {
+    async getEachExam() {
       try {
-        const res = await customAxios.get(
-          "main/group/get_details/?group_id=" + id
-        );
-        this.groupDetails = res.data;
+        const res = await customAxios.get(`main/exams/${this.examId}/`);
+        this.eachExam = res.data;
       } catch (e) {
         console.log(e.response);
       }
@@ -353,9 +308,9 @@ export default {
     getExamVariant(val) {
       if (typeof val === "string") return;
       this.variantId = val.id;
-      // console.log(this.variantId);
+      // console.log(val);
     },
-    async addExam() {
+    async editExam() {
       try {
         if (
           !this.startDate ||
@@ -367,8 +322,12 @@ export default {
           this.isEmpty = true;
           return;
         }
-        if (new Date(this.startDate) < new Date(this.finishDate)) {
-          await customAxios.post("main/exam/", {
+        if (
+          //   new Date() <= new Date(this.startDate) &&
+          new Date(this.startDate) < new Date(this.finishDate)
+        ) {
+          await customAxios.post("main/exams/edit/", {
+            id: this.examId,
             start_date: this.startDate,
             finish_date: this.finishDate,
             duration: this.duration,
@@ -388,14 +347,10 @@ export default {
   async created() {
     this.$Progress.start();
     this.$store.commit("activateGroup");
-    if (!this.$store.state.modules.length)
-      await this.$store.dispatch("getModules");
-    if (!this.$store.state.groups.length)
-      await this.$store.dispatch("getGroups");
+    await this.getEachExam();
     if (!this.$store.state.users.length) await this.$store.dispatch("getUsers");
     if (!this.$store.state.variants.length)
       await this.$store.dispatch("getVariants");
-    await this.getGroupDetails(this.id);
   },
   mounted() {
     this.$Progress.finish();
@@ -404,15 +359,17 @@ export default {
     this.$store.commit("activateGroup");
   },
   watch: {
-    getFilteredUsers(newUsers) {
-      // console.log(newUsers);
-      this.value = newUsers;
+    eachExam(newExam) {
+      this.startDate = newExam.start_date.slice(0, -1);
+      this.finishDate = newExam.finish_date.slice(0, -1);
+      this.variantId = newExam.variant.id;
+      this.value = this.eachExamUsers;
     },
     isEmpty() {
       setTimeout(() => (this.isEmpty = false), 2000);
     },
     isDateInvalid() {
-      setTimeout(() => (this.isDateInvalid = false), 2000);
+      setTimeout(() => (this.isDateInvalid = false), 3000);
     },
   },
 };

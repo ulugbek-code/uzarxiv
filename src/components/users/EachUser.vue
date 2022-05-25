@@ -296,7 +296,7 @@ export default {
     async getUserByPassNumber() {
       try {
         this.$Progress.start();
-        const res = await customAxios.get(`main/user/${this.id}`);
+        const res = await customAxios.get(`main/user/${this.id}/`);
         // console.log(res.data);
         this.getUser = res.data;
         this.$Progress.finish();

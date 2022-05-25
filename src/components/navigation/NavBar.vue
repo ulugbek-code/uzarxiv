@@ -91,10 +91,10 @@
               />
               <span class="nav_name">Imtihon Natijalari</span>
             </router-link>
-            <router-link to="/soon-expired-users" class="nav_link">
+            <!-- <router-link to="/soon-expired-users" class="nav_link">
               <fa class="bx bx-layer nav_logo-icon" :icon="['fas', 'list']" />
               <span class="nav_name">Sertifikat muddati</span>
-            </router-link>
+            </router-link> -->
             <router-link to="/newuser" class="nav_link">
               <fa
                 class="bx bx-layer nav_logo-icon"

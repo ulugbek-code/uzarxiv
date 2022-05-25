@@ -17,22 +17,11 @@ const OperationResult = () =>
   import("./components/operation/OperationResult.vue");
 // const Exams = () => import("./views/Exams.vue");
 const EachExam = () => import("./components/exams/EachExam.vue");
+const EditExam = () => import("./components/exams/EditExam.vue");
 const Categories = () => import("./views/Categories.vue");
 const Results = () => import("./views/Results.vue");
-const SoonExpiredUsers = () => import("./views/SoonExpiredUsers.vue");
+// const SoonExpiredUsers = () => import("./views/SoonExpiredUsers.vue");
 const NewUsers = () => import("./views/NewUsers.vue");
-// import Users from "./views/Users.vue";
-// import Groups from "./views/Groups.vue";
-// import GroupDetail from "./components/groups/GroupDetail.vue";
-// import OperationDetails from "./components/operation/OperationDetails";
-// import EachUser from "./components/users/EachUser.vue";
-// import Questions from "./views/Questions.vue";
-// import EachQuestion from "./components/questions/EachQuestion.vue";
-// import Exams from "./views/Exams.vue";
-// import EachExam from "./components/exams/EachExam.vue";
-// import Categories from "./views/Categories.vue";
-// import EachCategory from "./components/categories/EachCategory.vue";
-// import Results from "./views/Results.vue";
 import NotFound from "./views/NotFound.vue";
 
 const router = createRouter({
@@ -105,6 +94,13 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/exams/edit-exam/group-id=:id&exam-id=:examId",
+      name: "edit-exam",
+      component: EditExam,
+      props: true,
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/categories",
       component: Categories,
       meta: { requiresAuth: true },
@@ -117,11 +113,11 @@ const router = createRouter({
     //   meta: { requiresAuth: true },
     // },
     { path: "/results", component: Results, meta: { requiresAuth: true } },
-    {
-      path: "/soon-expired-users",
-      component: SoonExpiredUsers,
-      meta: { requiresAuth: true },
-    },
+    // {
+    //   path: "/soon-expired-users",
+    //   component: SoonExpiredUsers,
+    //   meta: { requiresAuth: true },
+    // },
     { path: "/newuser", component: NewUsers, meta: { requiresAuth: true } },
     { path: "/login", component: SignIn, meta: { requiresUnauth: true } },
     { path: "/:notFound(.*)", component: NotFound },

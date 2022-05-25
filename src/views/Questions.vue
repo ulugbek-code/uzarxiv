@@ -169,6 +169,9 @@ export default {
     categories() {
       return this.$store.getters.modules;
     },
+    originVariants() {
+      return this.$store.getters.variants;
+    },
     variants() {
       return this.$store.getters.variants.filter(
         (variant) => variant.module === this.categoryId
@@ -212,9 +215,15 @@ export default {
   },
   async created() {
     this.$Progress.start();
-    await this.$store.dispatch("getModules");
-    await this.$store.dispatch("getVariants");
-    await this.$store.dispatch("getQuestions");
+    if (!this.categories.length) {
+      await this.$store.dispatch("getModules");
+    }
+    if (!this.originVariants.length) {
+      await this.$store.dispatch("getVariants");
+    }
+    if (!this.questions.length) {
+      await this.$store.dispatch("getQuestions");
+    }
   },
   mounted() {
     this.$Progress.finish();

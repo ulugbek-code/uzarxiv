@@ -13,7 +13,8 @@
               <h5>Foiz:</h5>
               <h5 class="fw-bold">Natija:</h5>
             </div>
-            <div v-if="allOperation.user" class="col-lg-6 mx-1">
+
+            <div v-if="Object.keys(allOperation).length" class="col-lg-6 mx-1">
               <p>
                 {{ allOperation.user.first_name }}
                 {{ allOperation.user.last_name }}
@@ -46,7 +47,6 @@
     <div class="quize">
       <div class="question-bar">
         <template v-for="(q, idx) in answers" :key="q.id">
-          <!-- {{ q }} -->
           <operation-each-question
             :question="q"
             :answer="allOperation.operationitem"

@@ -446,9 +446,12 @@ export default {
     this.$store.commit("activateQuestion");
     this.$Progress.start();
     // await this.getQuestionById();
+
     await this.$store.dispatch("getQuestions");
-    await this.$store.dispatch("getModules");
-    await this.$store.dispatch("getVariants");
+    if (!this.$store.state.modules.length)
+      await this.$store.dispatch("getModules");
+    if (!this.$store.state.variants.length)
+      await this.$store.dispatch("getVariants");
   },
   mounted() {
     this.$Progress.finish();

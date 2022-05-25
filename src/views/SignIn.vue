@@ -1,53 +1,55 @@
 <template>
-  <section>
-    <div>
-      <div class="container">
-        <div class="user signinBx">
-          <div class="imgBx">
-            <h2 class="px-3">Malaka oshirish test sinoviga kirish</h2>
+  <div id="sign-in">
+    <section>
+      <div>
+        <div class="container">
+          <div class="user signinBx">
+            <div class="imgBx">
+              <h2 class="px-3">Malaka oshirish test sinoviga kirish</h2>
+            </div>
           </div>
-        </div>
-        <div class="user signupBx">
-          <div class="formBx">
-            <form @submit.prevent="">
-              <div v-if="error" class="alert alert-danger" role="alert">
-                {{ error }}
-              </div>
-              <h2>SIGN IN</h2>
-              <div @click="error = false" class="input-group mb-3">
-                <input
-                  v-model.trim="login"
-                  type="text"
-                  class="form-control"
-                  placeholder="Username"
-                  aria-describedby="basic-addon1"
-                  required
-                />
-              </div>
-              <div @click="error = false" class="input-group mb-3">
-                <input
-                  v-model.trim="password"
-                  type="password"
-                  class="form-control"
-                  placeholder="Password"
-                  autocomplete="off"
-                  required
-                />
-              </div>
-              <div class="d-grid">
-                <button
-                  @click.prevent="loginUser"
-                  class="btn btn-outline-primary"
-                >
-                  Log in
-                </button>
-              </div>
-            </form>
+          <div class="user signupBx">
+            <div class="formBx">
+              <form @submit.prevent="">
+                <div v-if="error" class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+                <h2>SIGN IN</h2>
+                <div @click="error = false" class="input-group mb-3">
+                  <input
+                    v-model.trim="login"
+                    type="text"
+                    class="form-control"
+                    placeholder="Username"
+                    aria-describedby="basic-addon1"
+                    required
+                  />
+                </div>
+                <div @click="error = false" class="input-group mb-3">
+                  <input
+                    v-model.trim="password"
+                    type="password"
+                    class="form-control"
+                    placeholder="Password"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+                <div class="d-grid">
+                  <button
+                    @click.prevent="loginUser"
+                    class="btn btn-outline-primary"
+                  >
+                    Log in
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
   <!--  -->
   <!--  -->
   <!-- <div class="c-sign-in pt-5">
@@ -158,14 +160,19 @@ export default {
 * {
   font-family: "Poppins", sans-serif;
 }
+
 section {
-  width: 90%;
+  width: 100%;
   min-height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 30px;
   z-index: 100;
+  background: #f8dd30;
 }
 
 section .container {
@@ -175,7 +182,7 @@ section .container {
   background: #fff;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 0.25rem;
 }
 
 section .container .user {
@@ -185,8 +192,6 @@ section .container .user {
   width: 100%;
   height: 100%;
   display: flex;
-  border: 1px solid rgb(241, 241, 241);
-  border-radius: 0.25rem;
 }
 
 section .container .user .imgBx {

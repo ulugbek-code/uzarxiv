@@ -141,15 +141,23 @@
                   >
                     <button class="btn btn-primary">Ko'rish</button>
                   </router-link>
-                  <div>
-                    <button class="btn btn-warning mx-2">
-                      <fa
-                        class="text-light"
-                        :icon="['fas', 'pencil']"
-                      /></button
-                    ><button class="btn btn-danger">
-                      <fa class="text-light" :icon="['fas', 'trash-alt']" />
-                    </button>
+                  <div
+                    v-if="
+                      exam.total_passed_students === 0 &&
+                      exam.total_failed_students === 0 &&
+                      exam.total_missed_students === 0
+                    "
+                  >
+                    <router-link
+                      :to="{
+                        name: 'edit-exam',
+                        params: { id: id, examId: exam.id },
+                      }"
+                    >
+                      <button class="btn btn-warning mx-2">
+                        <fa class="text-light" :icon="['fas', 'pencil']" />
+                      </button>
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -214,8 +222,12 @@ export default {
     },
   },
   created() {
+    this.$Progress.start();
     this.$store.commit("activateGroup");
     this.getGroupDetails(this.id);
+  },
+  mounted() {
+    this.$Progress.finish();
   },
   unmounted() {
     this.$store.commit("activateGroup");

@@ -44,16 +44,6 @@
                   >
                     <button class="btn btn-primary">Ko'rish</button>
                   </router-link>
-                  <div>
-                    <button class="btn btn-warning mx-2">
-                      <fa
-                        class="text-light"
-                        :icon="['fas', 'pencil']"
-                      /></button
-                    ><button class="btn btn-danger">
-                      <fa class="text-light" :icon="['fas', 'trash-alt']" />
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -87,9 +77,8 @@ export default {
   },
   async created() {
     this.$Progress.start();
-    if (!this.exams.length) {
-      await this.$store.dispatch("getExams");
-    }
+
+    await this.$store.dispatch("getExams");
   },
   mounted() {
     this.$Progress.finish();

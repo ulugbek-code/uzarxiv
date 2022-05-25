@@ -277,8 +277,12 @@ export default {
   },
   async created() {
     this.$Progress.start();
-    await this.$store.dispatch("getModules");
-    await this.$store.dispatch("getVariants");
+    if (!this.categories.length) {
+      await this.$store.dispatch("getModules");
+    }
+    if (!this.$store.state.variants.length) {
+      await this.$store.dispatch("getVariants");
+    }
   },
   mounted() {
     this.$Progress.finish();

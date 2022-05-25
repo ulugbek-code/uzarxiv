@@ -93,6 +93,7 @@ export default {
     //   this.submitAnswers();
     // },
     async submitAnswers() {
+      this.isSubmitted = true;
       await customAxios.post("operation/result/post/", [
         {
           user: this.$store.state.userId,
@@ -102,8 +103,8 @@ export default {
           // description: "desc",
         },
       ]);
-      this.isSubmitted = true;
-      console.log(this.isSubmitted);
+
+      // console.log(this.isSubmitted);
       this.$store.dispatch("resetDuration");
       this.$router.replace("/");
     },
@@ -133,6 +134,7 @@ export default {
     },
   },
   unmounted() {
+    console.log(this.isSubmitted);
     if (this.isSubmitted) return;
     this.submitAnswers();
   },

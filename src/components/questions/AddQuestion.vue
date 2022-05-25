@@ -434,8 +434,10 @@ export default {
   async created() {
     this.$Progress.start();
     await this.$store.commit("activateQuestion");
-    await this.$store.dispatch("getModules");
-    await this.$store.dispatch("getVariants");
+    if (!this.$store.state.modules.length)
+      await this.$store.dispatch("getModules");
+    if (!this.$store.state.variants.length)
+      await this.$store.dispatch("getVariants");
   },
   mounted() {
     this.$Progress.finish();

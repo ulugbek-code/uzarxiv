@@ -181,7 +181,7 @@ export default {
   },
   computed: {
     filteredUsers() {
-      return this.paginatedUsers.filter((user) => {
+      return this.users.filter((user) => {
         if (user.pass_number) {
           return (
             user.pass_number

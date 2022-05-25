@@ -291,7 +291,7 @@
               {{ exam.variant_name }}
             </h5>
             <p>Boshlanish vaqti: {{ formatDate(exam.start_date) }}</p>
-            <p>Tugash vaqti: {{ exam.finish_date }}</p>
+            <p>Tugash vaqti: {{ formatDate(exam.finish_date) }}</p>
             <p>Davomiyligi: {{ exam.duration }} minutes</p>
             <div class="d-flex">
               <router-link
@@ -374,7 +374,7 @@ export default {
           this.statistics.last_month_taken_exams) /
           this.statistics.last_month_taken_exams) *
         100;
-      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
+      if (a == "Infinity" || a == "-Infinity" || isNaN(a)) return 0;
       return a;
     },
     id() {
