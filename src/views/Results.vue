@@ -77,8 +77,7 @@ export default {
   },
   async created() {
     this.$Progress.start();
-
-    await this.$store.dispatch("getExams");
+    if (!this.exams.length) await this.$store.dispatch("getExams");
   },
   mounted() {
     this.$Progress.finish();

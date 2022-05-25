@@ -29,6 +29,9 @@ export default {
   exams(state) {
     return state.exams;
   },
+  userExams(state) {
+    return state.userExams;
+  },
   examResults(state) {
     return state.examResults;
   },

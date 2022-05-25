@@ -221,7 +221,7 @@
     <div v-if="!isUserAdmin" class="row">
       <!-- {{ getExams }} -->
       <div v-if="examResults.length" class="col-lg-9 table-responsive mb-4">
-        <table class="table text-center table-hover">
+        <table class="table table-responsive text-center table-hover">
           <thead>
             <tr>
               <th>#</th>
@@ -283,9 +283,9 @@
           </tbody>
         </table>
       </div>
+      <!-- {{ changedExams }} -->
       <div class="col-lg-3 spaced-top">
-        <div v-for="exam in exams" :key="exam.id" class="card p-3">
-          <!-- {{ exam }} -->
+        <div v-for="exam in changedExams" :key="exam.id" class="card p-3">
           <div class="card-body px-0">
             <h5 class="card-title pb-1">
               {{ exam.variant_name }}
@@ -300,6 +300,7 @@
                   params: {
                     id: exam.variant_id,
                     examId: exam.id,
+                    groupId: exam.group_id,
                     duration: Math.ceil(
                       (new Date(exam.finish_date.slice(0, -1)) - new Date()) /
                         1000
@@ -326,13 +327,26 @@ export default {
       fetchTimeInterval: null,
       statistics: {},
       // examResults: [],
-      exams: [],
+      // exams: [],
     };
   },
   components: {
     PieChart,
   },
   computed: {
+    exams() {
+      return this.$store.getters.userExams;
+    },
+    changedExams() {
+      return this.exams.map((exam) => {
+        return {
+          ...exam,
+          newDuration: Math.ceil(
+            (new Date(exam.finish_date.slice(0, -1)) - new Date()) / 1000
+          ),
+        };
+      });
+    },
     varGroups() {
       let a =
         ((this.statistics.number_groups -
@@ -446,17 +460,20 @@ export default {
       }
     },
 
-    async getExamByUser() {
-      try {
-        const res = await customAxios.get(`main/exams/get/?user_id=${this.id}`);
-        this.exams = res.data;
-        // console.log(this.exams);
-      } catch (e) {
-        console.log(e.response);
-      }
-    },
+    // async getExamByUser() {
+    //   try {
+    //     const res = await customAxios.get(`main/exams/get/?user_id=${this.id}`);
+    //     this.exams = res.data;
+    //     // console.log(this.exams);
+    //   } catch (e) {
+    //     console.log(e.response);
+    //   }
+    // },
     startFetching() {
-      this.fetchTimeInterval = setInterval(() => this.getExamByUser(), 40000);
+      this.fetchTimeInterval = setInterval(
+        () => this.$store.dispatch("getUserExams"),
+        40000
+      );
     },
     refreshing() {
       console.log("hello");
@@ -466,13 +483,13 @@ export default {
   async created() {
     this.$Progress.start();
     if (!this.isUserAdmin) {
-      await this.getExamByUser();
+      await this.$store.dispatch("getUserExams");
       await this.$store.dispatch("getExamResults");
       this.startFetching();
       return;
     }
     await this.getStatistics();
-    this.$store.dispatch("getGroups");
+    if (!this.groups.length) this.$store.dispatch("getGroups");
   },
   mounted() {
     this.$Progress.finish();

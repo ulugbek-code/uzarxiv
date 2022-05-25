@@ -181,8 +181,8 @@ section .container {
   height: 500px;
   background: #fff;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
   border-radius: 0.25rem;
+  overflow: hidden;
 }
 
 section .container .user {
@@ -279,6 +279,23 @@ input.border-danger::placeholder {
 
   section .container .user .formBx {
     width: 100%;
+  }
+}
+@media screen and (max-width: 768px) {
+  section .container {
+    background: #f8dd30;
+    box-shadow: none;
+    border-radius: none;
+  }
+  section .container .signupBx {
+    background: #f8dd30;
+  }
+  section .container .user .formBx {
+    width: 70%;
+    height: 50%;
+    margin: 25% auto 0;
+    border: 1px solid rgb(245, 238, 238);
+    border-radius: 0.25rem;
   }
 }
 </style>

@@ -22,13 +22,13 @@
             ></take-exam-each-question>
           </template>
           <div class="footer-button">
-            <router-link to="/" class="btn btn-outline-danger">
+            <button @click="cancelExam" class="btn btn-outline-danger">
               Bekor qilish
-            </router-link>
+            </button>
             <button
               @click="submitAnswers"
               type="button"
-              class="btn btn-success mx-3"
+              class="btn btn-success mx-sm-3 mx-1"
             >
               Yuborish
             </button>
@@ -48,7 +48,7 @@ import TakeExamEachQuestion from "./TakeExamEachQuestion.vue";
 import BaseTimer from "./BaseTimer.vue";
 
 export default {
-  props: ["id", "duration", "examId"],
+  props: ["id", "duration", "examId", "groupId"],
   components: {
     TakeExamEachQuestion,
     BaseTimer,
@@ -75,12 +75,16 @@ export default {
     },
   },
   methods: {
+    cancelExam() {
+      if (confirm("Siz rostan ham imtihonni bekor qilmoqchimisz?")) {
+        this.submitAnswers();
+      }
+    },
     saveDuration(val) {
       this.$store.dispatch("changeDuration", val);
     },
     warnUser() {
       this.lessTime = true;
-      // console.log(Math.floor(this.offset) + "px");
     },
     getAns(val) {
       const i = this.answers.findIndex(
@@ -89,24 +93,27 @@ export default {
       if (i > -1) this.answers[i] = val;
       else this.answers.push(val);
     },
-    // timeOver() {
-    //   this.submitAnswers();
-    // },
     async submitAnswers() {
-      this.isSubmitted = true;
-      await customAxios.post("operation/result/post/", [
-        {
-          user: this.$store.state.userId,
-          exam: parseInt(this.examId),
-          variant: parseInt(this.id),
-          operationitem: this.answers,
-          // description: "desc",
-        },
-      ]);
-
-      // console.log(this.isSubmitted);
-      this.$store.dispatch("resetDuration");
-      this.$router.replace("/");
+      try {
+        this.$Progress.start();
+        this.isSubmitted = true;
+        await customAxios.post("operation/result/post/", [
+          {
+            group: parseInt(this.groupId),
+            user: this.$store.state.userId,
+            exam: parseInt(this.examId),
+            variant: parseInt(this.id),
+            operationitem: this.answers,
+            // description: "desc",
+          },
+        ]);
+        this.$store.dispatch("resetDuration");
+        this.$Progress.finish();
+        this.$router.replace("/");
+      } catch (e) {
+        console.log(e.response.message);
+        this.$Progress.fail();
+      }
     },
     async getQuestionsByVariantId() {
       try {
@@ -133,10 +140,17 @@ export default {
       setTimeout(() => (this.lessTime = false), 4000);
     },
   },
-  unmounted() {
-    console.log(this.isSubmitted);
+  beforeRouteLeave(to, from, next) {
+    if (to.path === "/" && !this.isSubmitted) {
+      next(false);
+    } else {
+      next();
+    }
+  },
+  async beforeUnmount() {
+    // console.log(this.isSubmitted);
     if (this.isSubmitted) return;
-    this.submitAnswers();
+    await this.submitAnswers();
   },
 };
 </script>
@@ -192,7 +206,11 @@ ul {
 .footer-button {
   margin-top: 20px;
 }
-
+@media screen and (max-width: 768px) {
+  .quize {
+    padding: 20px;
+  }
+}
 /* svg {
   fill: #fff;
   height: 9px;

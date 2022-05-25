@@ -11,6 +11,17 @@ export default {
     }
   },
   // exams
+  async getUserExams(context) {
+    try {
+      const res = await customAxios.get(
+        `main/exams/get/?user_id=${context.state.userId}`
+      );
+      context.commit("getUserExams", res);
+      // console.log(this.exams);
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
   async getExams(context) {
     try {
       const res = await customAxios.get("main/exams/");

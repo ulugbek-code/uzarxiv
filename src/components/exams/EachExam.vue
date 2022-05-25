@@ -65,7 +65,11 @@
                                   ></base-dropdown>
                                 </div>
                                 <div v-else class="text-danger">
-                                  Kategoriyaning test variantlari mavjud emas
+                                  <input
+                                    type="text"
+                                    class="form-control w-50"
+                                    disabled
+                                  />
                                 </div>
                               </div>
                             </div>
