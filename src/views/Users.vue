@@ -92,7 +92,7 @@
                             <tbody>
                               <tr
                                 @click="toEachUser(user.id)"
-                                v-for="user in filteredUsers"
+                                v-for="user in paginatedUsers"
                                 :key="user.id"
                               >
                                 <td>
@@ -143,7 +143,7 @@
                         role="status"
                         aria-live="polite"
                       >
-                        {{ filteredUsers.length }} ta foydalanuvchilar
+                        {{ paginatedUsers.length }} ta foydalanuvchilar
                       </div>
                     </div>
 
@@ -206,7 +206,7 @@ export default {
       return this.currentPage * 50;
     },
     paginatedUsers() {
-      return this.users.slice(this.startPage, this.endPage);
+      return this.filteredUsers.slice(this.startPage, this.endPage);
     },
   },
   methods: {

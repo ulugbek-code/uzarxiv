@@ -32,6 +32,8 @@ export default {
     state.token = null;
     state.isAdmin = false;
     state.userId = null;
+    state.userExams = [];
+    state.examResults = [];
     router.replace("/login");
   },
   getUsers(state, payload) {
