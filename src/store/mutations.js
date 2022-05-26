@@ -81,4 +81,7 @@ export default {
   getOperationDetails(state, payload) {
     state.operationDetails = payload.data;
   },
+  resetOperation(state) {
+    state.operationDetails = [];
+  },
 };

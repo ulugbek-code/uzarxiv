@@ -96,8 +96,12 @@ export default {
     },
   },
   async created() {
+    this.$Progress.start();
     await this.getOperation();
     await this.getAnswers();
+  },
+  mounted() {
+    this.$Progress.finish();
   },
 };
 </script>

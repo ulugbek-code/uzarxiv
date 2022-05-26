@@ -58,7 +58,14 @@ export default {
   },
 
   async created() {
+    this.$Progress.start();
     await this.$store.dispatch("getOperationDetails", this.id);
+  },
+  mounted() {
+    this.$Progress.finish();
+  },
+  unmounted() {
+    this.$store.commit("resetOperation");
   },
 };
 </script>

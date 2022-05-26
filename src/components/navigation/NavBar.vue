@@ -105,7 +105,7 @@
           </template>
         </div>
       </div>
-      <p @click="logout" class="nav_link mb-3 log-out">
+      <p @click="logout" class="nav_link mb-5 log-out">
         <fa class="bx bx-layer nav_logo-icon" :icon="['fas', 'circle-user']" />
         <span class="nav_name">&nbsp;Chiqish</span>
       </p>
@@ -200,7 +200,7 @@ export default {
   top: 0;
   left: -30%;
   width: var(--nav-width);
-  height: 100vh;
+  height: 100%;
   background-color: var(--first-color);
   padding: 0.5rem 1rem 0 0;
   transition: 0.5s;
@@ -351,9 +351,9 @@ export default {
   .header {
     padding: 0 2rem 0 1rem;
   }
-  p {
+  /* p {
     display: none;
-  }
+  } */
   /* hr {
     display: none;
   } */

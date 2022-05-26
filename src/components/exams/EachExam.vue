@@ -40,9 +40,6 @@
                     <div class="card card-primary card-outline">
                       <div class="card-header">
                         <div class="card-title">Imtihon qo'shish</div>
-                        <!-- {{ getExam }} -->
-                        <!-- {{ getGroups }} -->
-                        <!-- {{ getUsers }} -->
                       </div>
                       <div class="card-body">
                         <div class="form-group field-subject">
@@ -91,7 +88,7 @@
                                     mode="tags"
                                     :close-on-select="false"
                                     :searchable="true"
-                                    :options="getUsers"
+                                    :options="filteredGroupUsers"
                                     label="name"
                                   />
                                 </div>
@@ -292,14 +289,14 @@ export default {
     formattedStart() {
       return new Date(`${this.startDate}`).toTimeString().slice(0, 8);
     },
-    getUsers() {
-      return this.$store.getters.users.map((user) => {
-        return {
-          value: user.id,
-          name: `${user.first_name}  ${user.last_name}`,
-        };
-      });
-    },
+    // getUsers() {
+    //   return this.$store.getters.users.map((user) => {
+    //     return {
+    //       value: user.id,
+    //       name: `${user.first_name}  ${user.last_name}`,
+    //     };
+    //   });
+    // },
     getGroups() {
       return this.$store.getters.groups.map((group) => {
         return {
@@ -323,13 +320,30 @@ export default {
         .map((group) => group.name)
         .join();
     },
-    // getUsersGroupById() {
-    //   return this.$store.getters.groups
-    //     .filter(
-    //       (group) => group.id === parseInt(this.id) //.map((group) => group.module)
-    //     )
-    //     .map((group) => group.users);
-    // },
+    getUsersGroupById() {
+      return this.$store.getters.groups
+        .filter(
+          (group) => group.id === parseInt(this.id) //.map((group) => group.module)
+        )
+        .map((group) => group.users)[0];
+    },
+    filteredGroupUsers() {
+      return this.$store.getters.users
+        .filter((user) => {
+          return (
+            this.getUsersGroupById.filter(
+              (usertwo) => user.id === parseInt(usertwo)
+            ).length !== 0
+          );
+        })
+        .map((user) => {
+          return {
+            value: user.id,
+            name: `${user.first_name}  ${user.last_name}`,
+          };
+        });
+    },
+
     getVariants() {
       return this.$store.getters.variants
         .filter(

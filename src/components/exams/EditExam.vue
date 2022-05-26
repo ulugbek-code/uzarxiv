@@ -79,7 +79,10 @@
 
                               <span class="text-red">* </span>
                             </label>
-                            <div class="col-sm-10 field-user">
+                            <div
+                              v-if="Object.keys(eachExam).length"
+                              class="col-sm-10 field-user"
+                            >
                               <div class="related-widget-wrapper">
                                 <div class="multi d-inline-block w-75">
                                   <Multiselect
@@ -280,7 +283,7 @@ export default {
       return new Date(`${this.startDate}`).toTimeString().slice(0, 8);
     },
     getUsers() {
-      return this.$store.getters.users.map((user) => {
+      return this.eachExam.user.map((user) => {
         return {
           value: user.id,
           name: `${user.first_name}  ${user.last_name}`,

@@ -475,10 +475,10 @@ export default {
         40000
       );
     },
-    refreshing() {
-      console.log("hello");
-      // location.reload();
-    },
+    // refreshing() {
+    //   console.log("hello");
+    //   // location.reload();
+    // },
   },
   async created() {
     this.$Progress.start();
