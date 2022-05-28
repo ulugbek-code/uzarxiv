@@ -21,7 +21,15 @@
         : 'text-secondary'
     "
   >
-    {{ users.exam_status ? users.exam_status : "Topshirmagan" }}
+    {{
+      users.exam_status === "Passed"
+        ? "O'tgan"
+        : users.exam_status === "Fail"
+        ? "O'tolmagan"
+        : users.exam_status === "not_submit"
+        ? "O'tkazib yuborgan"
+        : "Topshirmagan"
+    }}
   </td>
   <!--users.operation_id && users.payment_status && users.exam_status === 'Pass' for below td -->
   <!-- @click.prevent="getCertificate(users.operation_id)" -->

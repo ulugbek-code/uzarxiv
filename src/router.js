@@ -10,6 +10,7 @@ const GroupDetail = () => import("./components/groups/GroupDetail.vue");
 const OperationDetails = () =>
   import("./components/operation/OperationDetails");
 const EachUser = () => import("./components/users/EachUser.vue");
+const UserStatus = () => import("./components/users/UserStatus.vue");
 const Questions = () => import("./views/Questions.vue");
 const AddQuestion = () => import("./components/questions/AddQuestion.vue");
 const EachQuestion = () => import("./components/questions/EachQuestion.vue");
@@ -20,7 +21,7 @@ const EachExam = () => import("./components/exams/EachExam.vue");
 const EditExam = () => import("./components/exams/EditExam.vue");
 const Categories = () => import("./views/Categories.vue");
 const Results = () => import("./views/Results.vue");
-// const SoonExpiredUsers = () => import("./views/SoonExpiredUsers.vue");
+const SoonExpiredUsers = () => import("./views/SoonExpiredUsers.vue");
 const NewUsers = () => import("./views/NewUsers.vue");
 import NotFound from "./views/NotFound.vue";
 
@@ -33,6 +34,13 @@ const router = createRouter({
       path: "/users/:id",
       name: "user",
       component: EachUser,
+      props: true,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/user-status/:status",
+      name: "user-status",
+      component: UserStatus,
       props: true,
       meta: { requiresAuth: true },
     },
@@ -113,11 +121,11 @@ const router = createRouter({
     //   meta: { requiresAuth: true },
     // },
     { path: "/results", component: Results, meta: { requiresAuth: true } },
-    // {
-    //   path: "/soon-expired-users",
-    //   component: SoonExpiredUsers,
-    //   meta: { requiresAuth: true },
-    // },
+    {
+      path: "/soon-expired-users",
+      component: SoonExpiredUsers,
+      meta: { requiresAuth: true },
+    },
     { path: "/newuser", component: NewUsers, meta: { requiresAuth: true } },
     { path: "/login", component: SignIn, meta: { requiresUnauth: true } },
     { path: "/:notFound(.*)", component: NotFound },

@@ -1,11 +1,27 @@
 <template>
-  <div class="container-fluid pt-4">
-    <div class="row d-flex justify-content-between mb-3">
-      <div class="col-md-8">
+  <div class="container-fluid pt-2">
+    <div class="row d-flex justify-content-between mt-2">
+      <div class="col-md-4">
         <h1>Dashboard</h1>
+        <!-- {{ statistics }} -->
       </div>
       <template v-if="isUserAdmin">
-        <div class="col-md-3 d-flex align-items-center">
+        <div class="col-md-5 d-flex align-items-center">
+          <span>Dan: </span>
+          <input
+            v-model="grStartDate"
+            class="form-control w-75 mx-md-2"
+            type="date"
+          />
+          <span>Gacha: </span>
+          <input
+            v-model="grFinishDate"
+            class="form-control w-75 mx-md-2"
+            type="date"
+          />
+        </div>
+
+        <div class="col-md-3 d-flex align-items-center my-md-0 my-2">
           <base-dropdown
             :options="addedGroups"
             :withObj="true"
@@ -14,17 +30,17 @@
           ></base-dropdown>
         </div>
       </template>
-      <!-- {{ statistics }} -->
-      <!-- {{ statistics }} -->
     </div>
     <div v-if="isUserAdmin" class="row dash-chart">
       <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
-        <div v-if="statistics.number_groups" class="card">
+        <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
               <p class="mb-0">Guruhlar</p>
-              <p class="fs-2">{{ statistics.number_groups }}</p>
-              <span>
+              <p class="fs-2">
+                {{ statistics.number_groups ? statistics.number_groups : 0 }}
+              </p>
+              <!-- <span v-if="!groupId">
                 <fa
                   :class="
                     varGroups > 0
@@ -46,7 +62,7 @@
                   >&nbsp;{{ varGroups }}%</i
                 >
                 Avvalgi oydan</span
-              >
+              > -->
             </div>
             <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'people-group']" />
@@ -56,68 +72,22 @@
         <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0">O'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_users }}</p>
-              <span>
-                <fa
-                  :class="
-                    varUsers > 0
-                      ? 'text-success'
-                      : varUsers < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  :icon="['fas', 'chart-line']"
-                />
-                <i
-                  :class="
-                    varUsers > 0
-                      ? 'text-success'
-                      : varUsers < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  >&nbsp;{{ varUsers }}%</i
-                >
-                Avvalgi oydan</span
-              >
+              <p class="mb-0">To'lov qilgan o'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_paid_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user']" />
+              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
             </div>
           </div>
         </div>
         <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0">To'lov qilgan o'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_paid_users }}</p>
-              <span>
-                <fa
-                  :class="
-                    varPaidUsers > 0
-                      ? 'text-success'
-                      : varPaidUsers < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  :icon="['fas', 'chart-line']"
-                />
-                <i
-                  :class="
-                    varPaidUsers > 0
-                      ? 'text-success'
-                      : varPaidUsers < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  >&nbsp;{{ varPaidUsers }}%</i
-                >
-                Avvalgi oydan</span
-              >
+              <p class="mb-0">Barcha &nbsp;o'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
+              <fa class="icon icon-group" :icon="['fas', 'user']" />
             </div>
           </div>
         </div>
@@ -128,29 +98,6 @@
             <div class="info w-75">
               <p class="mb-0">Imtihonlar</p>
               <p class="fs-2">{{ statistics.all_exams }}</p>
-              <span>
-                <fa
-                  :class="
-                    varExams > 0
-                      ? 'text-success'
-                      : varExams < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  :icon="['fas', 'chart-line']"
-                />
-                <i
-                  :class="
-                    varExams > 0
-                      ? 'text-success'
-                      : varExams < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  >&nbsp;{{ varExams }}%</i
-                >
-                Avvalgi oydan</span
-              >
             </div>
             <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'list']" />
@@ -162,32 +109,29 @@
             <div class="info w-75">
               <p class="mb-0">Topshirilgan imtihonlar</p>
               <p class="fs-2">{{ statistics.taken_exams }}</p>
-              <span>
-                <fa
-                  :class="
-                    varTakenExams > 0
-                      ? 'text-success'
-                      : varTakenExams < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  :icon="['fas', 'chart-line']"
-                />
-                <i
-                  :class="
-                    varTakenExams > 0
-                      ? 'text-success'
-                      : varTakenExams < 0
-                      ? 'text-danger'
-                      : ''
-                  "
-                  >&nbsp;{{ varTakenExams }}%</i
-                >
-                Avvalgi oydan</span
-              >
             </div>
             <div class="icon-img text-primary">
               <fa class="icon icon-group" :icon="['fas', 'list-check']" />
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">Olingan sertifikatlar</p>
+              <p class="fs-2">
+                {{
+                  statistics.number_certificate
+                    ? statistics.number_certificate
+                    : 0
+                }}
+              </p>
+            </div>
+            <div class="icon-img text-primary">
+              <fa
+                class="icon icon-group"
+                :icon="['fas', 'square-poll-horizontal']"
+              />
             </div>
           </div>
         </div>
@@ -198,7 +142,7 @@
           statistics.failed_users ||
           statistics.missed_users
         "
-        class="col-lg-6 my-1"
+        class="col-lg-6 mt-1 mb-3"
       >
         <div class="card dash-col">
           <div
@@ -212,6 +156,55 @@
                 statistics.missed_users,
               ]"
             ></pie-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- third row in admin -->
+    <div
+      v-if="
+        statistics.passed_users ||
+        statistics.failed_users ||
+        statistics.missed_users
+      "
+      class="row"
+    >
+      <div v-if="Object.keys(statistics).length" class="col-lg-4">
+        <div @click="goToUserStatus(1)" class="card card-pointer">
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">Imtihondan o'tganlar</p>
+              <p class="fs-2">{{ statistics.passed_users }}</p>
+            </div>
+            <div class="icon-img text-primary">
+              <fa class="icon icon-group" :icon="['fas', 'user']" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="Object.keys(statistics).length" class="col-lg-4">
+        <div @click="goToUserStatus(2)" class="card card-pointer">
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">Imtihondan o'tolmaganlar</p>
+              <p class="fs-2">{{ statistics.failed_users }}</p>
+            </div>
+            <div class="icon-img text-primary">
+              <fa class="icon icon-group" :icon="['fas', 'user']" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="Object.keys(statistics).length" class="col-lg-4">
+        <div @click="goToUserStatus(3)" class="card card-pointer">
+          <div class="card-body d-flex justify-content-between">
+            <div class="info w-75">
+              <p class="mb-0">Imtihon topshirmaganlar</p>
+              <p class="fs-2">{{ statistics.missed_users }}</p>
+            </div>
+            <div class="icon-img text-primary">
+              <fa class="icon icon-group" :icon="['fas', 'user']" />
+            </div>
           </div>
         </div>
       </div>
@@ -253,7 +246,16 @@
                     : 'text-warning'
                 "
               >
-                {{ result.status }}
+                {{
+                  result.status === "Passed"
+                    ? "O'tgan"
+                    : result.status === "Fail"
+                    ? "O'tolmagan"
+                    : result.status === "not_submit"
+                    ? "O'tkazib yuborgan"
+                    : "Topshirmagan"
+                }}
+                <!-- {{ result.status }} -->
               </td>
               <td>{{ formatDate(result.date) }}</td>
               <td
@@ -284,7 +286,7 @@
         </table>
       </div>
       <!-- {{ changedExams }} -->
-      <div class="col-lg-3 spaced-top">
+      <div class="col-lg-3 spaced-top my-sm-0 my-2">
         <div v-for="exam in changedExams" :key="exam.id" class="card p-3">
           <div class="card-body px-0">
             <h5 class="card-title pb-1">
@@ -301,10 +303,7 @@
                     id: exam.variant_id,
                     examId: exam.id,
                     groupId: exam.group_id,
-                    duration: Math.ceil(
-                      (new Date(exam.finish_date.slice(0, -1)) - new Date()) /
-                        1000
-                    ),
+                    duration: exam.newDuration,
                   },
                 }"
               >
@@ -325,9 +324,10 @@ export default {
   data() {
     return {
       fetchTimeInterval: null,
+      groupId: null,
+      grStartDate: null,
+      grFinishDate: null,
       statistics: {},
-      // examResults: [],
-      // exams: [],
     };
   },
   components: {
@@ -347,50 +347,14 @@ export default {
         };
       });
     },
-    varGroups() {
-      let a =
-        ((this.statistics.number_groups -
-          this.statistics.last_month_number_groups) /
-          this.statistics.last_month_number_groups) *
-        100;
-      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
-      return a;
-    },
-    varUsers() {
-      let a =
-        ((this.statistics.number_users -
-          this.statistics.last_month_number_users) /
-          this.statistics.last_month_number_users) *
-        100;
-      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
-      return a;
-    },
-    varPaidUsers() {
-      let a =
-        ((this.statistics.number_paid_users -
-          this.statistics.last_month_number_paid_users) /
-          this.statistics.last_month_number_paid_users) *
-        100;
-      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
-      return a;
-    },
-    varExams() {
-      let a =
-        ((this.statistics.all_exams - this.statistics.last_month_all_exams) /
-          this.statistics.last_month_all_exams) *
-        100;
-      if (a == "Infinity" || a == "-Infinity" || a == "NaN") return 0;
-      return a;
-    },
-    varTakenExams() {
-      let a =
-        ((this.statistics.taken_exams -
-          this.statistics.last_month_taken_exams) /
-          this.statistics.last_month_taken_exams) *
-        100;
-      if (a == "Infinity" || a == "-Infinity" || isNaN(a)) return 0;
-      return a;
-    },
+    // varGroups() {
+    //   if (Object.keys(this.statistics).length) {
+    //     return this.varianceCalc(
+    //       this.current_month_number_groups,
+    //       this.last_month_number_groups
+    //     );
+    //   } else return 0;
+    // },
     id() {
       return this.$store.state.userId;
     },
@@ -408,13 +372,36 @@ export default {
     },
   },
   methods: {
+    // varianceCalc(current, last) {
+    //   let a = ((current - last) / last) * 100;
+    //   if (a == "Infinity" || a == "-Infinity" || isNaN(a)) return 0;
+    //   return a;
+    // },
+    goToUserStatus(s) {
+      this.$router.push({
+        name: "user-status",
+        params: { status: s },
+      });
+    },
+    async getStatisticsByDate() {
+      try {
+        this.$Progress.start();
+        const res = await customAxios.get(
+          `filter_statistic/?start_date=${this.grStartDate}&finish_date=${this.grFinishDate}&group_id=${this.groupId}`
+        );
+        this.statistics = res.data;
+        this.$Progress.finish();
+      } catch (e) {
+        this.$Progress.fail();
+        console.log(e.response);
+      }
+    },
     async getCertificate(id) {
       try {
         this.$Progress.start();
         const res = await customAxios.get(
           `operation/sertificate/get/?id=${id}`
         );
-        // console.log(res.data.url);
         let fileLink = document.createElement("a");
 
         fileLink.href = res.data.url;
@@ -429,15 +416,47 @@ export default {
     },
     async selectedGroup(val) {
       if (val.id === "all") {
+        this.groupId = null;
+        if (this.grStartDate && this.grFinishDate) {
+          this.getStatisticsByDate();
+          return;
+        }
         await this.getStatistics();
         return;
       }
       if (typeof val === "string") {
+        this.groupId = null;
         return;
       }
-      const res = await customAxios.get(`filter_statistic/?group_id=${val.id}`);
-      // console.log(res.data);
-      this.statistics = res.data;
+      this.groupId = val.id;
+      if (!this.grStartDate && !this.grFinishDate) {
+        await this.getStatisticsByGroup();
+        return;
+      }
+      if (this.grStartDate && this.grFinishDate)
+        await this.getStatisticsByGroup();
+
+      // const res = await customAxios.get(
+      //   `filter_statistic/?group_id=${val.id}&start_date=${
+      //     this.grStartDate ? this.grStartDate : null
+      //   }&finish_date=${this.grFinishDate ? this.grFinishDate : null}`
+      // );
+      // this.statistics = res.data;
+    },
+    async getStatisticsByGroup() {
+      try {
+        this.$Progress.start();
+        const res = await customAxios.get(
+          `filter_statistic/?group_id=${this.groupId}&start_date=${
+            this.grStartDate ? this.grStartDate : null
+          }&finish_date=${this.grFinishDate ? this.grFinishDate : null}`
+        );
+        this.statistics = res.data;
+        this.$Progress.finish();
+      } catch (e) {
+        this.$Progress.fail();
+        console.log(e.response);
+      }
     },
     formatDate(date) {
       let day = new Date(date).toUTCString().slice(5, 22);
@@ -459,26 +478,12 @@ export default {
         console.log(e.response);
       }
     },
-
-    // async getExamByUser() {
-    //   try {
-    //     const res = await customAxios.get(`main/exams/get/?user_id=${this.id}`);
-    //     this.exams = res.data;
-    //     // console.log(this.exams);
-    //   } catch (e) {
-    //     console.log(e.response);
-    //   }
-    // },
     startFetching() {
       this.fetchTimeInterval = setInterval(
         () => this.$store.dispatch("getUserExams"),
         40000
       );
     },
-    // refreshing() {
-    //   console.log("hello");
-    //   // location.reload();
-    // },
   },
   async created() {
     this.$Progress.start();
@@ -493,6 +498,16 @@ export default {
   },
   mounted() {
     this.$Progress.finish();
+  },
+  watch: {
+    grStartDate(val) {
+      if (val && this.grFinishDate && this.groupId) this.getStatisticsByGroup();
+      if (val && this.grFinishDate && !this.groupId) this.getStatisticsByDate();
+    },
+    grFinishDate(val) {
+      if (val && this.grStartDate && this.groupId) this.getStatisticsByGroup();
+      if (val && this.grStartDate && !this.groupId) this.getStatisticsByDate();
+    },
   },
   unmounted() {
     clearInterval(this.fetchTimeInterval);
@@ -510,11 +525,17 @@ export default {
 </script>
 
 <style scoped>
-.dash-chart {
-  min-height: 45vh;
+/* .dash-chart {
+  min-height: 50vh;
+} */
+.card-pointer {
+  cursor: pointer;
+}
+.card-pointer:hover {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .dash-col {
-  height: 92%;
+  height: 99%;
 }
 .container-fluid h1,
 .info p:last-child {
@@ -530,40 +551,16 @@ export default {
   border-radius: 50%;
   padding: 2px;
 }
-
-/* .info p:first-child {
-  color: #0dcaf0;
-} */
-
 .card-title {
   font-weight: 500;
 }
-/* .icon-users,
-.info-users p:first-child {
-  color: rgb(151, 52, 243);
-}
-.icon-exam,
-.info-exams p:first-child {
-  color: rgb(51, 238, 44);
-}
-.icon-all-exam,
-.info-all-exam p:first-child {
-  color: rgb(235, 56, 25);
-}
-.icon-paid,
-.info-paid p:first-child {
-  color: rgb(231, 192, 15);
-} */
+
 .card {
-  margin-bottom: 1.5rem;
+  margin: 0.5rem 0;
 }
 .icon {
   font-size: 2rem;
 }
-/* .icon-group,
-.info-group p:first-child {
-  color: #0dcaf0;#f7f6fb
-} */
 p {
   margin: 0;
 }
@@ -594,6 +591,13 @@ p span {
 }
 .link-icon:active {
   color: #156ff7 !important;
+}
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.4);
+}
+input[type="date"] {
+  color: #444;
 }
 
 @media screen and (max-width: 768px) {

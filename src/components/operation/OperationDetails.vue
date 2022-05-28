@@ -56,7 +56,6 @@ export default {
       return this.$store.getters.operationDetails;
     },
   },
-
   async created() {
     this.$Progress.start();
     await this.$store.dispatch("getOperationDetails", this.id);

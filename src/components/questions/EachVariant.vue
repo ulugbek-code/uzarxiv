@@ -1,8 +1,5 @@
 <template>
-  <!-- {{ variant }} -->
   <td class="field-answer">
-    <!-- {{ questions }} -->
-    <!-- {{ variant }} -->
     <textarea
       v-model.lazy="variantName"
       :class="[
@@ -16,9 +13,8 @@
 
   <td class="field-status">
     <select v-model="status" class="form-select">
-      <option value="Correct">Correct</option>
-
-      <option value="Mistake">Mistake</option>
+      <option value="Correct">To'g'ri</option>
+      <option value="Mistake">Noto'g'ri</option>
     </select>
     <div class="help-block text-red"></div>
   </td>

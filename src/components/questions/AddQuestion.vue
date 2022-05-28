@@ -380,42 +380,46 @@ export default {
       // console.log(this.getQuestion);
     },
     async saveQuestion() {
-      if (!this.questions.name || !this.questions.variant) {
-        this.isEmpty = true;
-        return;
-      }
-      this.isEmpty = this.questions.variants.find(
-        (variant) => variant.name === ""
-      );
-      if (this.isEmpty) return;
+      try {
+        if (!this.questions.name || !this.questions.variant) {
+          this.isEmpty = true;
+          return;
+        }
+        this.isEmpty = this.questions.variants.find(
+          (variant) => variant.name === ""
+        );
+        if (this.isEmpty) return;
+        this.isNoCorrectValue = this.questions.variants.find(
+          (variant) => variant.status == "Correct"
+        );
+        if (this.isNoCorrectValue == undefined) return;
+        this.isCorrectEmpty = this.questions.variants.find(
+          (variant) => variant.status === "Correct" && variant.ball == 0
+        );
+        if (this.isCorrectEmpty) {
+          this.isEmpty = true;
+          return;
+        }
+        let correctLength = this.questions.variants.filter(
+          (variant) => variant.status === "Correct"
+        ).length;
+        if (correctLength > 1) {
+          this.isCorrectMore = true;
+          return;
+        }
 
-      this.isNoCorrectValue = this.questions.variants.find(
-        (variant) => variant.status == "Correct"
-      );
-      if (this.isNoCorrectValue == undefined) return;
-
-      this.isCorrectEmpty = this.questions.variants.find(
-        (variant) => variant.status === "Correct" && variant.ball == 0
-      );
-      if (this.isCorrectEmpty) {
-        this.isEmpty = true;
-        return;
+        this.$Progress.start();
+        const arr = [];
+        arr.push(this.questions);
+        await costumAxios.post("main/question/post/", arr);
+        this.$Progress.finish();
+        await this.$store.dispatch("getQuestions");
+        this.isEmpty = false;
+        this.$router.replace("/questions");
+      } catch (e) {
+        this.$Progress.fail();
+        console.log(e.response);
       }
-      let correctLength = this.questions.variants.filter(
-        (variant) => variant.status === "Correct"
-      ).length;
-      if (correctLength > 1) {
-        this.isCorrectMore = true;
-        return;
-      }
-
-      // console.log(this.questions);
-      const arr = [];
-      arr.push(this.questions);
-      await costumAxios.post("main/question/post/", arr);
-      await this.$store.dispatch("getQuestions");
-      this.isEmpty = false;
-      this.$router.replace("/questions");
     },
     getQuestionCategory(val) {
       this.moduleId = val.id;

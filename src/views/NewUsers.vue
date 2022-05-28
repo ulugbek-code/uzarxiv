@@ -23,7 +23,7 @@
                   isInvalidPassportNumber ? 'border-danger' : '',
                   isEmpty && !passportNumber ? 'border-danger' : '',
                 ]"
-                class="form-control mb-2 border border-2"
+                class="form-control mb-2 border"
                 v-model.trim="passportNumber"
                 type="text"
                 placeholder="Passport raqami"
@@ -34,16 +34,7 @@
               <span class="text-danger mb-0">
                 {{ notValidPassport }}
               </span>
-              <input
-                v-model.trim="login"
-                class="form-control border mb-2"
-                :class="isEmpty && !login ? 'border-danger' : ''"
-                type="text"
-                placeholder="Login"
-                required
-                maxlength="25"
-                autocomplete="off"
-              />
+
               <input
                 v-model.trim="firstname"
                 class="form-control border mb-2"
@@ -60,6 +51,23 @@
                 placeholder="Familiyasi"
                 required
               />
+              <input
+                v-model.trim="login"
+                class="form-control border mb-2"
+                :class="[
+                  !loginValidity && login ? 'border-success' : '',
+                  loginValidity ? 'border-danger' : '',
+                  isEmpty && !login ? 'border-danger' : '',
+                ]"
+                type="text"
+                placeholder="Login"
+                required
+                maxlength="25"
+                autocomplete="off"
+              />
+              <span v-if="!!loginValidity" class="text-danger mb-0"
+                >Bunday login dasturda mavjud!</span
+              >
               <input
                 v-model="password"
                 class="form-control border mb-2"
@@ -138,6 +146,7 @@ export default {
       company: "",
       position: "",
       passwordValidity: false,
+      loginValidity: null,
       isEmpty: false,
     };
   },
@@ -162,7 +171,8 @@ export default {
           return (this.isEmpty = true);
         if (
           this.password === this.confirmPassword &&
-          !this.isInvalidPassportNumber
+          !this.isInvalidPassportNumber &&
+          !this.loginValidity
         ) {
           this.$Progress.start();
           await customAxios.post("main/user/", {
@@ -185,6 +195,7 @@ export default {
             setTimeout(() => (this.notValidPassport = ""), 2000);
             return;
           }
+          if (this.loginValidity) return;
           this.passwordValidity = true;
         }
       } catch (e) {
@@ -223,6 +234,9 @@ export default {
       // this.isInvalidPassportNumber = this.getUsers.filter((user) => {
       //   return user.pass_number.toLowerCase().includes(newVal.toLowerCase());
       // });
+    },
+    login(val) {
+      this.loginValidity = this.getUsers.find((user) => user.username == val);
     },
     isEmpty(newVal) {
       if (newVal === true) {

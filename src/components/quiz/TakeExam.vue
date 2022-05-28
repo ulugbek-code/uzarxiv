@@ -95,7 +95,7 @@ export default {
     },
     async submitAnswers() {
       try {
-        this.$Progress.start();
+        // this.$Progress.start();
         this.isSubmitted = true;
         await customAxios.post("operation/result/post/", [
           {
@@ -107,12 +107,13 @@ export default {
             // description: "desc",
           },
         ]);
-        this.$store.dispatch("resetDuration");
-        this.$Progress.finish();
+        // await this.$store.dispatch("getExamResults");
+
+        // this.$Progress.finish();
         this.$router.replace("/");
       } catch (e) {
         console.log(e.response.message);
-        this.$Progress.fail();
+        // this.$Progress.fail();
       }
     },
     async getQuestionsByVariantId() {
@@ -148,6 +149,7 @@ export default {
     }
   },
   async beforeUnmount() {
+    this.$store.dispatch("resetDuration");
     // console.log(this.isSubmitted);
     if (this.isSubmitted) return;
     await this.submitAnswers();

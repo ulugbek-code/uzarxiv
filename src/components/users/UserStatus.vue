@@ -3,13 +3,21 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-1">
-          <div class="col-sm-3 mt-2">
-            <h1 class="m-0 fw-normal">Foydalanuvchilar</h1>
+          <div v-if="status" class="col-sm-8 mt-2">
+            <h2 v-if="status == 1" class="m-0 fw-normal">
+              Imtihondan o'tgan foydalanuvchilar
+            </h2>
+            <h2 v-if="status == 2" class="m-0 fw-normal">
+              Imtihondan o'tolmagan foydalanuvchilar
+            </h2>
+            <h2 v-if="status == 3" class="m-0 fw-normal">
+              Imtihon topshirmagan foydalanuvchilar
+            </h2>
           </div>
-          <div class="col-sm-9 mt-4">
+          <div class="col-sm-4 mt-4">
             <ol class="breadcrumb float-end">
               <li class="breadcrumb-item">
-                <a href="/admin/">Bosh sahifa</a>
+                <router-link to="/">Bosh sahifa</router-link>
               </li>
               <li class="breadcrumb-item active">Foydalanuvchilar</li>
             </ol>
@@ -21,17 +29,17 @@
       <div class="row">
         <div class="col-12 p-0">
           <div class="card card-primary card-outline">
-            <div class="card-header">
+            <!-- <div class="card-header">
               <h4 class="card-title">
-                Tez orada amal qilish muddati tugaydigan foydalanuvchilar
+                O'zgartirish uchun foydalanuvchini tanlang
               </h4>
-            </div>
+            </div> -->
             <div class="card-body">
               <form>
                 <div class="module">
                   <div class="row">
                     <div class="col-12">
-                      <!-- <div class="row">
+                      <div class="row">
                         <div class="col-md-4">
                           <div class="actions">
                             <div class="input-group mb-3">
@@ -51,43 +59,38 @@
                         </div>
                         <div class="col-12 col-sm-4"></div>
                       </div>
-                      <hr /> -->
+
                       <div class="card">
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover">
+                          <table class="table">
                             <thead>
                               <tr>
-                                <th
-                                  class="sorting"
-                                  tabindex="0"
-                                  rowspan="1"
-                                  colspan="1"
-                                >
-                                  <div class="text">
-                                    <span>FIO</span>
-                                  </div>
+                                <th>
+                                  <span>FIO</span>
                                 </th>
-                                <th class="sorting">
-                                  <div class="text">
-                                    <span>Passport raqami</span>
-                                  </div>
+                                <th>
+                                  <span>Passport raqami</span>
                                 </th>
-                                <th class="sorting">
-                                  <div class="text">
-                                    <span>Tashkilot</span>
-                                  </div>
+                                <th>
+                                  <span>Guruh</span>
                                 </th>
-                                <th class="sorting">
-                                  <div class="text">
-                                    <span>Pozitsiya</span>
-                                  </div>
+                                <th>
+                                  <span>Kategoriya</span>
+                                </th>
+                                <th>
+                                  <span>Variant</span>
+                                </th>
+                                <th>
+                                  <span>Tashkilot</span>
+                                </th>
+                                <th>
+                                  <span>Pozitsiya</span>
                                 </th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="user in expiredUsers" :key="user.id">
+                              <tr v-for="user in examinedUsers" :key="user.id">
                                 <td>
-                                  <!-- <router-link :to="`/users/${user.id}`">{{user.username}}</router-link> -->
                                   {{ user.first_name }}
                                 </td>
                                 <td>
@@ -95,6 +98,9 @@
                                     user.pass_number ? user.pass_number : "-"
                                   }}
                                 </td>
+                                <td>{{ user.group_name }}</td>
+                                <td>{{ user.module_name }}</td>
+                                <td>{{ user.variant_name }}</td>
                                 <td width="30%">{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
                               </tr>
@@ -111,7 +117,7 @@
                         role="status"
                         aria-live="polite"
                       >
-                        {{ expiredUsers.length }} ta foydalanuvchilar
+                        {{ examinedUsers.length }} ta foydalanuvchilar
                       </div>
                     </div>
                   </div>
@@ -126,27 +132,32 @@
 </template>
 
 <script>
-import customAxios from "../api";
+import customAxios from "../../api";
 export default {
+  props: ["status"],
   data() {
     return {
-      expiredUsers: [],
+      search: "",
+      examinedUsers: [],
     };
   },
-  computed: {},
   methods: {
-    async getExpiredUsers() {
-      const res = await customAxios.get("deadline_statistic/");
-      //   this.expiredUsers = res.data;
-      console.log(res);
+    async getExaminedUsers() {
+      try {
+        this.$Progress.start();
+        const res = await customAxios.get(
+          `operation/result/filter_status/?status=${this.status}`
+        );
+        this.examinedUsers = res.data;
+        this.$Progress.finish();
+      } catch (e) {
+        this.$Progress.fail();
+        console.log(e.response);
+      }
     },
   },
   async created() {
-    this.$Progress.start();
-    await this.getExpiredUsers();
-  },
-  mounted() {
-    this.$Progress.finish();
+    await this.getExaminedUsers();
   },
 };
 </script>
@@ -163,11 +174,11 @@ export default {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
-.table-responsive {
+/* .table-responsive {
   display: block;
   width: 100%;
   overflow-x: auto;
-}
+} */
 .card-body > .table > thead > tr > th {
   border-top-width: 0;
 }
@@ -246,8 +257,5 @@ button {
 }
 .input-group {
   flex-wrap: nowrap;
-}
-tr {
-  cursor: pointer;
 }
 </style>

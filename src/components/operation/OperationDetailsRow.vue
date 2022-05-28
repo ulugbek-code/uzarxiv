@@ -12,7 +12,13 @@
         : 'text-warning'
     "
   >
-    {{ group.status }}
+    {{
+      group.status === "Passed"
+        ? "O'tgan"
+        : group.status === "Fail"
+        ? "O'tolmagan"
+        : "O'tkazib yuborgan"
+    }}
   </td>
   <td>{{ formatDate(group.date) }}</td>
   <td v-if="isLabel" @dblclick="isLabel = false" class="desc">

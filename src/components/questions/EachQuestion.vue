@@ -377,48 +377,52 @@ export default {
       });
     },
     async saveQuestion() {
-      if (!this.questionName) {
-        this.isEmpty = true;
-        return;
+      try {
+        if (!this.questionName) {
+          this.isEmpty = true;
+          return;
+        }
+        if (!this.getQuestion.variants.length) {
+          this.isVariantsEmpty = true;
+          return;
+        }
+        this.isEmpty = this.getQuestion.variants.find(
+          (variant) => variant.name === ""
+        );
+        if (this.isEmpty) return;
+        this.isNoCorrectValue = this.getQuestion.variants.find(
+          (variant) => variant.status == "Correct"
+        );
+        if (this.isNoCorrectValue == undefined) return;
+        this.isCorrectEmpty = this.getQuestion.variants.find(
+          (variant) =>
+            variant.status === "Correct" && (!variant.ball || variant.ball == 0)
+        );
+        if (this.isCorrectEmpty) {
+          this.isEmpty = true;
+          return;
+        }
+        let correctLength = this.getQuestion.variants.filter(
+          (variant) => variant.status === "Correct"
+        ).length;
+        if (correctLength > 1) {
+          this.isCorrectMore = true;
+          return;
+        }
+        this.$Progress.start();
+        await customAxios.post("main/question/update_question/", {
+          id: this.getQuestion.id,
+          name: this.questionName,
+          variant: this.getQuestion.variant_id,
+          variants: this.getQuestion.variants,
+        });
+        this.$Progress.finish();
+        await this.$store.dispatch("getQuestions");
+        this.$router.push("/questions");
+      } catch (e) {
+        this.$Progress.fail();
+        console.log(e.response);
       }
-      if (!this.getQuestion.variants.length) {
-        this.isVariantsEmpty = true;
-        return;
-      }
-      this.isEmpty = this.getQuestion.variants.find(
-        (variant) => variant.name === ""
-      );
-      if (this.isEmpty) return;
-
-      this.isNoCorrectValue = this.getQuestion.variants.find(
-        (variant) => variant.status == "Correct"
-      );
-      if (this.isNoCorrectValue == undefined) return;
-
-      this.isCorrectEmpty = this.getQuestion.variants.find(
-        (variant) =>
-          variant.status === "Correct" && (!variant.ball || variant.ball == 0)
-      );
-      if (this.isCorrectEmpty) {
-        this.isEmpty = true;
-        return;
-      }
-      let correctLength = this.getQuestion.variants.filter(
-        (variant) => variant.status === "Correct"
-      ).length;
-      if (correctLength > 1) {
-        this.isCorrectMore = true;
-        return;
-      }
-      // console.log(this.getQuestion);
-      await customAxios.post("main/question/update_question/", {
-        id: this.getQuestion.id,
-        name: this.questionName,
-        variant: this.getQuestion.variant_id,
-        variants: this.getQuestion.variants,
-      });
-      await this.$store.dispatch("getQuestions");
-      this.$router.push("/questions");
     },
     getQuestionCategory(val) {
       // if (typeof val === "string") return;
