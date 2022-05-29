@@ -63,8 +63,17 @@ export default {
   mounted() {
     this.$Progress.finish();
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      if (from.path == "/results") vm.$store.commit("activateResult");
+      else if (from.name === "group") vm.$store.commit("activateGroup");
+    });
+  },
   unmounted() {
     this.$store.commit("resetOperation");
+    if (this.$store.state.isGroupActive) this.$store.commit("activateGroup");
+    else if (this.$store.state.isResultActive)
+      this.$store.commit("activateResult");
   },
 };
 </script>

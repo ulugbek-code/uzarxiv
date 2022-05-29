@@ -84,21 +84,6 @@
                                 </th>
                               </tr>
                             </thead>
-                            <tbody>
-                              <tr v-for="user in expiredUsers" :key="user.id">
-                                <td>
-                                  <!-- <router-link :to="`/users/${user.id}`">{{user.username}}</router-link> -->
-                                  {{ user.first_name }}
-                                </td>
-                                <td>
-                                  {{
-                                    user.pass_number ? user.pass_number : "-"
-                                  }}
-                                </td>
-                                <td width="30%">{{ user.organization }}</td>
-                                <td>{{ user.position }}</td>
-                              </tr>
-                            </tbody>
                           </table>
                         </div>
                       </div>
@@ -111,7 +96,7 @@
                         role="status"
                         aria-live="polite"
                       >
-                        {{ expiredUsers.length }} ta foydalanuvchilar
+                        0 ta foydalanuvchilar
                       </div>
                     </div>
                   </div>
@@ -143,7 +128,7 @@ export default {
   },
   async created() {
     this.$Progress.start();
-    await this.getExpiredUsers();
+    // await this.getExpiredUsers();
   },
   mounted() {
     this.$Progress.finish();

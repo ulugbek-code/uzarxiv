@@ -10,6 +10,9 @@ export default {
   activateGroup(state) {
     state.isGroupActive = !state.isGroupActive;
   },
+  activateResult(state) {
+    state.isResultActive = !state.isResultActive;
+  },
   activateQuestion(state) {
     state.isQuestionActive = !state.isQuestionActive;
   },

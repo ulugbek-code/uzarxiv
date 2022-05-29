@@ -194,7 +194,7 @@ export default {
     },
     getCategoryChanges(val) {
       if (typeof val === "string") {
-        this.categoryId = this.categories[1].id;
+        this.categoryId = this.categories[0].id;
       } else {
         this.categoryId = val.id;
       }

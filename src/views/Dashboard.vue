@@ -403,7 +403,7 @@ export default {
           `operation/sertificate/get/?id=${id}`
         );
         let fileLink = document.createElement("a");
-
+        fileLink.setAttribute("target", "_blank");
         fileLink.href = res.data.url;
         fileLink.setAttribute("download", "certificate.docx");
         document.body.appendChild(fileLink);
