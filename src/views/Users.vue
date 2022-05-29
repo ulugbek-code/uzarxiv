@@ -57,12 +57,7 @@
                           <table class="table table-hover">
                             <thead>
                               <tr>
-                                <th
-                                  class="sorting"
-                                  tabindex="0"
-                                  rowspan="1"
-                                  colspan="1"
-                                >
+                                <th class="sorting">
                                   <div class="text">
                                     <span>FIO</span>
                                   </div>
@@ -104,7 +99,7 @@
                                     user.pass_number ? user.pass_number : "-"
                                   }}
                                 </td>
-                                <td width="30%">{{ user.organization }}</td>
+                                <td width="25%">{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
                                 <td>
                                   <router-link
@@ -147,7 +142,7 @@
                       </div>
                     </div>
 
-                    <div v-if="users.length > 50" class="col-7">
+                    <div v-if="filteredUsers.length > 50" class="col-7">
                       <base-pagination
                         :totalPages="Math.ceil(users.length / 50)"
                         :perPage="50"

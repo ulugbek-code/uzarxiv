@@ -17,6 +17,9 @@ export default {
   users(state) {
     return state.users;
   },
+  expiredUser(state) {
+    return state.expiredUser;
+  },
   // user: (state) => (id) => {
   //   return state.users.find((user) => user.id === id);
   // },

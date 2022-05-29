@@ -45,6 +45,9 @@ export default {
   getUsers(state, payload) {
     state.users = payload.data;
   },
+  getExpiredUsers(state, payload) {
+    state.expiredUser = payload.data;
+  },
   getExams(state, payload) {
     state.exams = payload.data.reverse();
   },

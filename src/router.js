@@ -38,7 +38,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: "/user-status/:status",
+      path: "/user-status/status=:status&group=:group&start-date=:start&finish-date=:finish",
       name: "user-status",
       component: UserStatus,
       props: true,

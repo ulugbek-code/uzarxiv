@@ -29,6 +29,8 @@ import {
   faFileArrowDown,
   faTurnUp,
   faChartLine,
+  faCheckCircle,
+  faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -59,7 +61,9 @@ library.add(
   faListCheck,
   faFileArrowDown,
   faTurnUp,
-  faChartLine
+  faChartLine,
+  faCheckCircle,
+  faQuestionCircle
 );
 
 export default FontAwesomeIcon;

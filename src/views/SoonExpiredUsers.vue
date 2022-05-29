@@ -17,6 +17,7 @@
         </div>
       </div>
     </div>
+    <!-- {{ expiredUsers }} -->
     <div class="content container-fluid">
       <div class="row">
         <div class="col-12 p-0">
@@ -31,7 +32,7 @@
                 <div class="module">
                   <div class="row">
                     <div class="col-12">
-                      <!-- <div class="row">
+                      <div class="row">
                         <div class="col-md-4">
                           <div class="actions">
                             <div class="input-group mb-3">
@@ -51,39 +52,60 @@
                         </div>
                         <div class="col-12 col-sm-4"></div>
                       </div>
-                      <hr /> -->
+                      <hr />
                       <div class="card">
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover">
+                          <table class="table">
                             <thead>
                               <tr>
-                                <th
-                                  class="sorting"
-                                  tabindex="0"
-                                  rowspan="1"
-                                  colspan="1"
-                                >
-                                  <div class="text">
-                                    <span>FIO</span>
-                                  </div>
+                                <th>
+                                  <span>FIO</span>
                                 </th>
-                                <th class="sorting">
-                                  <div class="text">
-                                    <span>Passport raqami</span>
-                                  </div>
+                                <th>
+                                  <span>Passport raqami</span>
                                 </th>
-                                <th class="sorting">
-                                  <div class="text">
-                                    <span>Tashkilot</span>
-                                  </div>
+                                <th>
+                                  <span>Guruh nomi</span>
                                 </th>
-                                <th class="sorting">
-                                  <div class="text">
-                                    <span>Pozitsiya</span>
-                                  </div>
+                                <th>
+                                  <span>Kategoriya</span>
+                                </th>
+                                <th>
+                                  <span>Variant nomi</span>
+                                </th>
+                                <th>
+                                  <span>Organizatsiya</span>
+                                </th>
+                                <th>
+                                  <span>Pozitsiya</span>
+                                </th>
+                                <th>
+                                  <span>Sana</span>
+                                </th>
+                                <th>
+                                  <span>Sertifikat</span>
                                 </th>
                               </tr>
                             </thead>
+                            <tbody>
+                              <tr v-for="user in paginatedUsers" :key="user.id">
+                                <td>
+                                  {{ user.first_name }}
+                                </td>
+                                <td>
+                                  {{
+                                    user.pass_number ? user.pass_number : "-"
+                                  }}
+                                </td>
+                                <td>{{ user.group_name }}</td>
+                                <td>{{ user.module_name }}</td>
+                                <td>{{ user.variant_name }}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ formatDate(user.date) }}</td>
+                                <td></td>
+                              </tr>
+                            </tbody>
                           </table>
                         </div>
                       </div>
@@ -91,13 +113,17 @@
                   </div>
                   <div class="row">
                     <div class="col-5">
-                      <div
-                        class="dataTables_info"
-                        role="status"
-                        aria-live="polite"
-                      >
-                        0 ta foydalanuvchilar
+                      <div class="dataTables_info">
+                        {{ paginatedUsers.length }} ta foydalanuvchilar
                       </div>
+                    </div>
+                    <div v-if="filteredExpiredUsers.length > 50" class="col-7">
+                      <base-pagination
+                        :totalPages="Math.ceil(expiredUsers.length / 50)"
+                        :perPage="50"
+                        :currentPage="current"
+                        @pagechanged="onPChange"
+                      ></base-pagination>
                     </div>
                   </div>
                 </div>
@@ -111,24 +137,74 @@
 </template>
 
 <script>
-import customAxios from "../api";
+import BasePagination from "../components/BasePagination.vue";
 export default {
+  components: {
+    BasePagination,
+  },
   data() {
     return {
-      expiredUsers: [],
+      search: "",
+      current: 1,
+      // expiredUsers: [],
     };
   },
-  computed: {},
-  methods: {
-    async getExpiredUsers() {
-      const res = await customAxios.get("deadline_statistic/");
-      //   this.expiredUsers = res.data;
-      console.log(res);
+  computed: {
+    expiredUsers() {
+      return this.$store.getters.expiredUser;
     },
+    filteredExpiredUsers() {
+      return this.expiredUsers.filter((user) => {
+        if (user.pass_number) {
+          return (
+            user.pass_number
+              .toLowerCase()
+              .includes(this.search.toLowerCase()) ||
+            user.first_name.toLowerCase().includes(this.search.toLowerCase())
+          );
+        }
+        return user.first_name
+          .toLowerCase()
+          .includes(this.search.toLowerCase());
+        // user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
+      });
+    },
+    startPage() {
+      return (this.current - 1) * 50;
+    },
+    endPage() {
+      return this.current * 50;
+    },
+    paginatedUsers() {
+      return this.filteredExpiredUsers.slice(this.startPage, this.endPage);
+    },
+  },
+  methods: {
+    onPChange(page) {
+      this.current = page;
+    },
+    formatDate(date) {
+      let day = new Date(date).toUTCString().slice(5, 22);
+      day =
+        day.substring(0, 2) +
+        "-" +
+        day.substring(3, 6) +
+        ", " +
+        day.substring(7, 11) +
+        "-yil" +
+        day.substring(11);
+      return day;
+    },
+    // async getExpiredUsers() {
+    //   const res = await customAxios.get("deadline_statistic/");
+    //   this.expiredUsers = res.data;
+    //   // console.log(res);
+    // },
   },
   async created() {
     this.$Progress.start();
-    // await this.getExpiredUsers();
+    if (!this.expiredUsers.length)
+      await this.$store.dispatch("getExpiredUsers");
   },
   mounted() {
     this.$Progress.finish();

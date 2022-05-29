@@ -33,7 +33,7 @@
     </div>
     <div v-if="isUserAdmin" class="row dash-chart">
       <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
-        <div v-if="statistics.number_groups" class="card">
+        <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
               <p class="mb-0">Guruhlar</p>
@@ -72,22 +72,22 @@
         <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0">Barcha &nbsp;o'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_users }}</p>
+              <p class="mb-0">To'lov qilgan o'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_paid_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user']" />
+              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
             </div>
           </div>
         </div>
         <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0">To'lov qilgan o'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_paid_users }}</p>
+              <p class="mb-0">Barcha o'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
+              <fa class="icon icon-group" :icon="['fas', 'user']" />
             </div>
           </div>
         </div>
@@ -173,11 +173,11 @@
         <div @click="goToUserStatus(1)" class="card card-pointer">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0">Imtihondan o'tganlar</p>
+              <p class="mb-0">Imtihondan a'lo o'tganlar</p>
               <p class="fs-2">{{ statistics.passed_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user']" />
+              <fa class="icon icon-group" :icon="['fas', 'check-circle']" />
             </div>
           </div>
         </div>
@@ -190,7 +190,7 @@
               <p class="fs-2">{{ statistics.failed_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user']" />
+              <fa class="icon icon-group" :icon="['fas', 'circle-xmark']" />
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@
               <p class="fs-2">{{ statistics.missed_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user']" />
+              <fa class="icon icon-group" :icon="['fas', 'question-circle']" />
             </div>
           </div>
         </div>
@@ -383,7 +383,12 @@ export default {
     goToUserStatus(s) {
       this.$router.push({
         name: "user-status",
-        params: { status: s },
+        params: {
+          status: s,
+          group: this.groupId ? this.groupId : "null",
+          start: this.grStartDate ? this.grStartDate : "null",
+          finish: this.grFinishDate ? this.grFinishDate : "null",
+        },
       });
     },
     async getCertificate(id) {
@@ -408,7 +413,6 @@ export default {
       if (val.id === "all") {
         this.groupId = null;
         if (this.grStartDate && this.grFinishDate) {
-          // this.getStatisticsByDate();
           this.$store.dispatch("getStatisticsByDate", {
             start: this.grStartDate,
             finish: this.grFinishDate,
@@ -425,7 +429,6 @@ export default {
       }
       this.groupId = val.id;
       if (!this.grStartDate && !this.grFinishDate) {
-        // await this.getStatisticsByGroup();
         await this.$store.dispatch("getStatisticsByGroup", {
           groupId: this.groupId,
           start: this.grStartDate,
@@ -434,7 +437,6 @@ export default {
         return;
       }
       if (this.grStartDate && this.grFinishDate)
-        // await this.getStatisticsByGroup();
         await this.$store.dispatch("getStatisticsByGroup", {
           groupId: this.groupId,
           start: this.grStartDate,
@@ -468,9 +470,8 @@ export default {
       this.startFetching();
       return;
     }
-    if (Object.keys(this.$store.state.statistics).length === 0)
-      await this.$store.dispatch("getStatistics");
     if (!this.groups.length) this.$store.dispatch("getGroups");
+    await this.$store.dispatch("getStatistics");
   },
   mounted() {
     this.$Progress.finish();
@@ -542,8 +543,8 @@ export default {
   justify-content: center;
   align-items: center;
   background: #c1d3ee;
-  height: 55px;
-  width: 58px;
+  height: 45px;
+  width: 48px;
   border-radius: 50%;
   padding: 2px;
 }
@@ -555,7 +556,7 @@ export default {
   margin: 0.5rem 0;
 }
 .icon {
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 p {
   margin: 0;

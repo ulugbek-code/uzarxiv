@@ -29,6 +29,7 @@ const store = createStore({
       isNavOpened: false, //for hamburger menu
       statistics: {},
       users: [],
+      expiredUser: [],
       exams: [],
       userExams: [],
       examResults: [],

@@ -13,6 +13,7 @@
             <h2 v-if="status == 3" class="m-0 fw-normal">
               Imtihon topshirmagan foydalanuvchilar
             </h2>
+            {{ group }}{{ start }}{{ finish }}
           </div>
           <div class="col-sm-4 mt-4">
             <ol class="breadcrumb float-end">
@@ -89,7 +90,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="user in examinedUsers" :key="user.id">
+                              <tr v-for="user in paginatedUsers" :key="user.id">
                                 <td>
                                   {{ user.first_name }}
                                 </td>
@@ -101,7 +102,7 @@
                                 <td>{{ user.group_name }}</td>
                                 <td>{{ user.module_name }}</td>
                                 <td>{{ user.variant_name }}</td>
-                                <td width="30%">{{ user.organization }}</td>
+                                <td width="20%">{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
                               </tr>
                             </tbody>
@@ -117,8 +118,16 @@
                         role="status"
                         aria-live="polite"
                       >
-                        {{ examinedUsers.length }} ta foydalanuvchilar
+                        {{ paginatedUsers.length }} ta foydalanuvchilar
                       </div>
+                    </div>
+                    <div v-if="filteredUsers.length > 50" class="col-7">
+                      <base-pagination
+                        :totalPages="Math.ceil(examinedUsers.length / 50)"
+                        :perPage="50"
+                        :currentPage="currentPage"
+                        @pagechanged="onPageChange"
+                      ></base-pagination>
                     </div>
                   </div>
                 </div>
@@ -133,15 +142,50 @@
 
 <script>
 import customAxios from "../../api";
+import BasePagination from "../BasePagination.vue";
 export default {
-  props: ["status"],
+  props: ["status", "group", "start", "finish"],
+  components: {
+    BasePagination,
+  },
   data() {
     return {
       search: "",
+      currentPage: 1,
       examinedUsers: [],
     };
   },
+  computed: {
+    filteredUsers() {
+      return this.examinedUsers.filter((user) => {
+        if (user.pass_number) {
+          return (
+            user.pass_number
+              .toLowerCase()
+              .includes(this.search.toLowerCase()) ||
+            user.first_name.toLowerCase().includes(this.search.toLowerCase())
+          );
+        }
+        return user.first_name
+          .toLowerCase()
+          .includes(this.search.toLowerCase());
+        // user.pass_number.toLowerCase().includes(this.search.toLowerCase()) ||
+      });
+    },
+    startPage() {
+      return (this.currentPage - 1) * 50;
+    },
+    endPage() {
+      return this.currentPage * 50;
+    },
+    paginatedUsers() {
+      return this.filteredUsers.slice(this.startPage, this.endPage);
+    },
+  },
   methods: {
+    onPageChange(page) {
+      this.currentPage = page;
+    },
     async getExaminedUsers() {
       try {
         this.$Progress.start();
@@ -155,9 +199,38 @@ export default {
         console.log(e.response);
       }
     },
+    async getFilteredStatus() {
+      try {
+        this.$Progress.start();
+        const res = await customAxios.get(
+          `filter_status/?start_date=${
+            this.start !== "null" && this.finish !== "null" ? this.start : null
+          }&finish_date=${
+            this.start !== "null" && this.finish !== "null" ? this.finish : null
+          }&group_id=${this.group}&status=${this.status}`
+        );
+        this.examinedUsers = res.data;
+        this.$Progress.finish();
+      } catch (e) {
+        this.$Progress.fail();
+        console.log(e.response);
+      }
+    },
   },
-  async created() {
-    await this.getExaminedUsers();
+  async mounted() {
+    if (this.start !== "null" && this.finish !== "null") {
+      await this.getFilteredStatus();
+      return;
+    } else if (
+      this.group !== "null"
+      // ((this.start !== "null" && this.finish !== "null") ||
+      //   (this.start === "null" && this.finish === "null"))
+    ) {
+      await this.getFilteredStatus();
+      return;
+    } else {
+      await this.getExaminedUsers();
+    }
   },
 };
 </script>

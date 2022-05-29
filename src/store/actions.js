@@ -10,6 +10,14 @@ export default {
       console.log(e);
     }
   },
+  async getExpiredUsers(context) {
+    try {
+      const res = await customAxios.get("deadline_statistic/");
+      context.commit("getExpiredUsers", res);
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
   // statistics
   async getStatistics(context) {
     try {
