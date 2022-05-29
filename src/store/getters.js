@@ -11,6 +11,9 @@ export default {
   isAmin(state) {
     return state.isAmin;
   },
+  statistics(state) {
+    return state.statistics;
+  },
   users(state) {
     return state.users;
   },

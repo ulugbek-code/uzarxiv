@@ -27,6 +27,7 @@ const store = createStore({
       isAdmin: JSON.parse(localStorage.getItem("isAdmin")) || false,
       isAuth: false,
       isNavOpened: false, //for hamburger menu
+      statistics: {},
       users: [],
       exams: [],
       userExams: [],

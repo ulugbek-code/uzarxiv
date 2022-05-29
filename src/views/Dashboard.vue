@@ -33,12 +33,12 @@
     </div>
     <div v-if="isUserAdmin" class="row dash-chart">
       <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
-        <div class="card">
+        <div v-if="statistics.number_groups" class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
               <p class="mb-0">Guruhlar</p>
               <p class="fs-2">
-                {{ statistics.number_groups ? statistics.number_groups : 0 }}
+                {{ statistics.number_groups }}
               </p>
               <!-- <span v-if="!groupId">
                 <fa
@@ -72,22 +72,22 @@
         <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0">To'lov qilgan o'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_paid_users }}</p>
+              <p class="mb-0">Barcha &nbsp;o'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
+              <fa class="icon icon-group" :icon="['fas', 'user']" />
             </div>
           </div>
         </div>
         <div class="card">
           <div class="card-body d-flex justify-content-between">
             <div class="info w-75">
-              <p class="mb-0">Barcha &nbsp;o'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_users }}</p>
+              <p class="mb-0">To'lov qilgan o'quvchilar</p>
+              <p class="fs-2">{{ statistics.number_paid_users }}</p>
             </div>
             <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user']" />
+              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
             </div>
           </div>
         </div>
@@ -327,13 +327,16 @@ export default {
       groupId: null,
       grStartDate: null,
       grFinishDate: null,
-      statistics: {},
+      // statistics: {},
     };
   },
   components: {
     PieChart,
   },
   computed: {
+    statistics() {
+      return this.$store.getters.statistics;
+    },
     exams() {
       return this.$store.getters.userExams;
     },
@@ -383,19 +386,6 @@ export default {
         params: { status: s },
       });
     },
-    async getStatisticsByDate() {
-      try {
-        this.$Progress.start();
-        const res = await customAxios.get(
-          `filter_statistic/?start_date=${this.grStartDate}&finish_date=${this.grFinishDate}&group_id=${this.groupId}`
-        );
-        this.statistics = res.data;
-        this.$Progress.finish();
-      } catch (e) {
-        this.$Progress.fail();
-        console.log(e.response);
-      }
-    },
     async getCertificate(id) {
       try {
         this.$Progress.start();
@@ -418,10 +408,15 @@ export default {
       if (val.id === "all") {
         this.groupId = null;
         if (this.grStartDate && this.grFinishDate) {
-          this.getStatisticsByDate();
+          // this.getStatisticsByDate();
+          this.$store.dispatch("getStatisticsByDate", {
+            start: this.grStartDate,
+            finish: this.grFinishDate,
+            groupId: this.groupId,
+          });
           return;
         }
-        await this.getStatistics();
+        await this.$store.dispatch("getStatistics");
         return;
       }
       if (typeof val === "string") {
@@ -430,33 +425,21 @@ export default {
       }
       this.groupId = val.id;
       if (!this.grStartDate && !this.grFinishDate) {
-        await this.getStatisticsByGroup();
+        // await this.getStatisticsByGroup();
+        await this.$store.dispatch("getStatisticsByGroup", {
+          groupId: this.groupId,
+          start: this.grStartDate,
+          finish: this.grFinishDate,
+        });
         return;
       }
       if (this.grStartDate && this.grFinishDate)
-        await this.getStatisticsByGroup();
-
-      // const res = await customAxios.get(
-      //   `filter_statistic/?group_id=${val.id}&start_date=${
-      //     this.grStartDate ? this.grStartDate : null
-      //   }&finish_date=${this.grFinishDate ? this.grFinishDate : null}`
-      // );
-      // this.statistics = res.data;
-    },
-    async getStatisticsByGroup() {
-      try {
-        this.$Progress.start();
-        const res = await customAxios.get(
-          `filter_statistic/?group_id=${this.groupId}&start_date=${
-            this.grStartDate ? this.grStartDate : null
-          }&finish_date=${this.grFinishDate ? this.grFinishDate : null}`
-        );
-        this.statistics = res.data;
-        this.$Progress.finish();
-      } catch (e) {
-        this.$Progress.fail();
-        console.log(e.response);
-      }
+        // await this.getStatisticsByGroup();
+        await this.$store.dispatch("getStatisticsByGroup", {
+          groupId: this.groupId,
+          start: this.grStartDate,
+          finish: this.grFinishDate,
+        });
     },
     formatDate(date) {
       let day = new Date(date).toUTCString().slice(5, 22);
@@ -469,14 +452,6 @@ export default {
         "-yil" +
         day.substring(11);
       return day;
-    },
-    async getStatistics() {
-      try {
-        const res = await customAxios.get("statistic/");
-        this.statistics = res.data;
-      } catch (e) {
-        console.log(e.response);
-      }
     },
     startFetching() {
       this.fetchTimeInterval = setInterval(
@@ -493,7 +468,8 @@ export default {
       this.startFetching();
       return;
     }
-    await this.getStatistics();
+    if (Object.keys(this.$store.state.statistics).length === 0)
+      await this.$store.dispatch("getStatistics");
     if (!this.groups.length) this.$store.dispatch("getGroups");
   },
   mounted() {
@@ -501,12 +477,32 @@ export default {
   },
   watch: {
     grStartDate(val) {
-      if (val && this.grFinishDate && this.groupId) this.getStatisticsByGroup();
-      if (val && this.grFinishDate && !this.groupId) this.getStatisticsByDate();
+      if (val && this.grFinishDate && this.groupId)
+        this.$store.dispatch("getStatisticsByGroup", {
+          groupId: this.groupId,
+          start: this.grStartDate,
+          finish: this.grFinishDate,
+        });
+      if (val && this.grFinishDate && !this.groupId)
+        this.$store.dispatch("getStatisticsByDate", {
+          start: this.grStartDate,
+          finish: this.grFinishDate,
+          groupId: this.groupId,
+        });
     },
     grFinishDate(val) {
-      if (val && this.grStartDate && this.groupId) this.getStatisticsByGroup();
-      if (val && this.grStartDate && !this.groupId) this.getStatisticsByDate();
+      if (val && this.grStartDate && this.groupId)
+        this.$store.dispatch("getStatisticsByGroup", {
+          groupId: this.groupId,
+          start: this.grStartDate,
+          finish: this.grFinishDate,
+        });
+      if (val && this.grStartDate && !this.groupId)
+        this.$store.dispatch("getStatisticsByDate", {
+          start: this.grStartDate,
+          finish: this.grFinishDate,
+          groupId: this.groupId,
+        });
     },
   },
   unmounted() {
@@ -604,5 +600,8 @@ input[type="date"] {
   .spaced-top {
     margin-top: 2rem;
   }
+  /* .dash-col {
+    flex-wrap: wrap;
+  } */
 }
 </style>

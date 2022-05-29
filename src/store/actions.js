@@ -10,6 +10,37 @@ export default {
       console.log(e);
     }
   },
+  // statistics
+  async getStatistics(context) {
+    try {
+      const res = await customAxios.get("statistic/");
+      context.commit("getStatistics", res);
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
+  async getStatisticsByDate(context, payload) {
+    try {
+      const res = await customAxios.get(
+        `filter_statistic/?start_date=${payload.start}&finish_date=${payload.finish}&group_id=${payload.groupId}`
+      );
+      context.commit("getStatistics", res);
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
+  async getStatisticsByGroup(context, payload) {
+    try {
+      const res = await customAxios.get(
+        `filter_statistic/?group_id=${payload.groupId}&start_date=${
+          payload.start ? payload.start : null
+        }&finish_date=${payload.finish ? payload.finish : null}`
+      );
+      context.commit("getStatistics", res);
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
   // exams
   async getUserExams(context) {
     try {

@@ -39,6 +39,9 @@ export default {
     state.examResults = [];
     router.replace("/login");
   },
+  getStatistics(state, payload) {
+    state.statistics = payload.data;
+  },
   getUsers(state, payload) {
     state.users = payload.data;
   },
