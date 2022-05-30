@@ -109,7 +109,7 @@ input[type="number"]::-webkit-outer-spin-button {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
     z-index: 10;

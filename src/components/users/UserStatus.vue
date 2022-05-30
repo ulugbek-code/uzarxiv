@@ -13,7 +13,6 @@
             <h2 v-if="status == 3" class="m-0 fw-normal">
               Imtihon topshirmagan foydalanuvchilar
             </h2>
-            {{ group }}{{ start }}{{ finish }}
           </div>
           <div class="col-sm-4 mt-4">
             <ol class="breadcrumb float-end">

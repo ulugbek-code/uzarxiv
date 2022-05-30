@@ -54,7 +54,7 @@
                 </li>
               </ul>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3 mt-3 mt-sm-0">
               <router-link
                 :to="{
                   name: 'exam',

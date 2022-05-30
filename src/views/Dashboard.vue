@@ -31,16 +31,17 @@
         </div>
       </template>
     </div>
-    <div v-if="isUserAdmin" class="row dash-chart">
-      <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
-        <div class="card">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Guruhlar</p>
-              <p class="fs-2">
-                {{ statistics.number_groups }}
-              </p>
-              <!-- <span v-if="!groupId">
+    <template v-if="isUserAdmin">
+      <div class="row dash-chart">
+        <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
+          <div class="card">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Guruhlar</p>
+                <p class="fs-2">
+                  {{ statistics.number_groups }}
+                </p>
+                <!-- <span v-if="!groupId">
                 <fa
                   :class="
                     varGroups > 0
@@ -63,152 +64,156 @@
                 >
                 Avvalgi oydan</span
               > -->
+              </div>
+              <div class="icon-img text-primary">
+                <fa class="icon icon-group" :icon="['fas', 'people-group']" />
+              </div>
             </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'people-group']" />
+          </div>
+          <div class="card">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">To'lov qilgan o'quvchilar</p>
+                <p class="fs-2">{{ statistics.number_paid_users }}</p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa class="icon icon-group" :icon="['fas', 'user-check']" />
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Barcha o'quvchilar</p>
+                <p class="fs-2">{{ statistics.number_users }}</p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa class="icon icon-group" :icon="['fas', 'user']" />
+              </div>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">To'lov qilgan o'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_paid_users }}</p>
+        <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
+          <div class="card">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Imtihonlar</p>
+                <p class="fs-2">{{ statistics.all_exams }}</p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa class="icon icon-group" :icon="['fas', 'list']" />
+              </div>
             </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user-check']" />
+          </div>
+          <div class="card">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Topshirilgan imtihonlar</p>
+                <p class="fs-2">{{ statistics.taken_exams }}</p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa class="icon icon-group" :icon="['fas', 'list-check']" />
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Olingan sertifikatlar</p>
+                <p class="fs-2">
+                  {{
+                    statistics.number_certificate
+                      ? statistics.number_certificate
+                      : 0
+                  }}
+                </p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa
+                  class="icon icon-group"
+                  :icon="['fas', 'square-poll-horizontal']"
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Barcha o'quvchilar</p>
-              <p class="fs-2">{{ statistics.number_users }}</p>
-            </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'user']" />
+        <div
+          v-if="
+            statistics.passed_users ||
+            statistics.failed_users ||
+            statistics.missed_users
+          "
+          class="col-lg-6 mt-1 mb-3"
+        >
+          <div class="card dash-col">
+            <div
+              class="card-body d-flex justify-content-center align-items-center"
+            >
+              <!-- {{  statistics.passed_users }} -->
+              <pie-chart
+                :series="[
+                  statistics.passed_users,
+                  statistics.failed_users,
+                  statistics.missed_users,
+                ]"
+              ></pie-chart>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="Object.keys(statistics).length" class="col-lg-3 my-1">
-        <div class="card">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Imtihonlar</p>
-              <p class="fs-2">{{ statistics.all_exams }}</p>
-            </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'list']" />
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Topshirilgan imtihonlar</p>
-              <p class="fs-2">{{ statistics.taken_exams }}</p>
-            </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'list-check']" />
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Olingan sertifikatlar</p>
-              <p class="fs-2">
-                {{
-                  statistics.number_certificate
-                    ? statistics.number_certificate
-                    : 0
-                }}
-              </p>
-            </div>
-            <div class="icon-img text-primary">
-              <fa
-                class="icon icon-group"
-                :icon="['fas', 'square-poll-horizontal']"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- third row in admin -->
       <div
         v-if="
           statistics.passed_users ||
           statistics.failed_users ||
           statistics.missed_users
         "
-        class="col-lg-6 mt-1 mb-3"
+        class="row"
       >
-        <div class="card dash-col">
-          <div
-            class="card-body d-flex justify-content-center align-items-center"
-          >
-            <!-- {{  statistics.passed_users }} -->
-            <pie-chart
-              :series="[
-                statistics.passed_users,
-                statistics.failed_users,
-                statistics.missed_users,
-              ]"
-            ></pie-chart>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- third row in admin -->
-    <div
-      v-if="
-        statistics.passed_users ||
-        statistics.failed_users ||
-        statistics.missed_users
-      "
-      class="row"
-    >
-      <div v-if="Object.keys(statistics).length" class="col-lg-4">
-        <div @click="goToUserStatus(1)" class="card card-pointer">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Imtihondan a'lo o'tganlar</p>
-              <p class="fs-2">{{ statistics.passed_users }}</p>
-            </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'check-circle']" />
+        <div v-if="Object.keys(statistics).length" class="col-lg-4">
+          <div @click="goToUserStatus(1)" class="card card-pointer">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Imtihondan a'lo o'tganlar</p>
+                <p class="fs-2">{{ statistics.passed_users }}</p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa class="icon icon-group" :icon="['fas', 'check-circle']" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div v-if="Object.keys(statistics).length" class="col-lg-4">
-        <div @click="goToUserStatus(2)" class="card card-pointer">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Imtihondan o'tolmaganlar</p>
-              <p class="fs-2">{{ statistics.failed_users }}</p>
+        <div v-if="Object.keys(statistics).length" class="col-lg-4">
+          <div @click="goToUserStatus(2)" class="card card-pointer">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Imtihondan o'tolmaganlar</p>
+                <p class="fs-2">{{ statistics.failed_users }}</p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa class="icon icon-group" :icon="['fas', 'circle-xmark']" />
+              </div>
             </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'circle-xmark']" />
+          </div>
+        </div>
+        <div v-if="Object.keys(statistics).length" class="col-lg-4">
+          <div @click="goToUserStatus(3)" class="card card-pointer">
+            <div class="card-body d-flex justify-content-between">
+              <div class="info w-75">
+                <p class="mb-0">Imtihon topshirmaganlar</p>
+                <p class="fs-2">{{ statistics.missed_users }}</p>
+              </div>
+              <div class="icon-img text-primary">
+                <fa
+                  class="icon icon-group"
+                  :icon="['fas', 'question-circle']"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="Object.keys(statistics).length" class="col-lg-4">
-        <div @click="goToUserStatus(3)" class="card card-pointer">
-          <div class="card-body d-flex justify-content-between">
-            <div class="info w-75">
-              <p class="mb-0">Imtihon topshirmaganlar</p>
-              <p class="fs-2">{{ statistics.missed_users }}</p>
-            </div>
-            <div class="icon-img text-primary">
-              <fa class="icon icon-group" :icon="['fas', 'question-circle']" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </template>
 
     <!-- user dashboard -->
     <div v-if="!isUserAdmin" class="row">

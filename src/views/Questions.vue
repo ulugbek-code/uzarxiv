@@ -31,7 +31,7 @@
                     </h4>
                     <div
                       v-if="categories.length"
-                      class="col-md-3 col-sm-6 col-6"
+                      class="col-md-3 col-sm-6 col-12"
                     >
                       <base-dropdown
                         :options="categories"
@@ -40,7 +40,7 @@
                         @input="getCategoryChanges"
                       ></base-dropdown>
                     </div>
-                    <div class="col-md-3 col-sm-6 col-6">
+                    <div class="col-md-3 col-sm-6 col-12 mt-2 mt-md-0">
                       <base-dropdown
                         v-if="variants.length"
                         :options="variants"
@@ -257,6 +257,11 @@ form {
 }
 tr {
   cursor: pointer;
+}
+@media screen and (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+  }
 }
 /* .table td.action-checkbox,
 .djn-checkbox-select-all {
