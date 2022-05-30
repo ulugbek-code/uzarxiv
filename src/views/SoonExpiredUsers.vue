@@ -82,9 +82,9 @@
                                 <th>
                                   <span>Sana</span>
                                 </th>
-                                <!-- <th>
+                                <th>
                                   <span>Sertifikat</span>
-                                </th> -->
+                                </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -102,8 +102,32 @@
                                 <td>{{ user.variant_name }}</td>
                                 <td>{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
-                                <td>{{ formatDate(user.date) }}</td>
-                                <!-- <td></td> -->
+                                <td
+                                  :class="
+                                    new Date().getTime() >
+                                    new Date(user.date).getTime()
+                                      ? 'underline'
+                                      : ''
+                                  "
+                                >
+                                  {{ formatDate(user.date) }}
+                                </td>
+                                <td
+                                  v-if="user.id && user.status === 'Passed'"
+                                  class="td-link"
+                                >
+                                  <fa
+                                    class="link-icon text-primary"
+                                    @click="getCertificate(user.id)"
+                                    :icon="['fas', 'file-arrow-down']"
+                                  />
+                                </td>
+                                <td v-else>
+                                  <fa
+                                    class="text-danger"
+                                    :icon="['fas', 'circle-xmark']"
+                                  />
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -137,6 +161,7 @@
 </template>
 
 <script>
+import customAxios from "../api";
 import BasePagination from "../components/BasePagination.vue";
 export default {
   components: {
@@ -180,6 +205,24 @@ export default {
     },
   },
   methods: {
+    async getCertificate(id) {
+      try {
+        this.$Progress.start();
+        const res = await customAxios.get(
+          `operation/sertificate/get/?id=${id}`
+        );
+        let fileLink = document.createElement("a");
+        fileLink.setAttribute("target", "_blank");
+        fileLink.href = res.data.url;
+        fileLink.setAttribute("download", "certificate.docx");
+        document.body.appendChild(fileLink);
+
+        this.$Progress.finish();
+        fileLink.click();
+      } catch {
+        this.$Progress.fail();
+      }
+    },
     onPChange(page) {
       this.current = page;
     },
@@ -213,6 +256,9 @@ export default {
 </script>
 
 <style scoped>
+.underline {
+  background: #dc3545;
+}
 .card-primary.card-outline {
   border-top: 3px solid #007bff;
 }
@@ -308,7 +354,7 @@ button {
 .input-group {
   flex-wrap: nowrap;
 }
-tr {
+td:last-child {
   cursor: pointer;
 }
 </style>
