@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import costumAxios from "../api";
+import customAxios from "../api";
 import BasePagination from "../components/BasePagination.vue";
 export default {
   components: {
@@ -213,9 +213,11 @@ export default {
       this.$router.push({ name: "user", params: { id: userId } });
     },
     async deleteUser(id) {
+      this.$Progress.start();
       if (confirm("Siz haqiqatan ham o'chirmoqchimisiz")) {
-        await costumAxios.delete(`main/user/${id}/`);
+        await customAxios.delete(`main/user/${id}/`);
         await this.$store.dispatch("getUsers");
+        this.$Progress.finish();
       }
     },
   },

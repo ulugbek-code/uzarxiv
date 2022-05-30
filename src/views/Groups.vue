@@ -30,6 +30,7 @@
                   <th>Tugaydigan sana</th>
                   <th>Module nomi</th>
                   <th>Qisqartma</th>
+                  <th></th>
                 </tr>
               </thead>
               <!-- below changed -->
@@ -47,6 +48,14 @@
                   <td>{{ formatDate(group.finish_date) }}</td>
                   <td>{{ group.module.name }}</td>
                   <td>{{ group.module.AT }}</td>
+                  <td>
+                    <button
+                      @click.prevent.stop="deleteGroup(group.id)"
+                      class="btn btn-danger"
+                    >
+                      <fa class="text-light" :icon="['fas', 'trash-alt']" />
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -58,6 +67,7 @@
 </template>
 
 <script>
+import customAxios from "../api";
 export default {
   computed: {
     getGroups() {
@@ -76,6 +86,14 @@ export default {
     // },
   },
   methods: {
+    async deleteGroup(id) {
+      this.$Progress.start();
+      if (confirm("Siz haqiqatan ham o'chirmoqchimisiz")) {
+        await customAxios.delete(`main/group/${id}/`);
+        await this.$store.dispatch("getGroups");
+        this.$Progress.finish();
+      }
+    },
     formatDate(date) {
       let day = new Date(date).toUTCString().slice(5, 22);
       day =
