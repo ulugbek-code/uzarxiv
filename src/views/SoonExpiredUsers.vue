@@ -82,9 +82,9 @@
                                 <th>
                                   <span>Sana</span>
                                 </th>
-                                <th>
+                                <!-- <th>
                                   <span>Sertifikat</span>
-                                </th>
+                                </th> -->
                               </tr>
                             </thead>
                             <tbody>
@@ -100,10 +100,10 @@
                                 <td>{{ user.group_name }}</td>
                                 <td>{{ user.module_name }}</td>
                                 <td>{{ user.variant_name }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ user.organization }}</td>
+                                <td>{{ user.position }}</td>
                                 <td>{{ formatDate(user.date) }}</td>
-                                <td></td>
+                                <!-- <td></td> -->
                               </tr>
                             </tbody>
                           </table>
@@ -191,8 +191,8 @@ export default {
         day.substring(3, 6) +
         ", " +
         day.substring(7, 11) +
-        "-yil" +
-        day.substring(11);
+        "-yil";
+      // + day.substring(11);
       return day;
     },
     // async getExpiredUsers() {
