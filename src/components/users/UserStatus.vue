@@ -57,12 +57,22 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-12 col-sm-4"></div>
+                        <div class="col-12 col-sm-8">
+                          <div class="text-end mb-3">
+                            <button
+                              @click="exportExcel"
+                              class="btn btn-success w-25"
+                              type="button"
+                            >
+                              Excel
+                            </button>
+                          </div>
+                        </div>
                       </div>
 
                       <div class="card">
                         <div class="card-body table-responsive p-0">
-                          <table class="table">
+                          <table id="table-id" class="table">
                             <thead>
                               <tr>
                                 <th>
@@ -79,6 +89,9 @@
                                 </th>
                                 <th>
                                   <span>Variant</span>
+                                </th>
+                                <th>
+                                  <span>Ball</span>
                                 </th>
                                 <th>
                                   <span>Tashkilot</span>
@@ -101,6 +114,9 @@
                                 <td>{{ user.group_name }}</td>
                                 <td>{{ user.module_name }}</td>
                                 <td>{{ user.variant_name }}</td>
+                                <td>
+                                  {{ user.total_ball ? user.total_ball : 0 }}
+                                </td>
                                 <td width="20%">{{ user.organization }}</td>
                                 <td>{{ user.position }}</td>
                               </tr>
@@ -142,6 +158,7 @@
 <script>
 import customAxios from "../../api";
 import BasePagination from "../BasePagination.vue";
+import * as XLSX from "xlsx";
 export default {
   props: ["status", "group", "start", "finish"],
   components: {
@@ -192,6 +209,7 @@ export default {
           `operation/result/filter_status/?status=${this.status}`
         );
         this.examinedUsers = res.data;
+        // console.log(res.data);
         this.$Progress.finish();
       } catch (e) {
         this.$Progress.fail();
@@ -214,6 +232,31 @@ export default {
         this.$Progress.fail();
         console.log(e.response);
       }
+    },
+    exportExcel() {
+      const users = this.examinedUsers.reduce((ac, user) => {
+        ac.push({
+          FIO: user.first_name,
+          Guruh: user.group_name,
+          Kategoriya: user.module_name,
+          Variant: user.variant_name,
+          Ball: user.total_ball,
+          Tashkilot: user.organization,
+          Pozitsiya: user.position,
+        });
+        return ac;
+      }, []);
+      var invoicesWS = XLSX.utils.json_to_sheet(users);
+
+      // A workbook is the name given to an Excel file
+      var wb = XLSX.utils.book_new(); // make Workbook of Excel
+
+      // add Worksheet to Workbook
+      // Workbook contains one or more worksheets
+      XLSX.utils.book_append_sheet(wb, invoicesWS, "Users"); // invoices list is name of Worksheet
+
+      // export Excel file
+      XLSX.writeFile(wb, "Users.xlsx");
     },
   },
   async mounted() {

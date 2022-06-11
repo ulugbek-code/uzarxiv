@@ -90,15 +90,16 @@
               <span v-if="passwordValidity" class="text-danger mb-0">
                 Parol takrorlanmadi
               </span>
-              <input
+              <textarea
                 v-model.trim="company"
                 class="form-control border mb-2"
                 :class="isEmpty && !company ? 'border-danger' : ''"
                 type="text"
                 placeholder="Tashkilot nomi"
                 required
-                maxlength="30"
-              />
+                maxlength="200"
+                rows="2"
+              ></textarea>
               <input
                 v-model.trim="position"
                 class="form-control border"
@@ -106,7 +107,7 @@
                 type="text"
                 placeholder="Pozitsiya"
                 required
-                maxlength="30"
+                maxlength="100"
               />
               <button
                 @click="addNewUser"
@@ -318,7 +319,8 @@ section .container .user .formBx form h2 {
   margin-bottom: 10px;
   color: #555;
 }
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   opacity: 0.7;
 }
 
