@@ -234,7 +234,7 @@ export default {
       }
     },
     exportExcel() {
-      const users = this.examinedUsers.reduce((ac, user) => {
+      const users = this.filteredUsers.reduce((ac, user) => {
         ac.push({
           FIO: user.first_name,
           Guruh: user.group_name,

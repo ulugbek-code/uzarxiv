@@ -93,20 +93,16 @@
               <textarea
                 v-model.trim="company"
                 class="form-control border mb-2"
-                :class="isEmpty && !company ? 'border-danger' : ''"
                 type="text"
                 placeholder="Tashkilot nomi"
-                required
                 maxlength="200"
                 rows="2"
               ></textarea>
               <input
                 v-model.trim="position"
                 class="form-control border"
-                :class="isEmpty && !position ? 'border-danger' : ''"
                 type="text"
                 placeholder="Pozitsiya"
-                required
                 maxlength="100"
               />
               <button
@@ -165,9 +161,7 @@ export default {
           !this.firstname ||
           !this.lastname ||
           !this.password ||
-          !this.confirmPassword ||
-          !this.company ||
-          !this.position
+          !this.confirmPassword
         )
           return (this.isEmpty = true);
         if (

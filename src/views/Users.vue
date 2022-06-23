@@ -99,8 +99,14 @@
                                     user.pass_number ? user.pass_number : "-"
                                   }}
                                 </td>
-                                <td width="25%">{{ user.organization }}</td>
-                                <td>{{ user.position }}</td>
+                                <td width="25%">
+                                  {{
+                                    user.organization ? user.organization : "-"
+                                  }}
+                                </td>
+                                <td>
+                                  {{ user.position ? user.position : "-" }}
+                                </td>
                                 <td>
                                   <router-link
                                     :to="{
