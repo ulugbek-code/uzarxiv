@@ -43,11 +43,11 @@
                   v-for="group in getGroups"
                   :key="group.id"
                 >
-                  <td>{{ group.name }}</td>
+                  <td>{{ group?.name }}</td>
                   <td>{{ formatDate(group.start_date) }}</td>
                   <td>{{ formatDate(group.finish_date) }}</td>
-                  <td>{{ group.module.name }}</td>
-                  <td>{{ group.module.AT }}</td>
+                  <td>{{ group.module?.name }}</td>
+                  <td>{{ group.module?.AT }}</td>
                   <td>
                     <button
                       @click.prevent.stop="deleteGroup(group.id)"
