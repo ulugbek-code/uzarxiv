@@ -3,7 +3,7 @@ import axios from "axios";
 // import store from "./store";
 
 const customAxios = axios.create({
-  baseURL: "https://quiz.uzarxiv-test.uz/",
+  baseURL: "http://quiz.ehub.uz/",
   timeout: 15000,
   // headers: {
   //   Authorization: `Token ${
