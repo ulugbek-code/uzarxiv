@@ -7,6 +7,12 @@
     <div v-if="!isUserAdmin" class="fs-5">
       {{ fullname ? fullname : "No name" }}
     </div>
+    <div v-else class="title">
+      <p class="text-danger fw-bold mb-0">
+        "Ustani ishlatganingizdan so'ng peshonasidagi teri qurimasidan turib
+        haqqini bering!" Rasululloh S.A.V
+      </p>
+    </div>
     <!-- <div class="header_img">
       <img src="https://i.imgur.com/hczKIze.jpg" alt="" />
     </div> -->
@@ -168,6 +174,21 @@ export default {
 </script>
 
 <style scoped>
+.title {
+  position: relative;
+  height: 3rem;
+  /* margin-left: 2rem; */
+  width: 100%;
+  overflow: hidden;
+}
+.title p {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: myfirst 25s linear infinite;
+  white-space: nowrap;
+  -moz-animation: myfirst 25s; /* Firefox */
+}
 .header {
   width: 100%;
   height: var(--header-height);
@@ -187,6 +208,7 @@ export default {
   color: var(--first-color);
   font-size: 1.5rem;
   cursor: pointer;
+  margin-bottom: 4px;
 }
 
 .header_img {
@@ -310,7 +332,14 @@ export default {
 .log-out {
   cursor: pointer;
 }
-
+@keyframes myfirst /* Firefox */ {
+  0% {
+    left: -55%;
+  }
+  100% {
+    left: 100%;
+  }
+}
 @media screen and (min-width: 768px) {
   body {
     margin: calc(var(--header-height) + 1rem) 0 0 0;
